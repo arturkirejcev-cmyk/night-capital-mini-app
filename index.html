@@ -1,123 +1,512 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<                                                                                                                                                                     <section class="sponsors" id="sponsorsSection">
+    <div class="section-header">
+        <div>
+            <h2>Канали для підписки</h2>
+            <p class="sponsors-description">
+                Підпишіться на всі канали, щоб продовжити
+            </p>
+        </div>
 
-            <title>Night Capital</title>
+        <div class="counter">
+            <span id="subscribedCount">0</span>/<span id="totalSponsors">0</span>
+        </div>
+    </div>
 
-                <link rel="stylesheet" href="css/style.css">
-                </head>
+    <div id="channelsList" class="channels-list">
+        <div id="sponsorsLoading" class="sponsors-status">
+            Завантаження каналів...
+        </div>
+    </div>
 
-                <body>
+    <div id="noSponsors" class="sponsors-status" style="display:none;">
+        <div class="empty-icon">✓</div>
+        <h3>Спонсорів немає</h3>
+        <p>Зараз немає каналів, на які потрібно підписатися.</p>
+    </div>
 
-                    <main class="app">
+    <div id="sponsorsError" class="sponsors-status error" style="display:none;">
+        <div class="empty-icon">!</div>
+        <h3>Не вдалося завантажити канали</h3>
+        <p>Спробуйте оновити Mini App.</p>
+        <button id="retrySponsors" class="retry-button">
+            Спробувати ще раз
+        </button>
+    </div>
 
-                            <section class="hero">
-                                        <div class="hero-overlay"></div>
+    <button
+        id="checkSubscriptions"
+        class="check-subscriptions-button"
+        style="display:none;"
+    >
+        ✓ Перевірити підписки
+    </button>
 
-                                                    <div class="hero-content">
-                                                                    <div class="logo">NC</div>
+    <div id="subscriptionMessage" class="subscription-message"></div>
+</section>
 
-                                                                                    <h1>Night Capital</h1>
+<script>
+(function () {
+    "use strict";
 
-                                                                                                    <p>
-                                                                                                                        Підпишіться на всі канали нижче,
-                                                                                                                                            щоб відкрити доступ до додатку.
-                                                                                                                                                            </p>
-                                                                                                                                                                        </div>
-                                                                                                                                                                                </section>
+    /*
+     * API Mini App.
+     *
+     * Якщо API працює на тому самому домені:
+     * API_BASE = "";
+     *
+     * Якщо API працює окремо — сюди потрібно поставити
+     * адресу твого API.
+     */
+    const API_BASE = "";
 
+    const API_URL = API_BASE + "/api/sponsors";
 
-                                                                                                                                                                                        <section class="sponsors">
+    const channelsList = document.getElementById("channelsList");
+    const sponsorsLoading = document.getElementById("sponsorsLoading");
+    const noSponsors = document.getElementById("noSponsors");
+    const sponsorsError = document.getElementById("sponsorsError");
+    const retrySponsors = document.getElementById("retrySponsors");
 
-                                                                                                                                                                                                    <div class="section-header">
-                                                                                                                                                                                                                    <h2>Канали для підписки</h2>
+    const subscribedCount = document.getElementById("subscribedCount");
+    const totalSponsors = document.getElementById("totalSponsors");
 
-                                                                                                                                                                                                                                    <div class="counter">
-                                                                                                                                                                                                                                                        <span id="subscribedCount">0</span>/16
-                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                    </div>
+    const checkSubscriptions =
+        document.getElementById("checkSubscriptions");
 
+    const subscriptionMessage =
+        document.getElementById("subscriptionMessage");
 
-                                                                                                                                                                                                                                                                                                <div id="channelsList">
+    let sponsors = [];
+    let subscribed = new Set();
 
-                                                                                                                                                                                                                                                                                                                <div class="channel">
-                                                                                                                                                                                                                                                                                                                                    <div class="channel-number">1</div>
+    /*
+     * Отримання Telegram WebApp.
+     */
+    const telegram =
+        window.Telegram && window.Telegram.WebApp
+            ? window.Telegram.WebApp
+            : null;
 
-                                                                                                                                                                                                                                                                                                                                                        <div class="channel-info">
-                                                                                                                                                                                                                                                                                                                                                                                <h3>Канал 1</h3>
-                                                                                                                                                                                                                                                                                                                                                                                                        <p>Натисніть, щоб перейти та підписатися</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+    if (telegram) {
+        telegram.ready();
+        telegram.expand();
+    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                <button class="channel-button">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ↗
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+    /*
+     * ID користувача Telegram.
+     */
+    function getTelegramUserId() {
+        if (
+            telegram &&
+            telegram.initDataUnsafe &&
+            telegram.initDataUnsafe.user
+        ) {
+            return telegram.initDataUnsafe.user.id;
+        }
 
+        return null;
+    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="channel">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="channel-number">2</div>
+    /*
+     * Безпечне створення тексту.
+     */
+    function escapeHTML(value) {
+        const div = document.createElement("div");
+        div.textContent = value == null ? "" : String(value);
+        return div.innerHTML;
+    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="channel-info">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <h3>Канал 2</h3>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <p>Натисніть, щоб перейти та підписатися</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+    /*
+     * Показ повідомлення.
+     */
+    function showMessage(text, type) {
+        subscriptionMessage.textContent = text;
+        subscriptionMessage.className =
+            "subscription-message " + (type || "");
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <button class="channel-button">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ↗
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+        if (text) {
+            subscriptionMessage.style.display = "block";
+        } else {
+            subscriptionMessage.style.display = "none";
+        }
+    }
 
+    /*
+     * Оновлення лічильника.
+     */
+    function updateCounter() {
+        subscribedCount.textContent = subscribed.size;
+        totalSponsors.textContent = sponsors.length;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="channel">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="channel-number">3</div>
+        if (sponsors.length > 0) {
+            checkSubscriptions.style.display = "block";
+        } else {
+            checkSubscriptions.style.display = "none";
+        }
+    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="channel-info">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <h3>Канал 3</h3>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <p>Натисніть, щоб перейти та підписатися</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+    /*
+     * Відкриття Telegram-каналу.
+     */
+    function openSponsor(sponsor) {
+        const url =
+            sponsor.url ||
+            sponsor.link ||
+            sponsor.telegram_url ||
+            "";
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button class="channel-button">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ↗
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+        if (!url) {
+            showMessage(
+                "Для цього каналу не вказано посилання.",
+                "error"
+            );
+            return;
+        }
 
+        if (telegram && telegram.openTelegramLink) {
+            telegram.openTelegramLink(url);
+        } else {
+            window.open(url, "_blank");
+        }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="channel">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="channel-number">4</div>
+        /*
+         * Позначаємо канал як відкритий.
+         * Це НЕ означає, що людина вже підписалась.
+         * Остаточну перевірку робить сервер.
+         */
+        if (sponsor.id !== undefined && sponsor.id !== null) {
+            subscribed.add(String(sponsor.id));
+        }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="channel-info">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <h3>Канал 4</h3>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <p>Натисніть, щоб перейти та підписатися</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+        updateCounter();
+    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button class="channel-button">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ↗
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+    /*
+     * Створення картки спонсора.
+     */
+    function createSponsorElement(sponsor, index) {
+        const item = document.createElement("div");
+        item.className = "channel";
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+        const id =
+            sponsor.id !== undefined && sponsor.id !== null
+                ? String(sponsor.id)
+                : String(index);
 
+        const title =
+            sponsor.title ||
+            sponsor.name ||
+            sponsor.channel_name ||
+            "Telegram-канал";
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="info-box">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Після підписки поверніться сюди та натисніть
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        кнопку перевірки. Якщо якийсь канал ще не
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        пройшов — список оновиться автоматично.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+        const description =
+            sponsor.description ||
+            "Натисніть, щоб перейти та підписатися";
 
+        item.innerHTML = `
+            <div class="channel-number">
+                ${index + 1}
+            </div>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button id="checkButton" class="check-button">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ✓&nbsp;&nbsp; Перевірити підписку
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </button>
+            <div class="channel-info">
+                <h3>${escapeHTML(title)}</h3>
+                <p>${escapeHTML(description)}</p>
+            </div>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </section>
+            <button
+                class="channel-button"
+                type="button"
+                aria-label="Відкрити канал"
+            >
+                ↗
+            </button>
+        `;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </main>
+        const button = item.querySelector(".channel-button");
 
+        button.addEventListener("click", function () {
+            openSponsor(sponsor);
+        });
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <script src="https://telegram.org/js/telegram-web-app.js"></script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <script src="js/app.js"></script>
+        item.dataset.sponsorId = id;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </html>
+        return item;
+    }
+
+    /*
+     * Відображення спонсорів.
+     */
+    function renderSponsors() {
+        channelsList.innerHTML = "";
+
+        if (!sponsors.length) {
+            channelsList.style.display = "none";
+            noSponsors.style.display = "block";
+            checkSubscriptions.style.display = "none";
+            updateCounter();
+            return;
+        }
+
+        channelsList.style.display = "flex";
+        noSponsors.style.display = "none";
+
+        sponsors.forEach(function (sponsor, index) {
+            channelsList.appendChild(
+                createSponsorElement(sponsor, index)
+            );
+        });
+
+        updateCounter();
+    }
+
+    /*
+     * Завантаження реальних спонсорів з API.
+     */
+    async function loadSponsors() {
+        sponsorsLoading.style.display = "block";
+        sponsorsError.style.display = "none";
+        noSponsors.style.display = "none";
+        channelsList.style.display = "none";
+        checkSubscriptions.style.display = "none";
+
+        showMessage("");
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    "API error: " + response.status
+                );
+            }
+
+            const data = await response.json();
+
+            /*
+             * Підтримуються формати:
+             *
+             * [...]
+             *
+             * або
+             *
+             * { "sponsors": [...] }
+             */
+            if (Array.isArray(data)) {
+                sponsors = data;
+            } else if (
+                data &&
+                Array.isArray(data.sponsors)
+            ) {
+                sponsors = data.sponsors;
+            } else {
+                sponsors = [];
+            }
+
+            /*
+             * Додаткова страховка:
+             * Mini App показує тільки active=true,
+             * якщо API повернув це поле.
+             */
+            sponsors = sponsors.filter(function (sponsor) {
+                if (
+                    Object.prototype.hasOwnProperty.call(
+                        sponsor,
+                        "active"
+                    )
+                ) {
+                    return (
+                        sponsor.active === true ||
+                        sponsor.active === 1
+                    );
+                }
+
+                return true;
+            });
+
+            /*
+             * Сортування за sort_order.
+             */
+            sponsors.sort(function (a, b) {
+                const orderA = Number(a.sort_order || 0);
+                const orderB = Number(b.sort_order || 0);
+
+                return orderA - orderB;
+            });
+
+            subscribed.clear();
+
+            sponsorsLoading.style.display = "none";
+
+            renderSponsors();
+
+        } catch (error) {
+            console.error(
+                "Не вдалося завантажити спонсорів:",
+                error
+            );
+
+            sponsors = [];
+
+            sponsorsLoading.style.display = "none";
+            channelsList.style.display = "none";
+            noSponsors.style.display = "none";
+            sponsorsError.style.display = "block";
+            checkSubscriptions.style.display = "none";
+
+            totalSponsors.textContent = "0";
+            subscribedCount.textContent = "0";
+        }
+    }
+
+    /*
+     * Перевірка реальної підписки.
+     *
+     * API має отримати Telegram initData
+     * і перевірити користувача через Telegram Bot API.
+     */
+    async function verifySubscriptions() {
+        const userId = getTelegramUserId();
+
+        if (!userId) {
+            showMessage(
+                "Mini App потрібно відкрити через Telegram.",
+                "error"
+            );
+            return;
+        }
+
+        checkSubscriptions.disabled = true;
+        checkSubscriptions.textContent =
+            "Перевірка...";
+
+        showMessage("");
+
+        try {
+            const response = await fetch(
+                API_BASE + "/api/sponsors/check",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        init_data:
+                            telegram &&
+                            telegram.initData
+                                ? telegram.initData
+                                : "",
+                        sponsor_ids: sponsors.map(function (sponsor) {
+                            return sponsor.id;
+                        })
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Check API error: " + response.status
+                );
+            }
+
+            const data = await response.json();
+
+            /*
+             * Очікуваний результат:
+             *
+             * {
+             *   "success": true,
+             *   "subscribed": true,
+             *   "subscribed_ids": [...]
+             * }
+             */
+
+            if (Array.isArray(data.subscribed_ids)) {
+                subscribed = new Set(
+                    data.subscribed_ids.map(function (id) {
+                        return String(id);
+                    })
+                );
+            }
+
+            updateCounter();
+
+            if (
+                data.subscribed === true ||
+                data.all_subscribed === true
+            ) {
+                showMessage(
+                    "✓ Усі необхідні підписки підтверджено!",
+                    "success"
+                );
+
+                /*
+                 * Тут можна відкрити основну частину Mini App.
+                 * Наприклад, приховати блок спонсорів.
+                 */
+                document.body.classList.add(
+                    "subscriptions-complete"
+                );
+
+            } else {
+                const missing =
+                    data.missing_count !== undefined
+                        ? data.missing_count
+                        : Math.max(
+                            sponsors.length -
+                            subscribed.size,
+                            0
+                        );
+
+                showMessage(
+                    "Потрібно підписатися ще на " +
+                    missing +
+                    " канал(и).",
+                    "error"
+                );
+            }
+
+        } catch (error) {
+            console.error(
+                "Помилка перевірки підписок:",
+                error
+            );
+
+            showMessage(
+                "Не вдалося перевірити підписки. Спробуйте ще раз.",
+                "error"
+            );
+        } finally {
+            checkSubscriptions.disabled = false;
+            checkSubscriptions.textContent =
+                "✓ Перевірити підписки";
+        }
+    }
+
+    /*
+     * Кнопки.
+     */
+    retrySponsors.addEventListener(
+        "click",
+        loadSponsors
+    );
+
+    checkSubscriptions.addEventListener(
+        "click",
+        verifySubscriptions
+    );
+
+    /*
+     * Перший запуск.
+     */
+    loadSponsors();
+
+})();
+        </script>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </html>
