@@ -5,2130 +5,575 @@
 
     <meta
         name="viewport"
-        content="width=device-width,
-                 initial-scale=1.0,
-                 maximum-scale=1.0,
-                 user-scalable=no,
-                 viewport-fit=cover"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <title>NightBorn</title>
-
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100%;
-            background: #020611;
-            color: #ffffff;
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Arial,
-                sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        button {
-            font-family: inherit;
-        }
-
-        .app {
-            position: relative;
-            min-height: 100vh;
-            width: 100%;
-            overflow: hidden;
-            background:
-                radial-gradient(
-                    circle at 50% 15%,
-                    rgba(0, 145, 255, 0.20),
-                    transparent 35%
-                ),
-                linear-gradient(
-                    180deg,
-                    #020611 0%,
-                    #061326 50%,
-                    #020611 100%
-                );
-        }
-
-        /*
-         * ФОНОВА КАРТИНКА NIGHTBORN
-         *
-         * Поклади свою картинку в репозиторій:
-         *
-         * images/nightborn-bg.jpg
-         *
-         * Якщо назва файлу інша — зміни шлях нижче.
-         */
-        .background {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-
-            background-image:
-                linear-gradient(
-                    180deg,
-                    rgba(0, 4, 15, 0.28),
-                    rgba(0, 5, 18, 0.72)
-                ),
-                url("../images/nightborn-bg.jpg");
-
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-
-            filter: saturate(1.08);
-        }
-
-        .background::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-
-            background:
-                radial-gradient(
-                    circle at 50% 30%,
-                    transparent 0%,
-                    rgba(0, 0, 0, 0.16) 45%,
-                    rgba(0, 0, 0, 0.62) 100%
-                );
-        }
-
-        .content {
-            position: relative;
-            z-index: 2;
-
-            width: 100%;
-            max-width: 620px;
-            margin: 0 auto;
-
-            padding:
-                22px
-                16px
-                calc(35px + env(safe-area-inset-bottom));
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .top {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 8px 0 20px;
-        }
-
-        .brand {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .brand-logo {
-            width: 70px;
-            height: 70px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 22px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(0, 183, 255, 0.30),
-                    rgba(24, 63, 255, 0.12)
-                );
-
-            border: 1px solid rgba(74, 189, 255, 0.45);
-
-            box-shadow:
-                0 0 35px rgba(0, 157, 255, 0.25),
-                inset 0 0 25px rgba(0, 142, 255, 0.12);
-
-            font-size: 25px;
-            font-weight: 900;
-            letter-spacing: 1px;
-
-            color: #ffffff;
-        }
-
-        .brand-name {
-            margin-top: 10px;
-
-            font-size: 25px;
-            line-height: 1;
-
-            font-weight: 900;
-            letter-spacing: 1px;
-
-            text-shadow:
-                0 0 20px rgba(0, 166, 255, 0.55);
-        }
-
-        .brand-subtitle {
-            margin-top: 7px;
-
-            font-size: 13px;
-            color: rgba(255,255,255,0.65);
-
-            text-align: center;
-        }
-
-        /* =========================
-           SPONSOR CARD
-        ========================= */
-
-        .sponsor-box {
-            margin-top: 5px;
-
-            padding: 20px 15px 16px;
-
-            border-radius: 25px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(7, 22, 43, 0.91),
-                    rgba(2, 9, 22, 0.94)
-                );
-
-            border: 1px solid rgba(70, 166, 255, 0.25);
-
-            box-shadow:
-                0 20px 55px rgba(0, 0, 0, 0.42),
-                inset 0 0 35px rgba(0, 117, 255, 0.045);
-
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-        }
-
-        .title {
-            margin: 0;
-
-            text-align: center;
-
-            font-size: 24px;
-            line-height: 1.2;
-
-            font-weight: 900;
-        }
-
-        .description {
-            margin: 10px auto 0;
-
-            max-width: 420px;
-
-            text-align: center;
-
-            font-size: 14px;
-            line-height: 1.45;
-
-            color: rgba(255,255,255,0.68);
-        }
-
-        .counter-wrap {
-            display: flex;
-            justify-content: center;
-
-            margin-top: 17px;
-        }
-
-        .counter {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            min-width: 105px;
-
-            padding: 8px 15px;
-
-            border-radius: 999px;
-
-            background: rgba(0, 150, 255, 0.11);
-
-            border: 1px solid rgba(0, 165, 255, 0.22);
-
-            color: #ffffff;
-
-            font-size: 14px;
-            font-weight: 800;
-        }
-
-        .counter span {
-            color: #38bfff;
-            margin-right: 4px;
-        }
-
-        /* =========================
-           CHANNELS
-        ========================= */
-
-        #channelsList {
-            margin-top: 17px;
-
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .channel {
-            display: flex;
-            align-items: center;
-
-            min-height: 72px;
-
-            padding: 10px;
-
-            border-radius: 18px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(12, 31, 56, 0.92),
-                    rgba(4, 13, 28, 0.94)
-                );
-
-            border: 1px solid rgba(92, 177, 255, 0.16);
-
-            transition:
-                transform 0.15s ease,
-                border-color 0.15s ease;
-        }
-
-        .channel:active {
-            transform: scale(0.985);
-        }
-
-        .channel-number {
-            flex: 0 0 45px;
-
-            width: 45px;
-            height: 45px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            margin-right: 11px;
-
-            border-radius: 14px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(0, 169, 255, 0.20),
-                    rgba(36, 70, 255, 0.12)
-                );
-
-            border: 1px solid rgba(60, 177, 255, 0.25);
-
-            color: #55c8ff;
-
-            font-size: 15px;
-            font-weight: 900;
-        }
-
-        .channel-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .channel-name {
-            margin: 0;
-
-            font-size: 15px;
-            font-weight: 800;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .channel-status {
-            margin-top: 4px;
-
-            font-size: 12px;
-            color: rgba(255,255,255,0.50);
-        }
-
-        .channel-button {
-            flex: 0 0 45px;
-
-            width: 45px;
-            height: 45px;
-
-            border: 0;
-            border-radius: 14px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #008eff,
-                    #2453ff
-                );
-
-            color: #ffffff;
-
-            font-size: 20px;
-            font-weight: 900;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 7px 20px rgba(0, 112, 255, 0.25);
-        }
-
-        .channel-button:active {
-            transform: scale(0.94);
-        }
-
-        /* =========================
-           CHECK BUTTON
-        ========================= */
-
-        .check-button {
-            width: 100%;
-
-            margin-top: 15px;
-            padding: 15px 18px;
-
-            border: 0;
-            border-radius: 17px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #008fff,
-                    #274bff
-                );
-
-            color: #ffffff;
-
-            font-size: 16px;
-            font-weight: 900;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 10px 30px rgba(0, 115, 255, 0.25);
-
-            transition:
-                transform 0.15s ease,
-                opacity 0.15s ease;
-        }
-
-        .check-button:active {
-            transform: scale(0.985);
-        }
-
-        .check-button:disabled {
-            opacity: 0.55;
-            cursor: default;
-        }
-
-        /* =========================
-           MESSAGE
-        ========================= */
-
-        .message {
-            display: none;
-
-            margin-top: 12px;
-
-            padding: 12px 14px;
-
-            border-radius: 14px;
-
-            text-align: center;
-
-            font-size: 13px;
-            line-height: 1.4;
-
-            background: rgba(255,255,255,0.05);
-
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .message.show {
-            display: block;
-        }
-
-        .message.error {
-            color: #ff9d9d;
-            border-color: rgba(255, 70, 70, 0.25);
-            background: rgba(255, 50, 50, 0.07);
-        }
-
-        .message.success {
-            color: #8effc0;
-            border-color: rgba(55, 255, 145, 0.22);
-            background: rgba(40, 255, 130, 0.06);
-        }
-
-        /* =========================
-           LOADING
-        ========================= */
-
-        .loading {
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            min-height: 160px;
-
-            color: rgba(255,255,255,0.65);
-
-            font-size: 14px;
-        }
-
-        .spinner {
-            width: 22px;
-            height: 22px;
-
-            margin-right: 10px;
-
-            border-radius: 50%;
-
-            border:
-                3px solid rgba(255,255,255,0.12);
-
-            border-top-color: #20aaff;
-
-            animation:
-                spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* =========================
-           MAIN MENU
-        ========================= */
-
-        #mainMenu {
-            display: none;
-        }
-
-        .welcome {
-            margin-top: 5px;
-
-            padding: 25px 18px;
-
-            text-align: center;
-
-            border-radius: 25px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(7, 24, 47, 0.91),
-                    rgba(2, 9, 22, 0.95)
-                );
-
-            border: 1px solid rgba(72, 173, 255, 0.24);
-
-            box-shadow:
-                0 20px 55px rgba(0,0,0,0.40);
-        }
-
-        .welcome-icon {
-            width: 72px;
-            height: 72px;
-
-            margin: 0 auto 14px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 22px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(0, 164, 255, 0.25),
-                    rgba(54, 66, 255, 0.16)
-                );
-
-            border: 1px solid rgba(71, 184, 255, 0.35);
-
-            font-size: 30px;
-
-            box-shadow:
-                0 0 30px rgba(0, 145, 255, 0.18);
-        }
-
-        .welcome h2 {
-            margin: 0;
-
-            font-size: 25px;
-            font-weight: 900;
-        }
-
-        .welcome p {
-            margin: 9px 0 0;
-
-            color: rgba(255,255,255,0.63);
-
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .menu-grid {
-            display: grid;
-
-            grid-template-columns: repeat(2, 1fr);
-
-            gap: 10px;
-
-            margin-top: 13px;
-        }
-
-        .menu-button {
-            min-height: 66px;
-
-            border: 1px solid rgba(75, 175, 255, 0.16);
-            border-radius: 17px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(10, 31, 56, 0.91),
-                    rgba(3, 13, 27, 0.94)
-                );
-
-            color: #ffffff;
-
-            font-size: 14px;
-            font-weight: 800;
-
-            cursor: pointer;
-        }
-
-        .menu-button:active {
-            transform: scale(0.98);
-        }
-
-        /* =========================
-           ERROR SCREEN
-        ========================= */
-
-        #errorScreen {
-            display: none;
-
-            text-align: center;
-
-            padding: 40px 20px;
-        }
-
-        #errorScreen h2 {
-            margin: 0 0 10px;
-
-            font-size: 23px;
-        }
-
-        #errorScreen p {
-            margin: 0;
-
-            color: rgba(255,255,255,0.62);
-
-            line-height: 1.5;
-        }
-
-        .retry-button {
-            margin-top: 18px;
-
-            padding: 13px 22px;
-
-            border: 0;
-            border-radius: 14px;
-
-            background: #168fff;
-
-            color: white;
-
-            font-size: 14px;
-            font-weight: 800;
-        }
-
-        @media (min-width: 600px) {
-            .content {
-                padding-top: 35px;
-            }
-        }
-    </style>
+    <meta
+        name="theme-color"
+        content="#080a12"
+    >
+
+    <meta
+        name="description"
+        content="Night Capital — офіційний Mini App NightBorn"
+    >
+
+    <title>Night Capital</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 </head>
 
 <body>
 
-<div class="app">
+<div id="app">
 
-    <div class="background"></div>
+    <!-- ================= HEADER ================= -->
 
-    <div class="content">
+    <header class="header">
 
-        <!-- =========================
-             HEADER
-        ========================== -->
+        <div class="brand">
 
-        <header class="top">
+            <div class="brand-logo">
+                NC
+            </div>
 
-            <div class="brand">
-
-                <div class="brand-logo">
-                    NB
-                </div>
-
-                <div class="brand-name">
-                    NightBorn
+            <div class="brand-info">
+                <div class="brand-title">
+                    Night Capital
                 </div>
 
                 <div class="brand-subtitle">
-                    Майбутнє починається зараз
+                    NightBorn
                 </div>
-
             </div>
 
-        </header>
+        </div>
+
+        <button
+            id="closeApp"
+            class="close-button"
+            type="button"
+            aria-label="Закрити"
+        >
+            ×
+        </button>
+
+    </header>
 
 
-        <!-- =========================
-             SPONSORS
-        ========================== -->
+    <!-- ================= PLAYER ================= -->
 
-        <section id="sponsorScreen">
+    <main>
 
-            <div class="sponsor-box">
+        <section class="player-card">
 
-                <h1 class="title">
-                    Канали для підписки
-                </h1>
+            <div class="player-top">
 
-                <p class="description">
-                    Підпишіться на всі показані канали,
-                    щоб продовжити та відкрити NightBorn.
-                </p>
+                <div
+                    id="playerAvatar"
+                    class="player-avatar"
+                >
+                    ?
+                </div>
 
-                <div class="counter-wrap">
+                <div class="player-data">
 
-                    <div class="counter">
-                        <span id="subscribedCount">0</span>
-                        /
-                        <span id="totalCount">0</span>
+                    <div
+                        id="playerName"
+                        class="player-name"
+                    >
+                        Завантаження...
+                    </div>
+
+                    <div
+                        id="playerUsername"
+                        class="player-username"
+                    >
+                        —
                     </div>
 
                 </div>
 
+            </div>
 
-                <div id="loadingBlock" class="loading">
+            <div class="balance-label">
+                БАЛАНС
+            </div>
 
-                    <div class="spinner"></div>
+            <div
+                id="playerBalance"
+                class="player-balance"
+            >
+                0.00 ₴
+            </div>
 
-                    <span>
-                        Завантаження каналів...
-                    </span>
-
-                </div>
+        </section>
 
 
-                <div
-                    id="channelsList"
-                    style="display:none;"
-                ></div>
+        <!-- ================= NAVIGATION ================= -->
 
+        <section class="navigation-section">
+
+            <div class="navigation-grid">
 
                 <button
-                    id="checkButton"
-                    class="check-button"
-                    style="display:none;"
+                    class="navigation-button active"
+                    data-page="home"
                     type="button"
                 >
-                    ✓ Перевірити підписки
+                    <span>🏠</span>
+                    <strong>Головна</strong>
                 </button>
 
+                <button
+                    class="navigation-button"
+                    data-page="tasks"
+                    type="button"
+                >
+                    <span>📋</span>
+                    <strong>Завдання</strong>
+                </button>
 
-                <div
-                    id="message"
-                    class="message"
-                ></div>
+                <button
+                    class="navigation-button"
+                    data-page="referrals"
+                    type="button"
+                >
+                    <span>👥</span>
+                    <strong>Реферали</strong>
+                </button>
+
+                <button
+                    class="navigation-button"
+                    data-page="profile"
+                    type="button"
+                >
+                    <span>👤</span>
+                    <strong>Профіль</strong>
+                </button>
 
             </div>
 
         </section>
 
 
-        <!-- =========================
-             MAIN MENU
-        ========================== -->
+        <!-- ================= HOME ================= -->
 
-        <section id="mainMenu">
+        <section
+            id="page-home"
+            class="page active"
+        >
 
-            <div class="welcome">
+            <div class="section-header">
 
-                <div class="welcome-icon">
-                    ✦
+                <div>
+                    <h2>Спонсори</h2>
+
+                    <p>
+                        Підпишись на канали та перевір підписку
+                    </p>
                 </div>
 
-                <h2>
-                    Ласкаво просимо
-                </h2>
+                <div
+                    id="sponsorCounter"
+                    class="counter"
+                >
+                    0/0
+                </div>
+
+            </div>
+
+
+            <div
+                id="sponsorLoading"
+                class="loading-card"
+            >
+                Завантаження спонсорів...
+            </div>
+
+
+            <div
+                id="sponsorError"
+                class="error-card hidden"
+            >
+                <div class="error-icon">
+                    ⚠️
+                </div>
+
+                <div>
+                    <strong>
+                        Не вдалося завантажити спонсорів
+                    </strong>
+
+                    <p id="sponsorErrorText">
+                        Сервер недоступний.
+                    </p>
+                </div>
+
+                <button
+                    id="retrySponsors"
+                    type="button"
+                >
+                    Повторити
+                </button>
+            </div>
+
+
+            <div
+                id="sponsorList"
+                class="sponsor-list"
+            ></div>
+
+
+            <div
+                id="noSponsors"
+                class="empty-card hidden"
+            >
+                <div class="empty-icon">
+                    📢
+                </div>
+
+                <strong>
+                    Активних спонсорів немає
+                </strong>
 
                 <p>
-                    Ви успішно відкрили доступ
-                    до NightBorn.
+                    Зараз немає доступних каналів для підписки.
+                </p>
+            </div>
+
+
+            <!-- ================= QUICK ACTIONS ================= -->
+
+            <div class="section-header quick-header">
+
+                <div>
+                    <h2>Мій акаунт</h2>
+
+                    <p>
+                        Основна інформація
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="quick-grid">
+
+                <button
+                    id="balanceAction"
+                    class="quick-card"
+                    type="button"
+                >
+
+                    <span class="quick-icon">
+                        💰
+                    </span>
+
+                    <span class="quick-title">
+                        Баланс
+                    </span>
+
+                    <span class="quick-description">
+                        Переглянути баланс
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="profileAction"
+                    class="quick-card"
+                    type="button"
+                >
+
+                    <span class="quick-icon">
+                        👤
+                    </span>
+
+                    <span class="quick-title">
+                        Профіль
+                    </span>
+
+                    <span class="quick-description">
+                        Дані акаунта
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TASKS ================= -->
+
+        <section
+            id="page-tasks"
+            class="page"
+        >
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Завдання</h2>
+
+                    <p>
+                        Доступні завдання
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="empty-card">
+
+                <div class="empty-icon">
+                    📋
+                </div>
+
+                <strong>
+                    Завдань поки немає
+                </strong>
+
+                <p>
+                    Коли адміністратор додасть завдання,
+                    вони з'являться тут.
                 </p>
 
             </div>
 
+        </section>
 
-            <div class="menu-grid">
 
-                <button
-                    class="menu-button"
-                    type="button"
+        <!-- ================= REFERRALS ================= -->
+
+        <section
+            id="page-referrals"
+            class="page"
+        >
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Реферали</h2>
+
+                    <p>
+                        Твоя реферальна система
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="referral-card">
+
+                <div class="referral-icon">
+                    👥
+                </div>
+
+                <div class="referral-title">
+                    Запрошуй друзів
+                </div>
+
+                <div
+                    id="referralCount"
+                    class="referral-count"
                 >
-                    💰 Баланс
-                </button>
+                    0
+                </div>
 
-                <button
-                    class="menu-button"
-                    type="button"
-                >
-                    👥 Реферали
-                </button>
-
-                <button
-                    class="menu-button"
-                    type="button"
-                >
-                    🎁 Завдання
-                </button>
-
-                <button
-                    class="menu-button"
-                    type="button"
-                >
-                    ⛏ Майнинг
-                </button>
+                <div class="referral-description">
+                    Запрошених користувачів
+                </div>
 
             </div>
 
         </section>
 
 
-        <!-- =========================
-             ERROR
-        ========================== -->
+        <!-- ================= PROFILE ================= -->
 
-        <section id="errorScreen">
+        <section
+            id="page-profile"
+            class="page"
+        >
 
-            <h2>
-                Не вдалося завантажити канали
-            </h2>
+            <div class="section-header">
 
-            <p id="errorText">
-                Спробуйте оновити Mini App.
-            </p>
+                <div>
+                    <h2>Профіль</h2>
 
-            <button
-                id="retryButton"
-                class="retry-button"
-                type="button"
-            >
-                Спробувати ще раз
-            </button>
+                    <p>
+                        Інформація про акаунт
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <div
+                    id="profileAvatar"
+                    class="profile-avatar"
+                >
+                    ?
+                </div>
+
+                <div class="profile-row">
+
+                    <span>
+                        Ім'я
+                    </span>
+
+                    <strong id="profileName">
+                        —
+                    </strong>
+
+                </div>
+
+                <div class="profile-row">
+
+                    <span>
+                        Username
+                    </span>
+
+                    <strong id="profileUsername">
+                        —
+                    </strong>
+
+                </div>
+
+                <div class="profile-row">
+
+                    <span>
+                        Telegram ID
+                    </span>
+
+                    <strong id="profileId">
+                        —
+                    </strong>
+
+                </div>
+
+                <div class="profile-row">
+
+                    <span>
+                        Баланс
+                    </span>
+
+                    <strong id="profileBalance">
+                        0.00 ₴
+                    </strong>
+
+                </div>
+
+            </div>
 
         </section>
 
-    </div>
+    </main>
+
+
+    <!-- ================= ADMIN PANEL ================= -->
+
+    <section
+        id="adminPanel"
+        class="admin-panel hidden"
+    >
+
+        <div class="admin-header">
+
+            <div>
+
+                <h2>
+                    Адмін-панель
+                </h2>
+
+                <p>
+                    Керування Night Capital
+                </p>
+
+            </div>
+
+            <button
+                id="closeAdmin"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="admin-grid">
+
+            <button
+                class="admin-card"
+                data-admin-page="statistics"
+                type="button"
+            >
+                <span>📊</span>
+                <strong>Статистика</strong>
+            </button>
+
+            <button
+                class="admin-card"
+                data-admin-page="sponsors"
+                type="button"
+            >
+                <span>📢</span>
+                <strong>Спонсори</strong>
+            </button>
+
+            <button
+                class="admin-card"
+                data-admin-page="users"
+                type="button"
+            >
+                <span>👥</span>
+                <strong>Користувачі</strong>
+            </button>
+
+            <button
+                class="admin-card"
+                data-admin-page="tasks"
+                type="button"
+            >
+                <span>📋</span>
+                <strong>Завдання</strong>
+            </button>
+
+        </div>
+
+
+        <div
+            id="adminContent"
+            class="admin-content"
+        ></div>
+
+    </section>
+
+
+    <!-- ================= TOAST ================= -->
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
 
 </div>
 
 
-<script>
-"use strict";
-
-/*
-============================================================
- NIGHTBORN MINI APP
- РЕАЛЬНІ СПОНСОРИ + РЕАЛЬНА ПЕРЕВІРКА TELEGRAM
-============================================================
-
- API повинен мати:
-
- GET:
- /api/sponsors
-
- POST:
- /api/sponsor/check
-
- Telegram initData передається через:
-
- X-Telegram-Init-Data
-============================================================
-*/
-
-
-/*
-============================================================
- НАЛАШТУВАННЯ API
-============================================================
-
- СЮДИ ПОТРІБНО ВСТАВИТИ ПУБЛІЧНУ HTTPS-АДРЕСУ
- ТВОГО PYTHON API.
-
- Приклад:
-
- const API_BASE_URL = "https://example.com";
-
- НЕ ПИШИ:
- localhost
- 127.0.0.1
- 0.0.0.0
-
- GitHub Pages не зможе звернутися до API
- на твоєму телефоні через localhost.
-============================================================
-*/
-
-const API_BASE_URL = "";
-
-
-/*
-============================================================
- НАЛАШТУВАННЯ КІЛЬКОСТІ СПОНСОРІВ НА ЕКРАН
-============================================================
-*/
-
-const SPONSORS_PER_PAGE = 4;
-
-
-/*
-============================================================
- TELEGRAM
-============================================================
-*/
-
-const tg =
-    window.Telegram &&
-    window.Telegram.WebApp
-        ? window.Telegram.WebApp
-        : null;
-
-
-/*
-============================================================
- СТАН
-============================================================
-*/
-
-let allSponsors = [];
-
-let currentPage = 0;
-
-let currentSponsors = [];
-
-let checkedSponsors = new Set();
-
-
-/*
-============================================================
- DOM
-===================
-    /*
-========================================================
-    DOM
-========================================================
-*/
-
-const channelsList = document.getElementById("channelsList");
-const subscribedCount = document.getElementById("subscribedCount");
-
-const tg =
-    window.Telegram &&
-    window.Telegram.WebApp
-        ? window.Telegram.WebApp
-        : null;
-
-
-/*
-========================================================
-    API
-========================================================
-*/
-
-/*
-    API_BASE можна задати вище в коді як:
-
-    const API_BASE = "https://твій-api-домен";
-
-    Якщо API_BASE уже існує — використовується він.
-    Якщо ні — запит іде на поточний домен.
-*/
-
-const API_ROOT =
-    typeof API_BASE !== "undefined"
-        ? API_BASE.replace(/\/+$/, "")
-        : "";
-
-
-/*
-========================================================
-    TELEGRAM USER
-========================================================
-*/
-
-function getTelegramUser() {
-    if (
-        tg &&
-        tg.initDataUnsafe &&
-        tg.initDataUnsafe.user
-    ) {
-        return tg.initDataUnsafe.user;
-    }
-
-    return null;
-}
-
-
-function getTelegramUserId() {
-    const user = getTelegramUser();
-
-    if (!user || !user.id) {
-        return null;
-    }
-
-    return String(user.id);
-}
-
-
-function getInitData() {
-    if (tg && tg.initData) {
-        return tg.initData;
-    }
-
-    return "";
-}
-
-
-/*
-========================================================
-    API REQUEST
-========================================================
-*/
-
-async function apiRequest(
-    endpoint,
-    options = {}
-) {
-    const url =
-        API_ROOT +
-        endpoint;
-
-    const headers = {
-        "Content-Type": "application/json",
-        ...(options.headers || {})
-    };
-
-    const initData = getInitData();
-
-    if (initData) {
-        headers["X-Telegram-Init-Data"] = initData;
-    }
-
-    const userId = getTelegramUserId();
-
-    if (userId) {
-        headers["X-Telegram-User-Id"] = userId;
-    }
-
-    const response = await fetch(
-        url,
-        {
-            ...options,
-            headers
-        }
-    );
-
-    let data = null;
-
-    try {
-        data = await response.json();
-    } catch (_) {
-        data = null;
-    }
-
-    if (!response.ok) {
-        const message =
-            data &&
-            (
-                data.error ||
-                data.message
-            )
-                ? (
-                    data.error ||
-                    data.message
-                )
-                : `HTTP ${response.status}`;
-
-        throw new Error(message);
-    }
-
-    return data;
-}
-
-
-/*
-========================================================
-    NORMALIZE SPONSOR
-========================================================
-*/
-
-function normalizeSponsor(item) {
-    if (!item) {
-        return null;
-    }
-
-    const id =
-        item.id ??
-        item.channel_id ??
-        item.chat_id ??
-        item.channelId ??
-        null;
-
-    const title =
-        item.title ??
-        item.name ??
-        item.channel_name ??
-        item.channelName ??
-        "Telegram канал";
-
-    const username =
-        item.username ??
-        item.channel_username ??
-        item.channelUsername ??
-        "";
-
-    let url =
-        item.url ??
-        item.link ??
-        item.invite_link ??
-        item.inviteLink ??
-        "";
-
-    if (
-        !url &&
-        username
-    ) {
-        url =
-            "https://t.me/" +
-            String(username).replace(/^@/, "");
-    }
-
-    return {
-        id: id !== null ? String(id) : "",
-        title: String(title),
-        username: username
-            ? String(username)
-            : "",
-        url: String(url || ""),
-        raw: item
-    };
-}
-
-
-/*
-========================================================
-    LOAD SPONSORS
-========================================================
-*/
-
-async function loadSponsors() {
-    const data =
-        await apiRequest(
-            "/api/sponsors",
-            {
-                method: "GET"
-            }
-        );
-
-    let sponsors = [];
-
-    if (Array.isArray(data)) {
-        sponsors = data;
-    } else if (
-        data &&
-        Array.isArray(data.sponsors)
-    ) {
-        sponsors = data.sponsors;
-    } else if (
-        data &&
-        Array.isArray(data.channels)
-    ) {
-        sponsors = data.channels;
-    }
-
-    return sponsors
-        .map(normalizeSponsor)
-        .filter(Boolean);
-}
-
-
-/*
-========================================================
-    UNIQUE SPONSORS
-========================================================
-*/
-
-function uniqueSponsors(list) {
-    const result = [];
-    const seen = new Set();
-
-    for (const sponsor of list) {
-        const key =
-            sponsor.id ||
-            sponsor.url ||
-            sponsor.username ||
-            sponsor.title;
-
-        if (seen.has(key)) {
-            continue;
-        }
-
-        seen.add(key);
-        result.push(sponsor);
-    }
-
-    return result;
-}
-
-
-/*
-========================================================
-    PAGINATION
-========================================================
-*/
-
-function getPageSponsors() {
-    const start =
-        currentPage * 4;
-
-    return allSponsors.slice(
-        start,
-        start + 4
-    );
-}
-
-
-function hasMoreSponsors() {
-    return (
-        (currentPage + 1) * 4 <
-        allSponsors.length
-    );
-}
-
-
-/*
-========================================================
-    COUNTER
-========================================================
-*/
-
-function updateCounter() {
-    if (!subscribedCount) {
-        return;
-    }
-
-    subscribedCount.textContent =
-        String(checkedSponsors.size);
-}
-
-
-/*
-========================================================
-    RENDER SPONSORS
-========================================================
-*/
-
-function renderSponsors() {
-    if (!channelsList) {
-        return;
-    }
-
-    channelsList.innerHTML = "";
-
-    currentSponsors =
-        getPageSponsors();
-
-    if (
-        currentSponsors.length === 0
-    ) {
-        showMainMenu();
-        return;
-    }
-
-    currentSponsors.forEach(
-        (sponsor, index) => {
-            const channel =
-                document.createElement("div");
-
-            channel.className =
-                "channel";
-
-            const number =
-                document.createElement("div");
-
-            number.className =
-                "channel-number";
-
-            number.textContent =
-                String(
-                    currentPage * 4 +
-                    index +
-                    1
-                );
-
-            const info =
-                document.createElement("div");
-
-            info.className =
-                "channel-info";
-
-            const title =
-                document.createElement("h3");
-
-            title.textContent =
-                sponsor.title;
-
-            const description =
-                document.createElement("p");
-
-            if (
-                sponsor.username
-            ) {
-                description.textContent =
-                    "@" +
-                    sponsor.username.replace(
-                        /^@/,
-                        ""
-                    );
-            } else {
-                description.textContent =
-                    "Натисніть, щоб перейти та підписатися";
-            }
-
-            info.appendChild(title);
-            info.appendChild(description);
-
-            const button =
-                document.createElement("button");
-
-            button.className =
-                "channel-button";
-
-            button.type =
-                "button";
-
-            button.textContent =
-                "↗";
-
-            if (
-                checkedSponsors.has(
-                    sponsor.id
-                )
-            ) {
-                button.textContent =
-                    "✓";
-
-                button.classList.add(
-                    "checked"
-                );
-            }
-
-            button.addEventListener(
-                "click",
-                () => {
-                    openSponsor(
-                        sponsor
-                    );
-                }
-            );
-
-            channel.appendChild(
-                number
-            );
-
-            channel.appendChild(
-                info
-            );
-
-            channel.appendChild(
-                button
-            );
-
-            channelsList.appendChild(
-                channel
-            );
-        }
-    );
-
-    updateCounter();
-
-    renderCheckButton();
-}
-
-
-/*
-========================================================
-    OPEN TELEGRAM CHANNEL
-========================================================
-*/
-
-function openSponsor(sponsor) {
-    if (!sponsor.url) {
-        showError(
-            "У цього каналу немає посилання."
-        );
-
-        return;
-    }
-
-    if (
-        tg &&
-        typeof tg.openTelegramLink ===
-            "function" &&
-        sponsor.url.startsWith(
-            "https://t.me/"
-        )
-    ) {
-        try {
-            tg.openTelegramLink(
-                sponsor.url
-            );
-
-            return;
-        } catch (_) {}
-    }
-
-    if (
-        tg &&
-        typeof tg.openLink ===
-            "function"
-    ) {
-        try {
-            tg.openLink(
-                sponsor.url
-            );
-
-            return;
-        } catch (_) {}
-    }
-
-    window.open(
-        sponsor.url,
-        "_blank"
-    );
-}
-
-
-/*
-========================================================
-    CHECK SUBSCRIPTIONS
-========================================================
-*/
-
-async function checkSubscriptions() {
-    const userId =
-        getTelegramUserId();
-
-    if (!userId) {
-        showError(
-            "Відкрийте Mini App через Telegram."
-        );
-
-        return;
-    }
-
-    setCheckingState(true);
-
-    try {
-        const response =
-            await apiRequest(
-                "/api/check-subscriptions",
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        user_id: userId,
-                        telegram_user_id:
-                            userId,
-                        sponsors:
-                            currentSponsors.map(
-                                sponsor => ({
-                                    id:
-                                        sponsor.id,
-                                    username:
-                                        sponsor.username
-                                })
-                            )
-                    })
-                }
-            );
-
-        const results =
-            response &&
-            (
-                response.results ||
-                response.subscriptions ||
-                response.checked ||
-                []
-            );
-
-        /*
-            Очікуємо:
-
-            {
-                "results": [
-                    {
-                        "id": "...",
-                        "subscribed": true
-                    }
-                ]
-            }
-
-            Або:
-
-            {
-                "subscriptions": {
-                    "123": true,
-                    "456": false
-                }
-            }
-        */
-
-        processSubscriptionResults(
-            results,
-            response
-        );
-
-    } catch (error) {
-        console.error(
-            "Subscription check error:",
-            error
-        );
-
-        showError(
-            "Не вдалося перевірити підписку. Спробуйте ще раз."
-        );
-
-    } finally {
-        setCheckingState(false);
-    }
-}
-
-
-/*
-========================================================
-    PROCESS CHECK RESULT
-========================================================
-*/
-
-function processSubscriptionResults(
-    results,
-    response
-) {
-    let failed = [];
-
-    /*
-        Варіант №1:
-        results = array
-    */
-
-    if (
-        Array.isArray(results)
-    ) {
-        results.forEach(
-            result => {
-                if (!result) {
-                    return;
-                }
-
-                const id =
-                    result.id ??
-                    result.channel_id ??
-                    result.chat_id;
-
-                const subscribed =
-                    Boolean(
-                        result.subscribed ??
-                        result.is_subscribed ??
-                        result.member ??
-                        result.ok
-                    );
-
-                if (
-                    id !== undefined &&
-                    id !== null
-                ) {
-                    if (subscribed) {
-                        checkedSponsors.add(
-                            String(id)
-                        );
-                    } else {
-                        failed.push(
-                            String(id)
-                        );
-                    }
-                }
-            }
-        );
-    }
-
-    /*
-        Варіант №2:
-        subscriptions = object
-    */
-
-    if (
-        response &&
-        response.subscriptions &&
-        !Array.isArray(
-            response.subscriptions
-        )
-    ) {
-        Object.entries(
-            response.subscriptions
-        ).forEach(
-            ([id, value]) => {
-                if (value) {
-                    checkedSponsors.add(
-                        String(id)
-                    );
-                } else {
-                    failed.push(
-                        String(id)
-                    );
-                }
-            }
-        );
-    }
-
-    /*
-        Якщо API повернуло просто:
-        subscribed: true/false
-    */
-
-    if (
-        response &&
-        typeof response.subscribed ===
-            "boolean"
-    ) {
-        if (
-            response.subscribed
-        ) {
-            currentSponsors.forEach(
-                sponsor => {
-                    if (sponsor.id) {
-                        checkedSponsors.add(
-                            sponsor.id
-                        );
-                    }
-                }
-            );
-        }
-    }
-
-    updateCounter();
-
-    /*
-        Якщо хоча б один канал
-        не підписаний — залишаємо
-        користувача на поточній сторінці.
-    */
-
-    const currentIds =
-        currentSponsors
-            .map(
-                sponsor => sponsor.id
-            )
-            .filter(Boolean);
-
-    const notSubscribed =
-        currentIds.filter(
-            id =>
-                !checkedSponsors.has(
-                    id
-                )
-        );
-
-    if (
-        notSubscribed.length > 0
-    ) {
-        markUnsubscribed(
-            notSubscribed
-        );
-
-        showError(
-            "Ви підписалися не на всі канали. Підпишіться на всі канали та натисніть «Перевірити підписку» ще раз."
-        );
-
-        return;
-    }
-
-    /*
-        Поточні 4 канали виконані.
-        Переходимо до наступних.
-    */
-
-    if (
-        hasMoreSponsors()
-    ) {
-        currentPage++;
-
-        renderSponsors();
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-        return;
-    }
-
-    /*
-        Усі реальні спонсори виконані.
-    */
-
-    showMainMenu();
-}
-
-
-/*
-========================================================
-    MARK UNSUBSCRIBED
-========================================================
-*/
-
-function markUnsubscribed(
-    ids
-) {
-    if (!channelsList) {
-        return;
-    }
-
-    const buttons =
-        channelsList.querySelectorAll(
-            ".channel-button"
-        );
-
-    buttons.forEach(
-        (button, index) => {
-            const sponsor =
-                currentSponsors[index];
-
-            if (
-                !sponsor ||
-                !sponsor.id
-            ) {
-                return;
-            }
-
-            if (
-                ids.includes(
-                    sponsor.id
-                )
-            ) {
-                button.textContent =
-                    "↗";
-
-                button.classList.remove(
-                    "checked"
-                );
-
-                button.classList.add(
-                    "not-checked"
-                );
-            }
-        }
-    );
-}
-
-
-/*
-========================================================
-    CHECK BUTTON
-========================================================
-*/
-
-function renderCheckButton() {
-    const old =
-        document.getElementById(
-            "checkSubscriptionsButton"
-        );
-
-    if (old) {
-        old.remove();
-    }
-
-    if (
-        !channelsList ||
-        currentSponsors.length === 0
-    ) {
-        return;
-    }
-
-    const wrapper =
-        document.createElement("div");
-
-    wrapper.id =
-        "checkButtonWrapper";
-
-    wrapper.style.width =
-        "100%";
-
-    wrapper.style.marginTop =
-        "16px";
-
-    const button =
-        document.createElement("button");
-
-    button.id =
-        "checkSubscriptionsButton";
-
-    button.type =
-        "button";
-
-    button.textContent =
-        "Перевірити підписку";
-
-    button.addEventListener(
-        "click",
-        checkSubscriptions
-    );
-
-    wrapper.appendChild(
-        button
-    );
-
-    channelsList.parentNode.insertBefore(
-        wrapper,
-        channelsList.nextSibling
-    );
-}
-
-
-/*
-========================================================
-    LOADING STATE
-========================================================
-*/
-
-function setCheckingState(
-    checking
-) {
-    const button =
-        document.getElementById(
-            "checkSubscriptionsButton"
-        );
-
-    if (!button) {
-        return;
-    }
-
-    button.disabled =
-        checking;
-
-    if (checking) {
-        button.textContent =
-            "Перевіряємо...";
-    } else {
-        button.textContent =
-            "Перевірити підписку";
-    }
-}
-
-
-/*
-========================================================
-    ERROR
-========================================================
-*/
-
-function showError(
-    message
-) {
-    let error =
-        document.getElementById(
-            "sponsorError"
-        );
-
-    if (!error) {
-        error =
-            document.createElement(
-                "div"
-            );
-
-        error.id =
-            "sponsorError";
-
-        error.style.marginTop =
-            "14px";
-
-        error.style.padding =
-            "12px";
-
-        error.style.borderRadius =
-            "12px";
-
-        error.style.fontSize =
-            "14px";
-
-        error.style.textAlign =
-            "center";
-
-        if (channelsList) {
-            channelsList.parentNode.insertBefore(
-                error,
-                channelsList
-            );
-        }
-    }
-
-    error.textContent =
-        message;
-
-    error.style.display =
-        "block";
-}
-
-
-function hideError() {
-    const error =
-        document.getElementById(
-            "sponsorError"
-        );
-
-    if (error) {
-        error.style.display =
-            "none";
-    }
-}
-
-
-/*
-========================================================
-    MAIN MENU
-========================================================
-*/
-
-function showMainMenu() {
-    hideError();
-
-    const sponsorSection =
-        document.querySelector(
-            ".sponsors"
-        );
-
-    if (
-        sponsorSection
-    ) {
-        sponsorSection.style.display =
-            "none";
-    }
-
-    /*
-        Якщо головне меню вже є
-        в HTML — показуємо його.
-    */
-
-    const mainMenu =
-        document.getElementById(
-            "mainMenu"
-        );
-
-    if (mainMenu) {
-        mainMenu.style.display =
-            "block";
-
-        return;
-    }
-
-    /*
-        Якщо головного меню ще немає,
-        створюємо базовий контейнер.
-    */
-
-    const existing =
-        document.getElementById(
-            "generatedMainMenu"
-        );
-
-    if (existing) {
-        existing.style.display =
-            "block";
-
-        return;
-    }
-
-    const menu =
-        document.createElement(
-            "section"
-        );
-
-    menu.id =
-        "generatedMainMenu";
-
-    menu.style.padding =
-        "20px";
-
-    menu.innerHTML = `
-        <div style="
-            text-align:center;
-            padding:30px 10px;
-        ">
-            <h2>Night Capital</h2>
-            <p>
-    Доступ відкрито.
-</p>
-</div>
-`;
-
-    menu.style.marginTop = "20px";
-
-    const app =
-        document.querySelector(".app");
-
-    if (app) {
-        app.appendChild(menu);
-    }
-}
-
-
-/*
-========================================================
-    INITIAL LOAD
-========================================================
-*/
-
-async function initializeApp() {
-    try {
-        if (tg) {
-            try {
-                tg.ready();
-                tg.expand();
-            } catch (_) {}
-        }
-
-        hideError();
-
-        allSponsors =
-            uniqueSponsors(
-                await loadSponsors()
-            );
-
-        /*
-            Якщо спонсорів немає —
-            одразу відкриваємо головне меню.
-        */
-
-        if (allSponsors.length === 0) {
-            showMainMenu();
-            return;
-        }
-
-        /*
-            Починаємо з першої четвірки.
-        */
-
-        currentPage = 0;
-        checkedSponsors = new Set();
-
-        renderSponsors();
-
-    } catch (error) {
-        console.error(
-            "Mini App initialization error:",
-            error
-        );
-
-        if (channelsList) {
-            channelsList.innerHTML = `
-                <div style="
-                    text-align:center;
-                    padding:25px 10px;
-                ">
-                    <h3>
-                        Не вдалося завантажити канали
-                    </h3>
-
-                    <p>
-                        Спробуйте оновити Mini App.
-                    </p>
-
-                    <button
-                        id="retrySponsorsButton"
-                        type="button"
-                    >
-                        Спробувати ще раз
-                    </button>
-                </div>
-            `;
-
-            const retry =
-                document.getElementById(
-                    "retrySponsorsButton"
-                );
-
-            if (retry) {
-                retry.addEventListener(
-                    "click",
-                    initializeApp
-                );
-            }
-        }
-    }
-}
-
-
-/*
-========================================================
-    START APPLICATION
-========================================================
-*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initializeApp
-);
-
-if (
-    document.readyState !== "loading"
-) {
-    initializeApp();
-}
-
-</script>
-            
+<script
+    src="https://telegram.org/js/telegram-web-app.js"
+></script>
+
+<script
+    src="js/app.js"
+></script>
+
+</body>
+</html>
