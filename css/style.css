@@ -1,329 +1,809 @@
+:root {
+    --background: #080a12;
+    --background-light: #0d101b;
+    --card: #111521;
+    --card-light: #171c2a;
+    --border: rgba(255, 255, 255, 0.08);
+
+    --text: #ffffff;
+    --text-secondary: #a7afc0;
+
+    --accent: #7657ff;
+    --accent-light: #927cff;
+
+    --success: #39d98a;
+    --danger: #ff5d6c;
+
+    --radius: 18px;
+}
+
 * {
-        box-sizing: border-box;
-            margin: 0;
-                padding: 0;
-                }
-
-                html,
-                body {
-                    width: 100%;
-                        min-height: 100%;
-                        }
-
-                        body {
-                            font-family: Arial, sans-serif;
-                                background: #050b16;
-                                    color: #ffffff;
-                                        overflow-x: hidden;
-                                        }
-
-                                        button {
-                                            font-family: inherit;
-                                                border: 0;
-                                                    cursor: pointer;
-                                                    }
-
-                                                    .app {
-                                                        width: 100%;
-                                                            min-height: 100vh;
-                                                                background:
-                                                                        linear-gradient(
-                                                                                    to bottom,
-                                                                                                rgba(3, 9, 20, 0.15),
-                                                                                                            rgba(3, 9, 20, 0.92)
-                                                                                                                    ),
-                                                                                                                            url("../assets/background.jpg") center top / cover fixed;
-                                                                                                                            }
-
-                                                                                                                            /* Верхня частина */
-
-                                                                                                                            .hero {
-                                                                                                                                position: relative;
-                                                                                                                                    min-height: 310px;
-                                                                                                                                        display: flex;
-                                                                                                                                            align-items: flex-end;
-                                                                                                                                                justify-content: center;
-                                                                                                                                                    padding: 35px 20px 28px;
-                                                                                                                                                        overflow: hidden;
-                                                                                                                                                        }
-
-                                                                                                                                                        .hero-overlay {
-                                                                                                                                                            position: absolute;
-                                                                                                                                                                inset: 0;
-                                                                                                                                                                    background:
-                                                                                                                                                                            radial-gradient(
-                                                                                                                                                                                        circle at 50% 25%,
-                                                                                                                                                                                                    rgba(0, 183, 255, 0.22),
-                                                                                                                                                                                                                transparent 45%
-                                                                                                                                                                                                                        ),
-                                                                                                                                                                                                                                linear-gradient(
-                                                                                                                                                                                                                                            to bottom,
-                                                                                                                                                                                                                                                        transparent 35%,
-                                                                                                                                                                                                                                                                    rgba(4, 10, 22, 0.95) 100%
-                                                                                                                                                                                                                                                                            );
-                                                                                                                                                                                                                                                                            }
-
-                                                                                                                                                                                                                                                                            .hero-content {
-                                                                                                                                                                                                                                                                                position: relative;
-                                                                                                                                                                                                                                                                                    z-index: 2;
-                                                                                                                                                                                                                                                                                        width: 100%;
-                                                                                                                                                                                                                                                                                            max-width: 600px;
-                                                                                                                                                                                                                                                                                                text-align: center;
-                                                                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                                                                .logo {
-                                                                                                                                                                                                                                                                                                    width: 76px;
-                                                                                                                                                                                                                                                                                                        height: 76px;
-                                                                                                                                                                                                                                                                                                            margin: 0 auto 14px;
-                                                                                                                                                                                                                                                                                                                border-radius: 50%;
-                                                                                                                                                                                                                                                                                                                    display: flex;
-                                                                                                                                                                                                                                                                                                                        align-items: center;
-                                                                                                                                                                                                                                                                                                                            justify-content: center;
-
-                                                                                                                                                                                                                                                                                                                                font-size: 27px;
-                                                                                                                                                                                                                                                                                                                                    font-weight: 900;
-                                                                                                                                                                                                                                                                                                                                        letter-spacing: 1px;
-
-                                                                                                                                                                                                                                                                                                                                            color: #ffffff;
-
-                                                                                                                                                                                                                                                                                                                                                background:
-                                                                                                                                                                                                                                                                                                                                                        radial-gradient(
-                                                                                                                                                                                                                                                                                                                                                                    circle,
-                                                                                                                                                                                                                                                                                                                                                                                #09263d 0%,
-                                                                                                                                                                                                                                                                                                                                                                                            #06111f 65%,
-                                                                                                                                                                                                                                                                                                                                                                                                        #020710 100%
-                                                                                                                                                                                                                                                                                                                                                                                                                );
-
-                                                                                                                                                                                                                                                                                                                                                                                                                    border: 2px solid #16bfff;
-
-                                                                                                                                                                                                                                                                                                                                                                                                                        box-shadow:
-                                                                                                                                                                                                                                                                                                                                                                                                                                0 0 12px rgba(0, 191, 255, 0.9),
-                                                                                                                                                                                                                                                                                                                                                                                                                                        0 0 35px rgba(0, 150, 255, 0.35);
-                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                        .hero h1 {
-                                                                                                                                                                                                                                                                                                                                                                                                                                            font-size: 30px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                font-weight: 800;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    margin-bottom: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        text-shadow: 0 3px 18px rgba(0, 0, 0, 0.8);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        .hero p {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            max-width: 420px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                margin: 0 auto;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: rgba(255, 255, 255, 0.72);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 16px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            line-height: 1.45;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            /* Спонсори */
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            .sponsors {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: 100%;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    max-width: 650px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        margin: 0 auto;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            padding: 22px 16px 30px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            .section-header {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    align-items: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        justify-content: space-between;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            gap: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                margin-bottom: 15px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .section-header h2 {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    font-size: 21px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-weight: 800;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .counter {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            min-width: 64px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                padding: 9px 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    border-radius: 20px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        text-align: center;
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            background: rgba(255, 255, 255, 0.09);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border: 1px solid rgba(255, 255, 255, 0.08);
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: rgba(255, 255, 255, 0.9);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 15px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            font-weight: 700;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            /* Канали */
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            #channelsList {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    flex-direction: column;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        gap: 10px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    min-height: 100%;
+    background: var(--background);
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(118, 87, 255, 0.20),
+            transparent 35%
+        ),
+        var(--background);
+
+    color: var(--text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .channel {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            min-height: 82px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    align-items: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        gap: 12px;
+button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            padding: 10px;
+button:active {
+    transform: scale(0.98);
+}
+
+.hidden {
+    display: none !important;
+}
+
+#app {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+
+    padding:
+        16px
+        16px
+        40px;
+}
+
+
+/* ================= HEADER ================= */
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border-radius: 22px;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 46px;
+    height: 46px;
+
+    border-radius: 14px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background: rgba(18, 27, 41, 0.94);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        border: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            box-shadow:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    0 10px 25px rgba(0, 0, 0, 0.25);
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent),
+            var(--accent-light)
+        );
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        backdrop-filter: blur(12px);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+    font-size: 15px;
+    font-weight: 900;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .channel-number {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: 52px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                height: 52px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    flex: 0 0 52px;
+    box-shadow:
+        0 8px 30px rgba(118, 87, 255, 0.25);
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            align-items: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                justify-content: center;
+.brand-title {
+    font-size: 18px;
+    font-weight: 800;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    border-radius: 17px;
+.brand-subtitle {
+    margin-top: 3px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        background: rgba(255, 255, 255, 0.055);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                color: #55c8ff;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    font-size: 18px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-weight: 800;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+    font-size: 12px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .channel-info {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            min-width: 0;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                flex: 1;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+.close-button {
+    width: 42px;
+    height: 42px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .channel-info h3 {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    font-size: 17px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        margin-bottom: 5px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+    border: none;
+    border-radius: 12px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .channel-info p {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            white-space: nowrap;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                overflow: hidden;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    text-overflow: ellipsis;
+    background: var(--card);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        color: rgba(255, 255, 255, 0.55);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            font-size: 13px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+    color: var(--text-secondary);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            .channel-button {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: 52px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    height: 52px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        flex: 0 0 52px;
+    font-size: 28px;
+    line-height: 1;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border-radius: 17px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                background: #1769ff;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: #ffffff;
+/* ================= PLAYER ================= */
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 27px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            line-height: 1;
+.player-card {
+    padding: 20px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                box-shadow:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        0 7px 20px rgba(23, 105, 255, 0.28);
+    border: 1px solid var(--border);
+    border-radius: 22px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transition:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    transform 0.15s ease,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            background 0.15s ease;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(118, 87, 255, 0.25),
+            transparent 45%
+        ),
+        var(--card);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            .channel-button:active {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                transform: scale(0.94);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.18);
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                /* Інформаційний блок */
+.player-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .info-box {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    margin-top: 18px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        padding: 17px 18px;
+.player-avatar,
+.profile-avatar {
+    width: 50px;
+    height: 50px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border-radius: 20px;
+    border-radius: 15px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                background: rgba(18, 27, 41, 0.88);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    border: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        color: rgba(255, 255, 255, 0.65);
+    background: var(--card-light);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            font-size: 14px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                line-height: 1.55;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+    font-size: 20px;
+    font-weight: 800;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                /* Кнопка перевірки */
+.player-name {
+    font-weight: 800;
+    font-size: 16px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .check-button {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    width: 100%;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        min-height: 62px;
+.player-username {
+    margin-top: 3px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            margin-top: 16px;
+    color: var(--text-secondary);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border-radius: 21px;
+    font-size: 13px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background: linear-gradient(
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            135deg,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #1769ff,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            #347cff
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                );
+.balance-label {
+    margin-top: 25px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: #ffffff;
+    color: var(--text-secondary);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 18px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                box-shadow:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        0 10px 30px rgba(23, 105, 255, 0.3);
+.player-balance {
+    margin-top: 5px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transition:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    transform 0.15s ease,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            filter 0.15s ease;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+    font-size: 34px;
+    font-weight: 900;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            .check-button:active {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                transform: scale(0.98);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    filter: brightness(0.9);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+    letter-spacing: -1px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    /* Маленькі телефони */
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @media (max-width: 380px) {
+/* ================= NAVIGATION ================= */
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .hero {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                min-height: 285px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        padding-left: 15px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                padding-right: 15px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+.navigation-section {
+    margin-top: 14px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .hero h1 {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                font-size: 26px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+.navigation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .hero p {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                font-size: 14px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+.navigation-button {
+    min-height: 70px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .sponsors {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                padding-left: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        padding-right: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+    border: 1px solid var(--border);
+    border-radius: 15px;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .channel {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        border-radius: 19px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+    background: var(--card);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .channel-number,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    .channel-button {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: 48px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    height: 48px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            flex-basis: 48px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+}
+
+.navigation-button span {
+    font-size: 20px;
+}
+
+.navigation-button strong {
+    font-size: 11px;
+}
+
+.navigation-button.active {
+    border-color: rgba(118, 87, 255, 0.5);
+
+    background:
+        rgba(118, 87, 255, 0.13);
+
+    color: var(--accent-light);
+}
+
+
+/* ================= SECTIONS ================= */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 25px;
+    margin-bottom: 12px;
+}
+
+.section-header h2 {
+    font-size: 19px;
+}
+
+.section-header p {
+    margin-top: 4px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+.counter {
+    padding: 7px 10px;
+
+    border-radius: 10px;
+
+    background: var(--card);
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+
+/* ================= SPONSORS ================= */
+
+.loading-card,
+.error-card,
+.empty-card {
+    padding: 20px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    background: var(--card);
+
+    color: var(--text-secondary);
+
+    text-align: center;
+}
+
+.error-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-align: left;
+}
+
+.error-icon {
+    font-size: 25px;
+}
+
+.error-card strong {
+    color: var(--text);
+    font-size: 14px;
+}
+
+.error-card p {
+    margin-top: 4px;
+    font-size: 12px;
+}
+
+.error-card button {
+    margin-left: auto;
+
+    padding: 9px 11px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: var(--accent);
+
+    font-size: 12px;
+}
+
+.empty-icon {
+    margin-bottom: 10px;
+
+    font-size: 30px;
+}
+
+.empty-card strong {
+    display: block;
+
+    color: var(--text);
+}
+
+.empty-card p {
+    margin-top: 6px;
+
+    line-height: 1.5;
+
+    font-size: 13px;
+}
+
+.sponsor-list {
+    display: grid;
+    gap: 10px;
+}
+
+.sponsor-card {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px;
+
+    border: 1px solid var(--border);
+    border-radius: 17px;
+
+    background: var(--card);
+}
+
+.sponsor-logo {
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    border-radius: 14px;
+
+    object-fit: cover;
+
+    background: var(--card-light);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.sponsor-information {
+    min-width: 0;
+    flex: 1;
+}
+
+.sponsor-name {
+    overflow: hidden;
+
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 800;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sponsor-status {
+    margin-top: 4px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+.sponsor-status.success {
+    color: var(--success);
+}
+
+.sponsor-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.sponsor-button {
+    border: none;
+    border-radius: 10px;
+
+    padding: 9px 10px;
+
+    background: var(--card-light);
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sponsor-button.primary {
+    background: var(--accent);
+}
+
+.sponsor-button.check {
+    color: var(--success);
+}
+
+.sponsor-button:disabled {
+    opacity: 0.45;
+}
+
+
+/* ================= QUICK ================= */
+
+.quick-header {
+    margin-top: 28px;
+}
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+.quick-card {
+    min-height: 130px;
+
+    padding: 16px;
+
+    border: 1px solid var(--border);
+    border-radius: 17px;
+
+    background: var(--card);
+
+    text-align: left;
+}
+
+.quick-icon {
+    display: block;
+
+    margin-bottom: 12px;
+
+    font-size: 25px;
+}
+
+.quick-title {
+    display: block;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.quick-description {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+
+/* ================= REFERRALS ================= */
+
+.referral-card {
+    padding: 28px 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    background: var(--card);
+
+    text-align: center;
+}
+
+.referral-icon {
+    font-size: 36px;
+}
+
+.referral-title {
+    margin-top: 12px;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.referral-count {
+    margin-top: 18px;
+
+    font-size: 40px;
+    font-weight: 900;
+}
+
+.referral-description {
+    margin-top: 3px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+
+/* ================= PROFILE ================= */
+
+.profile-card {
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    background: var(--card);
+}
+
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+
+    margin: 22px auto;
+
+    border-radius: 21px;
+
+    font-size: 27px;
+}
+
+.profile-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px 17px;
+
+    border-top: 1px solid var(--border);
+}
+
+.profile-row span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.profile-row strong {
+    max-width: 60%;
+
+    overflow: hidden;
+
+    font-size: 13px;
+
+    text-align: right;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* ================= ADMIN ================= */
+
+.admin-panel {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    overflow-y: auto;
+
+    background: var(--background);
+
+    padding: 18px;
+
+    animation: panelIn .18s ease;
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    max-width: 720px;
+
+    margin: 0 auto 18px;
+}
+
+.admin-header h2 {
+    font-size: 20px;
+}
+
+.admin-header p {
+    margin-top: 4px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+.admin-header button {
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: var(--card);
+
+    font-size: 27px;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    max-width: 720px;
+
+    margin: 0 auto;
+}
+
+.admin-card {
+    min-height: 100px;
+
+    border: 1px solid var(--border);
+    border-radius: 17px;
+
+    background: var(--card);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.admin-card span {
+    font-size: 25px;
+}
+
+.admin-card strong {
+    font-size: 13px;
+}
+
+.admin-content {
+    max-width: 720px;
+
+    margin: 15px auto 0;
+}
+
+
+/* ================= TOAST ================= */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+    bottom: 22px;
+
+    z-index: 200;
+
+    width: calc(100% - 30px);
+    max-width: 520px;
+
+    padding: 13px 15px;
+
+    border: 1px solid var(--border);
+    border-radius: 13px;
+
+    background: #1b2030;
+
+    color: white;
+
+    text-align: center;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translate(-50%, 15px);
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+.toast.show {
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 420px) {
+
+    #app {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .player-balance {
+        font-size: 31px;
+    }
+
+    .navigation-button {
+        min-height: 64px;
+    }
+
+    .navigation-button strong {
+        font-size: 10px;
+    }
+
+    .sponsor-card {
+        padding: 11px;
+    }
+
+    .sponsor-buttons {
+        flex-direction: column;
+    }
+
+    .quick-grid {
+        grid-template-columns: 1fr;
+    }
+}
