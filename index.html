@@ -2,15 +2,16 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <title>NightBorn</title>
-
-    <meta name="theme-color" content="#050914">
+    <meta name="theme-color" content="#030711">
     <meta name="description" content="NightBorn">
+
+    <title>NightBorn</title>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -20,7 +21,7 @@
 <body>
 
 <!-- =========================================================
-     NIGHTBORN SPLASH SCREEN
+     LOADER
 ========================================================= -->
 
 <div id="loader" class="loader">
@@ -38,30 +39,64 @@
         <span></span>
         <span></span>
         <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
 
     <div class="loader-center">
 
-        <!-- CROWN -->
         <div class="loader-crown-wrap">
-            <div class="loader-crown">♛</div>
-            <div class="crown-aura"></div>
-        </div>
 
-        <!-- BRAND -->
-        <div class="loader-brand">
-            <div class="loader-brand-name">NightBorn</div>
-            <div class="loader-brand-line"></div>
-        </div>
-
-        <!-- YOUNG MOON -->
-        <div class="loader-moon-wrap">
-            <div class="moon moon-large">
-                <div class="moon-light"></div>
+            <div class="loader-crown">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
+
+            <div class="crown-aura"></div>
+
         </div>
 
-        <!-- NIGHT ENERGY -->
+
+        <div class="loader-brand">
+
+            <div class="loader-brand-name">
+                NightBorn
+            </div>
+
+            <div class="loader-brand-line"></div>
+
+        </div>
+
+
+        <!-- СПРАВЖНІЙ ГРАФІЧНИЙ ПІВМІСЯЦЬ -->
+
+        <div class="loader-moon-wrap">
+
+            <svg
+                class="brand-crescent brand-crescent-large"
+                viewBox="0 0 64 64"
+                aria-hidden="true"
+            >
+
+                <path
+                    class="crescent-shape"
+                    d="M45.8 5.7C27.4 8.9 14 24.1 14 41.5C14 53.1 20.3 61.8 30.3 63C24.1 57.2 20.6 49.6 20.6 41C20.6 26.5 30.3 13.5 45.8 5.7Z"
+                />
+
+                <path
+                    class="crescent-highlight"
+                    d="M38.9 9.8C27.4 15.1 20.8 27 20.8 40.2C20.8 48.2 23.8 55.3 29.2 60C23.3 54.1 20.2 47.1 20.2 39C20.2 26.9 27.1 15.4 38.9 9.8Z"
+                />
+
+            </svg>
+
+        </div>
+
+
+        <!-- ЕНЕРГІЯ -->
+
         <div class="night-energy">
 
             <div class="energy-orbit orbit-one">
@@ -89,11 +124,21 @@
                 <i></i>
                 <i></i>
                 <i></i>
+                <i></i>
+                <i></i>
             </div>
+
         </div>
 
+
         <div class="loader-status">
-            <span id="loaderStatus">Пробудження NightBorn</span>
+            <span id="loaderStatus">
+                Пробудження NightBorn
+            </span>
+        </div>
+
+        <div class="loader-progress">
+            <div id="loaderProgressBar"></div>
         </div>
 
     </div>
@@ -108,20 +153,45 @@
 <div id="app" class="app hidden">
 
     <!-- TOP BAR -->
+
     <header class="topbar">
 
-        <div class="brand">
+        <button
+            class="brand"
+            data-screen="home"
+            type="button"
+            aria-label="Головна"
+        >
 
-            <div class="brand-moon moon-small">
-                <div class="moon-light"></div>
-            </div>
+            <svg
+                class="brand-crescent brand-crescent-small"
+                viewBox="0 0 64 64"
+                aria-hidden="true"
+            >
 
-            <div class="brand-text">
+                <path
+                    class="crescent-shape"
+                    d="M45.8 5.7C27.4 8.9 14 24.1 14 41.5C14 53.1 20.3 61.8 30.3 63C24.1 57.2 20.6 49.6 20.6 41C20.6 26.5 30.3 13.5 45.8 5.7Z"
+                />
+
+                <path
+                    class="crescent-highlight"
+                    d="M38.9 9.8C27.4 15.1 20.8 27 20.8 40.2C20.8 48.2 23.8 55.3 29.2 60C23.3 54.1 20.2 47.1 20.2 39C20.2 26.9 27.1 15.4 38.9 9.8Z"
+                />
+
+            </svg>
+
+
+            <span class="brand-text">
+
                 <strong>NightBorn</strong>
-                <span>Night Capital</span>
-            </div>
 
-        </div>
+                <span>Night Capital</span>
+
+            </span>
+
+        </button>
+
 
         <button
             id="settingsTopBtn"
@@ -136,19 +206,30 @@
 
 
     <!-- =====================================================
-         MAIN CONTENT
+         CONTENT
     ====================================================== -->
 
     <main class="content">
 
-        <!-- HOME -->
-        <section id="screen-home" class="screen active">
+
+        <!-- ================= HOME ================= -->
+
+        <section
+            id="screen-home"
+            class="screen active"
+        >
 
             <div class="hero-card">
 
                 <div class="hero-glow"></div>
 
+                <div class="hero-lines"></div>
+
                 <div class="hero-content">
+
+                    <div class="hero-label">
+                        NIGHTBORN
+                    </div>
 
                     <div class="hero-title">
                         NIGHT CAPITAL
@@ -159,12 +240,19 @@
                     </div>
 
                     <div class="balance-label">
-                        Баланс
+                        Поточний баланс
                     </div>
 
                     <div class="balance-value">
-                        <span id="balance">0.00</span>
-                        <span class="currency">₴</span>
+
+                        <span id="balance">
+                            0.00
+                        </span>
+
+                        <span class="currency">
+                            ₴
+                        </span>
+
                     </div>
 
                 </div>
@@ -172,7 +260,7 @@
             </div>
 
 
-            <!-- USER INFORMATION -->
+            <!-- ПРОФІЛЬ -->
 
             <div class="section-title">
                 Профіль
@@ -182,11 +270,20 @@
 
                 <div class="info-card">
 
-                    <div class="info-icon">◈</div>
+                    <div class="info-icon">
+                        ◈
+                    </div>
 
                     <div class="info-content">
-                        <span>Ім'я</span>
-                        <strong id="userName">—</strong>
+
+                        <span>
+                            Ім'я
+                        </span>
+
+                        <strong id="userName">
+                            —
+                        </strong>
+
                     </div>
 
                 </div>
@@ -194,11 +291,20 @@
 
                 <div class="info-card">
 
-                    <div class="info-icon">@</div>
+                    <div class="info-icon">
+                        @
+                    </div>
 
                     <div class="info-content">
-                        <span>Username</span>
-                        <strong id="userUsername">—</strong>
+
+                        <span>
+                            Username
+                        </span>
+
+                        <strong id="userUsername">
+                            —
+                        </strong>
+
                     </div>
 
                 </div>
@@ -206,11 +312,20 @@
 
                 <div class="info-card info-card-wide">
 
-                    <div class="info-icon">ID</div>
+                    <div class="info-icon">
+                        ID
+                    </div>
 
                     <div class="info-content">
-                        <span>Telegram ID</span>
-                        <strong id="userId">—</strong>
+
+                        <span>
+                            Telegram ID
+                        </span>
+
+                        <strong id="userId">
+                            —
+                        </strong>
+
                     </div>
 
                 </div>
@@ -218,7 +333,7 @@
             </div>
 
 
-            <!-- QUICK ACTIONS -->
+            <!-- ШВИДКИЙ ДОСТУП -->
 
             <div class="section-title">
                 Швидкий доступ
@@ -231,8 +346,15 @@
                     data-screen="tasks"
                     type="button"
                 >
-                    <span class="quick-icon">▣</span>
-                    <span>Завдання</span>
+
+                    <span class="quick-icon">
+                        ▣
+                    </span>
+
+                    <span>
+                        Завдання
+                    </span>
+
                 </button>
 
 
@@ -241,8 +363,15 @@
                     data-screen="referrals"
                     type="button"
                 >
-                    <span class="quick-icon">♧</span>
-                    <span>Реферали</span>
+
+                    <span class="quick-icon">
+                        ♧
+                    </span>
+
+                    <span>
+                        Реферали
+                    </span>
+
                 </button>
 
 
@@ -251,8 +380,15 @@
                     data-screen="bonus"
                     type="button"
                 >
-                    <span class="quick-icon">✦</span>
-                    <span>Бонус</span>
+
+                    <span class="quick-icon">
+                        ✦
+                    </span>
+
+                    <span>
+                        Бонус
+                    </span>
+
                 </button>
 
 
@@ -261,14 +397,21 @@
                     data-screen="history"
                     type="button"
                 >
-                    <span class="quick-icon">◴</span>
-                    <span>Історія</span>
+
+                    <span class="quick-icon">
+                        ◴
+                    </span>
+
+                    <span>
+                        Історія
+                    </span>
+
                 </button>
 
             </div>
 
 
-            <!-- SPONSORS -->
+            <!-- СПОНСОРИ -->
 
             <div
                 id="sponsorsHomeBlock"
@@ -283,17 +426,28 @@
                 <div class="sponsor-card">
 
                     <div class="sponsor-header">
+
                         <div>
-                            <strong>Підпишись на канали</strong>
-                            <span>Це допомагає NightBorn розвиватися</span>
+
+                            <strong>
+                                Підпишись на канали
+                            </strong>
+
+                            <span>
+                                Виконай умови, щоб продовжити
+                            </span>
+
                         </div>
 
                         <div id="sponsorCounter">
                             0/0
                         </div>
+
                     </div>
 
+
                     <div id="sponsorsList"></div>
+
 
                     <button
                         id="checkSponsorsBtn"
@@ -310,20 +464,34 @@
         </section>
 
 
-        <!-- =================================================
-             TASKS
-        ================================================== -->
+        <!-- ================= TASKS ================= -->
 
-        <section id="screen-tasks" class="screen">
+        <section
+            id="screen-tasks"
+            class="screen"
+        >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Завдання</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Завдання
+                </h1>
+
+                <p>
+                    Виконуй завдання та отримуй винагороду.
+                </p>
+
             </div>
 
-            <div id="tasksList" class="items-list">
+
+            <div
+                id="tasksList"
+                class="items-list"
+            >
 
                 <div class="empty-state">
                     Завдання завантажуються…
@@ -334,22 +502,35 @@
         </section>
 
 
-        <!-- =================================================
-             REFERRALS
-        ================================================== -->
+        <!-- ================= REFERRALS ================= -->
 
-        <section id="screen-referrals" class="screen">
+        <section
+            id="screen-referrals"
+            class="screen"
+        >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Реферали</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Реферали
+                </h1>
+
+                <p>
+                    Запрошуй друзів та отримуй винагороду.
+                </p>
+
             </div>
+
 
             <div class="stat-card">
 
-                <span>Запрошено користувачів</span>
+                <span>
+                    Запрошено користувачів
+                </span>
 
                 <strong id="referralCount">
                     0
@@ -361,6 +542,7 @@
             <div class="section-title">
                 Твоє реферальне посилання
             </div>
+
 
             <div class="referral-box">
 
@@ -380,25 +562,37 @@
 
             </div>
 
+
             <div class="referral-info">
-                Запрошуй друзів та отримуй винагороду за розвиток NightBorn.
+                Запрошуй друзів та розвивай NightBorn разом.
             </div>
 
         </section>
 
 
-        <!-- =================================================
-             BONUS
-        ================================================== -->
+        <!-- ================= BONUS ================= -->
 
-        <section id="screen-bonus" class="screen">
+        <section
+            id="screen-bonus"
+            class="screen"
+        >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Щоденний бонус</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Щоденний бонус
+                </h1>
+
+                <p>
+                    Заходь щодня та отримуй свою винагороду.
+                </p>
+
             </div>
+
 
             <div class="bonus-card">
 
@@ -406,10 +600,12 @@
                     ✦
                 </div>
 
-                <h2>Щоденна винагорода</h2>
+                <h2>
+                    Щоденна винагорода
+                </h2>
 
                 <p id="bonusDescription">
-                    Заходь щодня та отримуй свій бонус.
+                    Твій щоденний бонус уже чекає.
                 </p>
 
                 <button
@@ -425,20 +621,34 @@
         </section>
 
 
-        <!-- =================================================
-             HISTORY
-        ================================================== -->
+        <!-- ================= HISTORY ================= -->
 
-        <section id="screen-history" class="screen">
+        <section
+            id="screen-history"
+            class="screen"
+        >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Історія</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Історія
+                </h1>
+
+                <p>
+                    Останні операції твого акаунта.
+                </p>
+
             </div>
 
-            <div id="historyList" class="items-list">
+
+            <div
+                id="historyList"
+                class="items-list"
+            >
 
                 <div class="empty-state">
                     Історія завантажується…
@@ -449,30 +659,46 @@
         </section>
 
 
-        <!-- =================================================
-             PROFILE
-        ================================================== -->
+        <!-- ================= PROFILE ================= -->
 
-        <section id="screen-profile" class="screen">
+        <section
+            id="screen-profile"
+            class="screen"
+        >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Мій профіль</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Мій профіль
+                </h1>
+
             </div>
+
 
             <div class="profile-large-card">
 
-                <div class="profile-avatar" id="profileAvatar">
+                <div
+                    class="profile-avatar"
+                    id="profileAvatar"
+                >
                     N
                 </div>
 
-                <div class="profile-large-name" id="profileName">
+                <div
+                    class="profile-large-name"
+                    id="profileName"
+                >
                     —
                 </div>
 
-                <div class="profile-large-username" id="profileUsername">
+                <div
+                    class="profile-large-username"
+                    id="profileUsername"
+                >
                     —
                 </div>
 
@@ -482,20 +708,47 @@
             <div class="profile-details">
 
                 <div class="detail-row">
-                    <span>Telegram ID</span>
-                    <strong id="profileId">—</strong>
-                </div>
 
-                <div class="detail-row">
-                    <span>Баланс</span>
-                    <strong>
-                        <span id="profileBalance">0.00</span> ₴
+                    <span>
+                        Telegram ID
+                    </span>
+
+                    <strong id="profileId">
+                        —
                     </strong>
+
                 </div>
 
+
                 <div class="detail-row">
-                    <span>Рефералів</span>
-                    <strong id="profileReferrals">0</strong>
+
+                    <span>
+                        Баланс
+                    </span>
+
+                    <strong>
+
+                        <span id="profileBalance">
+                            0.00
+                        </span>
+
+                        ₴
+
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Рефералів
+                    </span>
+
+                    <strong id="profileReferrals">
+                        0
+                    </strong>
+
                 </div>
 
             </div>
@@ -503,31 +756,53 @@
         </section>
 
 
-        <!-- =================================================
-             SETTINGS
-        ================================================== -->
+        <!-- ================= SETTINGS ================= -->
 
-        <section id="screen-settings" class="screen">
+        <section
+            id="screen-settings"
+            class="screen"
+        >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Налаштування</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Налаштування
+                </h1>
+
             </div>
+
 
             <div class="settings-card">
 
                 <div class="setting-row">
 
                     <div>
-                        <strong>Мова</strong>
-                        <span>Мова інтерфейсу</span>
+
+                        <strong>
+                            Мова
+                        </strong>
+
+                        <span>
+                            Мова інтерфейсу
+                        </span>
+
                     </div>
 
+
                     <select id="languageSelect">
-                        <option value="uk">Українська</option>
-                        <option value="ru">Русский</option>
+
+                        <option value="uk">
+                            Українська
+                        </option>
+
+                        <option value="ru">
+                            Русский
+                        </option>
+
                     </select>
 
                 </div>
@@ -542,11 +817,23 @@
                     data-screen="support"
                     type="button"
                 >
-                    <span>💬</span>
+
+                    <span class="setting-button-icon">
+                        ?
+                    </span>
+
                     <div>
-                        <strong>Підтримка</strong>
-                        <small>Поставити запитання</small>
+
+                        <strong>
+                            Підтримка
+                        </strong>
+
+                        <small>
+                            Поставити запитання
+                        </small>
+
                     </div>
+
                 </button>
 
             </div>
@@ -554,18 +841,29 @@
         </section>
 
 
-        <!-- =================================================
-             SUPPORT
-        ================================================== -->
+        <!-- ================= SUPPORT ================= -->
 
-        <section id="screen-support" class="screen">
+        <section
+            id="screen-support"
+            class="screen"
+        >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Підтримка</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Підтримка
+                </h1>
+
+                <p>
+                    Ми допоможемо вирішити твоє питання.
+                </p>
+
             </div>
+
 
             <div class="support-card">
 
@@ -573,18 +871,22 @@
                     ?
                 </div>
 
-                <h2>Є питання?</h2>
+                <h2>
+                    Є питання?
+                </h2>
 
                 <p>
-                    Напиши свою проблему або запитання.
-                    Ми передамо повідомлення адміністратору.
+                    Опиши проблему або запитання.
+                    Повідомлення буде передано адміністратору.
                 </p>
+
 
                 <textarea
                     id="supportMessage"
-                    placeholder="Напиши повідомлення..."
                     maxlength="2000"
+                    placeholder="Напиши повідомлення..."
                 ></textarea>
+
 
                 <button
                     id="sendSupportBtn"
@@ -599,9 +901,7 @@
         </section>
 
 
-        <!-- =================================================
-             ADMIN
-        ================================================== -->
+        <!-- ================= ADMIN ================= -->
 
         <section
             id="screen-admin"
@@ -610,35 +910,98 @@
         >
 
             <div class="page-heading">
-                <div>
-                    <span>NightBorn</span>
-                    <h1>Адмін-панель</h1>
-                </div>
+
+                <span>
+                    NIGHTBORN
+                </span>
+
+                <h1>
+                    Адмін-панель
+                </h1>
+
+                <p>
+                    Керування системою.
+                </p>
+
             </div>
+
 
             <div class="admin-grid">
 
-                <button class="admin-card" type="button">
-                    <strong>Користувачі</strong>
-                    <span>Керування користувачами</span>
+                <button
+                    class="admin-card"
+                    data-admin-action="users"
+                    type="button"
+                >
+
+                    <strong>
+                        Користувачі
+                    </strong>
+
+                    <span>
+                        Керування користувачами
+                    </span>
+
                 </button>
 
-                <button class="admin-card" type="button">
-                    <strong>Завдання</strong>
-                    <span>Керування завданнями</span>
+
+                <button
+                    class="admin-card"
+                    data-admin-action="tasks"
+                    type="button"
+                >
+
+                    <strong>
+                        Завдання
+                    </strong>
+
+                    <span>
+                        Керування завданнями
+                    </span>
+
                 </button>
 
-                <button class="admin-card" type="button">
-                    <strong>Спонсори</strong>
-                    <span>Керування каналами</span>
+
+                <button
+                    class="admin-card"
+                    data-admin-action="sponsors"
+                    type="button"
+                >
+
+                    <strong>
+                        Спонсори
+                    </strong>
+
+                    <span>
+                        Керування каналами
+                    </span>
+
                 </button>
 
-                <button class="admin-card" type="button">
-                    <strong>Промокоди</strong>
-                    <span>Керування промокодами</span>
+
+                <button
+                    class="admin-card"
+                    data-admin-action="promocodes"
+                    type="button"
+                >
+
+                    <strong>
+                        Промокоди
+                    </strong>
+
+                    <span>
+                        Керування промокодами
+                    </span>
+
                 </button>
 
             </div>
+
+
+            <div
+                id="adminResult"
+                class="admin-result"
+            ></div>
 
         </section>
 
@@ -652,49 +1015,84 @@
     <nav class="bottom-nav">
 
         <button
-            class="nav-button active"
+            class="nav-item active"
             data-screen="home"
             type="button"
         >
-            <span>⌂</span>
-            <small>Головна</small>
+
+            <span>
+                ◆
+            </span>
+
+            <small>
+                Головна
+            </small>
+
         </button>
 
+
         <button
-            class="nav-button"
+            class="nav-item"
             data-screen="tasks"
             type="button"
         >
-            <span>▣</span>
-            <small>Завдання</small>
+
+            <span>
+                ▣
+            </span>
+
+            <small>
+                Завдання
+            </small>
+
         </button>
 
+
         <button
-            class="nav-button"
+            class="nav-item"
             data-screen="referrals"
             type="button"
         >
-            <span>♧</span>
-            <small>Реферали</small>
+
+            <span>
+                ♧
+            </span>
+
+            <small>
+                Реферали
+            </small>
+
         </button>
 
+
         <button
-            class="nav-button"
+            class="nav-item"
             data-screen="profile"
             type="button"
         >
-            <span>◉</span>
-            <small>Профіль</small>
+
+            <span>
+                ◉
+            </span>
+
+            <small>
+                Профіль
+            </small>
+
         </button>
 
     </nav>
 
+
+    <!-- TOAST -->
+
+    <div
+        id="toast"
+        class="toast"
+        aria-live="polite"
+    ></div>
+
 </div>
-
-
-<!-- TOAST -->
-
-<div id="toast" class="toast"></div>
 
 
 <script src="js/app.js"></script>
