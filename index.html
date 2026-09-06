@@ -2,19 +2,19 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <meta name="theme-color" content="#020611">
-
     <title>NightBorn</title>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="theme-color" content="#050914">
+    <meta name="description" content="NightBorn">
 
     <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 
 <body>
@@ -23,62 +23,77 @@
      NIGHTBORN SPLASH SCREEN
 ========================================================= -->
 
-<div id="loader">
+<div id="loader" class="loader">
 
-    <div class="loader-background">
-
-        <div class="loader-stars"></div>
-
-        <div class="loader-glow loader-glow-one"></div>
-        <div class="loader-glow loader-glow-two"></div>
-
+    <div class="loader-stars">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
 
-
-    <div class="loader-content">
+    <div class="loader-center">
 
         <!-- CROWN -->
+        <div class="loader-crown-wrap">
+            <div class="loader-crown">♛</div>
+            <div class="crown-aura"></div>
+        </div>
 
-        <div class="loader-crown">
-            <div class="crown-glow"></div>
+        <!-- BRAND -->
+        <div class="loader-brand">
+            <div class="loader-brand-name">NightBorn</div>
+            <div class="loader-brand-line"></div>
+        </div>
 
-            <div class="crown-symbol">
-                ♛
+        <!-- YOUNG MOON -->
+        <div class="loader-moon-wrap">
+            <div class="moon moon-large">
+                <div class="moon-light"></div>
             </div>
         </div>
 
+        <!-- NIGHT ENERGY -->
+        <div class="night-energy">
 
-        <!-- BRAND -->
+            <div class="energy-orbit orbit-one">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
-        <div class="loader-brand">
+            <div class="energy-orbit orbit-two">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
-            <span class="loader-night">
-                NightBorn
-            </span>
+            <div class="energy-core">
+                <div class="energy-core-inner"></div>
+            </div>
 
-            <!-- Не emoji. Окремий графічний місяць -->
-            <span
-                class="brand-moon"
-                aria-hidden="true">
-            </span>
-
+            <div class="energy-particles">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
         </div>
 
-
-        <div class="loader-line">
-            <span></span>
-        </div>
-
-
-        <div class="loader-subtitle">
-            NIGHT CAPITAL
-        </div>
-
-
-        <div class="loader-points">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="loader-status">
+            <span id="loaderStatus">Пробудження NightBorn</span>
         </div>
 
     </div>
@@ -90,167 +105,117 @@
      APPLICATION
 ========================================================= -->
 
-<div id="app">
+<div id="app" class="app hidden">
 
-
-    <!-- =====================================================
-         TOP BAR
-    ====================================================== -->
-
+    <!-- TOP BAR -->
     <header class="topbar">
 
-        <div class="brand-mini">
+        <div class="brand">
 
-            <div class="brand-logo">
-                NC
+            <div class="brand-moon moon-small">
+                <div class="moon-light"></div>
             </div>
 
-
-            <div class="brand-mini-text">
-
-                <div class="brand-name">
-
-                    <span>
-                        NightBorn
-                    </span>
-
-                    <span
-                        class="brand-moon brand-moon-small"
-                        aria-hidden="true">
-                    </span>
-
-                </div>
-
-
-                <div class="brand-status">
-
-                    <span class="status-dot"></span>
-
-                    Онлайн
-
-                </div>
-
+            <div class="brand-text">
+                <strong>NightBorn</strong>
+                <span>Night Capital</span>
             </div>
 
         </div>
 
-
         <button
+            id="settingsTopBtn"
             class="icon-button"
-            id="top-support-button"
             type="button"
-            aria-label="Підтримка">
-
-            ?
-
+            aria-label="Налаштування"
+        >
+            ⚙
         </button>
 
     </header>
 
 
-
     <!-- =====================================================
-         PAGES
+         MAIN CONTENT
     ====================================================== -->
 
-    <main id="pages">
+    <main class="content">
 
+        <!-- HOME -->
+        <section id="screen-home" class="screen active">
 
-        <!-- =================================================
-             HOME
-        ================================================== -->
+            <div class="hero-card">
 
-        <section
-            class="page active"
-            id="page-home">
-
-
-            <!-- CITY HERO -->
-
-            <div class="hero">
-
-                <div class="hero-image"></div>
-
-                <div class="hero-overlay"></div>
+                <div class="hero-glow"></div>
 
                 <div class="hero-content">
 
-                    <div class="hero-brand">
-
-                        <span>
-                            NightBorn
-                        </span>
-
-                        <span
-                            class="brand-moon brand-moon-hero"
-                            aria-hidden="true">
-                        </span>
-
-                    </div>
-
-
-                    <div class="hero-small">
+                    <div class="hero-title">
                         NIGHT CAPITAL
                     </div>
 
+                    <div class="hero-subtitle">
+                        Твоя ніч. Твій капітал.
+                    </div>
 
-                    <h1>
-                        Заробляй.<br>
-                        Розвивайся.
-                    </h1>
+                    <div class="balance-label">
+                        Баланс
+                    </div>
 
-
-                    <p>
-                        Виконуй завдання та отримуй
-                        винагороду у гривнях.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- BALANCE -->
-
-            <div class="balance-card">
-
-                <div class="balance-header">
-
-                    <span>
-                        Ваш баланс
-                    </span>
-
-                    <span class="balance-currency">
-                        UAH
-                    </span>
-
-                </div>
-
-
-                <div class="balance-value">
-
-                    <span id="balance-value">
-                        0.00
-                    </span>
-
-                    <span class="balance-symbol">
-                        ₴
-                    </span>
-
-                </div>
-
-
-                <div class="balance-footer">
-
-                    <span id="balance-status">
-                        Доступний баланс
-                    </span>
+                    <div class="balance-value">
+                        <span id="balance">0.00</span>
+                        <span class="currency">₴</span>
+                    </div>
 
                 </div>
 
             </div>
 
+
+            <!-- USER INFORMATION -->
+
+            <div class="section-title">
+                Профіль
+            </div>
+
+            <div class="profile-grid">
+
+                <div class="info-card">
+
+                    <div class="info-icon">◈</div>
+
+                    <div class="info-content">
+                        <span>Ім'я</span>
+                        <strong id="userName">—</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-icon">@</div>
+
+                    <div class="info-content">
+                        <span>Username</span>
+                        <strong id="userUsername">—</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="info-card info-card-wide">
+
+                    <div class="info-icon">ID</div>
+
+                    <div class="info-content">
+                        <span>Telegram ID</span>
+                        <strong id="userId">—</strong>
+                    </div>
+
+                </div>
+
+            </div>
 
 
             <!-- QUICK ACTIONS -->
@@ -259,799 +224,224 @@
                 Швидкий доступ
             </div>
 
-
             <div class="quick-grid">
 
-
                 <button
                     class="quick-card"
-                    data-page="tasks"
-                    type="button">
-
-                    <div class="quick-icon">
-                        📋
-                    </div>
-
-                    <div class="quick-name">
-                        Завдання
-                    </div>
-
-                    <div class="quick-description">
-                        Отримати винагороду
-                    </div>
-
+                    data-screen="tasks"
+                    type="button"
+                >
+                    <span class="quick-icon">▣</span>
+                    <span>Завдання</span>
                 </button>
 
 
                 <button
                     class="quick-card"
-                    data-page="bonus"
-                    type="button">
-
-                    <div class="quick-icon">
-                        🎁
-                    </div>
-
-                    <div class="quick-name">
-                        Бонус
-                    </div>
-
-                    <div class="quick-description">
-                        Щоденна винагорода
-                    </div>
-
+                    data-screen="referrals"
+                    type="button"
+                >
+                    <span class="quick-icon">♧</span>
+                    <span>Реферали</span>
                 </button>
 
 
                 <button
                     class="quick-card"
-                    data-page="referrals"
-                    type="button">
-
-                    <div class="quick-icon">
-                        👥
-                    </div>
-
-                    <div class="quick-name">
-                        Реферали
-                    </div>
-
-                    <div class="quick-description">
-                        Запрошуй друзів
-                    </div>
-
+                    data-screen="bonus"
+                    type="button"
+                >
+                    <span class="quick-icon">✦</span>
+                    <span>Бонус</span>
                 </button>
 
 
                 <button
                     class="quick-card"
-                    data-page="history"
-                    type="button">
-
-                    <div class="quick-icon">
-                        📜
-                    </div>
-
-                    <div class="quick-name">
-                        Історія
-                    </div>
-
-                    <div class="quick-description">
-                        Ваші операції
-                    </div>
-
+                    data-screen="history"
+                    type="button"
+                >
+                    <span class="quick-icon">◴</span>
+                    <span>Історія</span>
                 </button>
 
             </div>
-
-
-
-            <!-- PROFILE PREVIEW -->
-
-            <div class="section-title">
-                Профіль
-            </div>
-
-
-            <button
-                class="profile-preview"
-                data-page="profile"
-                type="button">
-
-
-                <div
-                    class="profile-avatar"
-                    id="home-avatar">
-
-                    ?
-
-                </div>
-
-
-                <div class="profile-info">
-
-                    <div
-                        class="profile-name"
-                        id="home-name">
-
-                        Користувач
-
-                    </div>
-
-
-                    <div
-                        class="profile-username"
-                        id="home-username">
-
-                        @username
-
-                    </div>
-
-                </div>
-
-
-                <div class="profile-arrow">
-                    ›
-                </div>
-
-            </button>
-
 
 
             <!-- SPONSORS -->
 
             <div
-                class="sponsors-block"
-                id="home-sponsors-block">
+                id="sponsorsHomeBlock"
+                class="section-block"
+                style="display:none;"
+            >
 
                 <div class="section-title">
-                    Партнери
+                    Підтримка проєкту
                 </div>
 
+                <div class="sponsor-card">
 
-                <div id="home-sponsors">
+                    <div class="sponsor-header">
+                        <div>
+                            <strong>Підпишись на канали</strong>
+                            <span>Це допомагає NightBorn розвиватися</span>
+                        </div>
 
-                    <div class="empty-small">
-                        Завантаження...
+                        <div id="sponsorCounter">
+                            0/0
+                        </div>
                     </div>
+
+                    <div id="sponsorsList"></div>
+
+                    <button
+                        id="checkSponsorsBtn"
+                        class="primary-button"
+                        type="button"
+                    >
+                        Перевірити підписку
+                    </button>
 
                 </div>
 
             </div>
 
         </section>
-
 
 
         <!-- =================================================
              TASKS
         ================================================== -->
 
-        <section
-            class="page"
-            id="page-tasks">
+        <section id="screen-tasks" class="screen">
 
-
-            <div class="page-header">
-
-                <button
-                    class="back-button"
-                    data-page="home"
-                    type="button">
-
-                    ‹
-
-                </button>
-
-
+            <div class="page-heading">
                 <div>
-
-                    <h2>
-                        Завдання
-                    </h2>
-
-                    <p>
-                        Виконуй завдання та отримуй ₴
-                    </p>
-
+                    <span>NightBorn</span>
+                    <h1>Завдання</h1>
                 </div>
-
             </div>
 
+            <div id="tasksList" class="items-list">
 
-            <div class="page-info-card">
-
-                <div class="page-info-icon">
-                    📋
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        Звичайні завдання
-                    </strong>
-
-                    <span>
-                        Виконай умову та отримай винагороду
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div id="tasks-list">
-
-                <div class="loading-card">
-                    Завантаження завдань...
+                <div class="empty-state">
+                    Завдання завантажуються…
                 </div>
 
             </div>
 
         </section>
-
 
 
         <!-- =================================================
              REFERRALS
         ================================================== -->
 
-        <section
-            class="page"
-            id="page-referrals">
+        <section id="screen-referrals" class="screen">
 
-
-            <div class="page-header">
-
-                <button
-                    class="back-button"
-                    data-page="home"
-                    type="button">
-
-                    ‹
-
-                </button>
-
-
+            <div class="page-heading">
                 <div>
-
-                    <h2>
-                        Реферали
-                    </h2>
-
-                    <p>
-                        Запрошуй друзів
-                    </p>
-
+                    <span>NightBorn</span>
+                    <h1>Реферали</h1>
                 </div>
-
             </div>
 
+            <div class="stat-card">
 
-            <div class="referral-card">
+                <span>Запрошено користувачів</span>
 
-                <div class="referral-icon">
-                    👥
-                </div>
-
-
-                <div class="referral-title">
-                    Ваша реферальна система
-                </div>
-
-
-                <div class="referral-text">
-
-                    Запрошуй друзів за своїм
-                    реферальним посиланням
-                    та отримуй винагороду.
-
-                </div>
-
-
-                <div class="referral-stat">
-
-                    <div>
-
-                        <span>
-                            Рефералів
-                        </span>
-
-                        <strong id="referral-count">
-                            0
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>
-                            Зароблено
-                        </span>
-
-                        <strong>
-
-                            <span id="referral-earned">
-                                0.00
-                            </span>
-
-                            ₴
-
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="referral-link-box">
-
-                    <span id="referral-link">
-                        Посилання завантажується...
-                    </span>
-
-                </div>
-
-
-                <button
-                    class="primary-button"
-                    id="copy-referral"
-                    type="button">
-
-                    Скопіювати посилання
-
-                </button>
-
-            </div>
-
-
-            <div class="info-box">
-
-                <strong>
-                    Як це працює?
+                <strong id="referralCount">
+                    0
                 </strong>
 
-
-                <p>
-
-                    Поділись своїм реферальним
-                    посиланням. Нові користувачі,
-                    які прийдуть за ним, будуть
-                    зараховані до твоєї команди.
-
-                </p>
-
             </div>
 
-        </section>
 
+            <div class="section-title">
+                Твоє реферальне посилання
+            </div>
 
+            <div class="referral-box">
 
-        <!-- =================================================
-             PROFILE
-        ================================================== -->
-
-        <section
-            class="page"
-            id="page-profile">
-
-
-            <div class="page-header">
+                <input
+                    id="referralLink"
+                    type="text"
+                    readonly
+                    value=""
+                >
 
                 <button
-                    class="back-button"
-                    data-page="home"
-                    type="button">
-
-                    ‹
-
+                    id="copyReferralBtn"
+                    type="button"
+                >
+                    Копіювати
                 </button>
 
-
-                <div>
-
-                    <h2>
-                        Профіль
-                    </h2>
-
-                    <p>
-                        Інформація про акаунт
-                    </p>
-
-                </div>
-
             </div>
 
-
-            <div class="big-profile-card">
-
-                <div
-                    class="big-avatar"
-                    id="profile-avatar">
-
-                    ?
-
-                </div>
-
-
-                <div
-                    class="big-profile-name"
-                    id="profile-name">
-
-                    Користувач
-
-                </div>
-
-
-                <div
-                    class="big-profile-username"
-                    id="profile-username">
-
-                    @username
-
-                </div>
-
+            <div class="referral-info">
+                Запрошуй друзів та отримуй винагороду за розвиток NightBorn.
             </div>
-
-
-
-            <!-- NAME -->
-
-            <div class="profile-detail-card">
-
-                <div class="profile-detail-icon">
-                    👤
-                </div>
-
-                <div class="profile-detail-content">
-
-                    <span>
-                        Ім'я
-                    </span>
-
-                    <strong id="detail-name">
-                        Користувач
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- USERNAME -->
-
-            <div class="profile-detail-card">
-
-                <div class="profile-detail-icon">
-                    @
-                </div>
-
-                <div class="profile-detail-content">
-
-                    <span>
-                        Username
-                    </span>
-
-                    <strong id="detail-username">
-                        —
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- ID -->
-
-            <div class="profile-detail-card">
-
-                <div class="profile-detail-icon">
-                    #
-                </div>
-
-                <div class="profile-detail-content">
-
-                    <span>
-                        Telegram ID
-                    </span>
-
-                    <strong id="detail-id">
-                        —
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- STATISTICS -->
-
-            <div class="stats-grid">
-
-                <div class="stat-card">
-
-                    <span>
-                        Баланс
-                    </span>
-
-                    <strong>
-
-                        <span id="profile-balance">
-                            0.00
-                        </span>
-
-                        ₴
-
-                    </strong>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <span>
-                        Реферали
-                    </span>
-
-                    <strong id="profile-referrals">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <span>
-                        Завдання
-                    </span>
-
-                    <strong id="profile-tasks">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <span>
-                        Зароблено
-                    </span>
-
-                    <strong>
-
-                        <span id="profile-earned">
-                            0.00
-                        </span>
-
-                        ₴
-
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <button
-                class="menu-row"
-                data-page="history"
-                type="button">
-
-                <span class="menu-row-icon">
-                    📜
-                </span>
-
-                <span class="menu-row-title">
-                    Історія операцій
-                </span>
-
-                <span class="menu-row-arrow">
-                    ›
-                </span>
-
-            </button>
-
-
-
-            <button
-                class="menu-row"
-                data-page="settings"
-                type="button">
-
-                <span class="menu-row-icon">
-                    ⚙️
-                </span>
-
-                <span class="menu-row-title">
-                    Налаштування
-                </span>
-
-                <span class="menu-row-arrow">
-                    ›
-                </span>
-
-            </button>
-
-
-
-            <button
-                class="menu-row"
-                data-page="support"
-                type="button">
-
-                <span class="menu-row-icon">
-                    💬
-                </span>
-
-                <span class="menu-row-title">
-                    Підтримка
-                </span>
-
-                <span class="menu-row-arrow">
-                    ›
-                </span>
-
-            </button>
-
-
-            <button
-                class="menu-row admin-only"
-                id="open-admin"
-                data-page="admin"
-                type="button"
-                style="display:none;">
-
-                <span class="menu-row-icon">
-                    ⚙
-                </span>
-
-                <span class="menu-row-title">
-                    Адмін-панель
-                </span>
-
-                <span class="menu-row-arrow">
-                    ›
-                </span>
-
-            </button>
 
         </section>
-
 
 
         <!-- =================================================
              BONUS
         ================================================== -->
 
-        <section
-            class="page"
-            id="page-bonus">
+        <section id="screen-bonus" class="screen">
 
-
-            <div class="page-header">
-
-                <button
-                    class="back-button"
-                    data-page="home"
-                    type="button">
-
-                    ‹
-
-                </button>
-
-
+            <div class="page-heading">
                 <div>
-
-                    <h2>
-                        Щоденний бонус
-                    </h2>
-
-                    <p>
-                        Отримуй винагороду щодня
-                    </p>
-
+                    <span>NightBorn</span>
+                    <h1>Щоденний бонус</h1>
                 </div>
-
             </div>
-
 
             <div class="bonus-card">
 
-                <div class="bonus-icon">
-                    🎁
+                <div class="bonus-symbol">
+                    ✦
                 </div>
 
+                <h2>Щоденна винагорода</h2>
 
-                <div class="bonus-title">
-                    Щоденна винагорода
-                </div>
-
-
-                <div class="bonus-amount">
-
-                    +
-
-                    <span id="bonus-amount">
-                        0.00
-                    </span>
-
-                    ₴
-
-                </div>
-
-
-                <div
-                    class="bonus-status"
-                    id="bonus-status">
-
-                    Перевірка доступності...
-
-                </div>
-
+                <p id="bonusDescription">
+                    Заходь щодня та отримуй свій бонус.
+                </p>
 
                 <button
+                    id="claimBonusBtn"
                     class="primary-button"
-                    id="claim-bonus"
-                    type="button">
-
+                    type="button"
+                >
                     Отримати бонус
-
                 </button>
 
             </div>
 
         </section>
-
 
 
         <!-- =================================================
              HISTORY
         ================================================== -->
 
-        <section
-            class="page"
-            id="page-history">
+        <section id="screen-history" class="screen">
 
-
-            <div class="page-header">
-
-                <button
-                    class="back-button"
-                    data-page="home"
-                    type="button">
-
-                    ‹
-
-                </button>
-
-
+            <div class="page-heading">
                 <div>
-
-                    <h2>
-                        Історія
-                    </h2>
-
-                    <p>
-                        Ваші операції
-                    </p>
-
+                    <span>NightBorn</span>
+                    <h1>Історія</h1>
                 </div>
-
             </div>
 
+            <div id="historyList" class="items-list">
 
-            <div id="history-list">
-
-                <div class="loading-card">
-                    Завантаження історії...
+                <div class="empty-state">
+                    Історія завантажується…
                 </div>
 
             </div>
@@ -1059,37 +449,86 @@
         </section>
 
 
+        <!-- =================================================
+             PROFILE
+        ================================================== -->
+
+        <section id="screen-profile" class="screen">
+
+            <div class="page-heading">
+                <div>
+                    <span>NightBorn</span>
+                    <h1>Мій профіль</h1>
+                </div>
+            </div>
+
+            <div class="profile-large-card">
+
+                <div class="profile-avatar" id="profileAvatar">
+                    N
+                </div>
+
+                <div class="profile-large-name" id="profileName">
+                    —
+                </div>
+
+                <div class="profile-large-username" id="profileUsername">
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="profile-details">
+
+                <div class="detail-row">
+                    <span>Telegram ID</span>
+                    <strong id="profileId">—</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Баланс</span>
+                    <strong>
+                        <span id="profileBalance">0.00</span> ₴
+                    </strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Рефералів</span>
+                    <strong id="profileReferrals">0</strong>
+                </div>
+
+            </div>
+
+        </section>
+
 
         <!-- =================================================
              SETTINGS
         ================================================== -->
 
-        <section
-            class="page"
-            id="page-settings">
+        <section id="screen-settings" class="screen">
 
-
-            <div class="page-header">
-
-                <button
-                    class="back-button"
-                    data-page="profile"
-                    type="button">
-
-                    ‹
-
-                </button>
-
-
+            <div class="page-heading">
                 <div>
+                    <span>NightBorn</span>
+                    <h1>Налаштування</h1>
+                </div>
+            </div>
 
-                    <h2>
-                        Налаштування
-                    </h2>
+            <div class="settings-card">
 
-                    <p>
-                        Параметри Mini App
-                    </p>
+                <div class="setting-row">
+
+                    <div>
+                        <strong>Мова</strong>
+                        <span>Мова інтерфейсу</span>
+                    </div>
+
+                    <select id="languageSelect">
+                        <option value="uk">Українська</option>
+                        <option value="ru">Русский</option>
+                    </select>
 
                 </div>
 
@@ -1098,134 +537,66 @@
 
             <div class="settings-card">
 
-                <div class="setting-row">
-
+                <button
+                    class="setting-button"
+                    data-screen="support"
+                    type="button"
+                >
+                    <span>💬</span>
                     <div>
-
-                        <strong>
-                            Мова
-                        </strong>
-
-                        <span>
-                            Мова інтерфейсу
-                        </span>
-
+                        <strong>Підтримка</strong>
+                        <small>Поставити запитання</small>
                     </div>
-
-
-                    <select id="language-select">
-
-                        <option value="uk">
-                            Українська
-                        </option>
-
-                        <option value="ru">
-                            Русский
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="setting-row">
-
-                    <div>
-
-                        <strong>
-                            Telegram
-                        </strong>
-
-                        <span>
-                            Mini App відкрито через Telegram
-                        </span>
-
-                    </div>
-
-
-                    <span class="setting-status">
-                        ✓
-                    </span>
-
-                </div>
+                </button>
 
             </div>
 
         </section>
-
 
 
         <!-- =================================================
              SUPPORT
         ================================================== -->
 
-        <section
-            class="page"
-            id="page-support">
+        <section id="screen-support" class="screen">
 
-
-            <div class="page-header">
-
-                <button
-                    class="back-button"
-                    data-page="profile"
-                    type="button">
-
-                    ‹
-
-                </button>
-
-
+            <div class="page-heading">
                 <div>
-
-                    <h2>
-                        Підтримка
-                    </h2>
-
-                    <p>
-                        Маєш проблему?
-                    </p>
-
+                    <span>NightBorn</span>
+                    <h1>Підтримка</h1>
                 </div>
-
             </div>
-
 
             <div class="support-card">
 
-                <div class="support-icon">
-                    💬
+                <div class="support-symbol">
+                    ?
                 </div>
 
-
-                <h3>
-                    Потрібна допомога?
-                </h3>
-
+                <h2>Є питання?</h2>
 
                 <p>
-
-                    Напиши про проблему або
-                    своє питання. Адміністратор
-                    зможе відповісти тобі
-                    в Telegram.
-
+                    Напиши свою проблему або запитання.
+                    Ми передамо повідомлення адміністратору.
                 </p>
 
+                <textarea
+                    id="supportMessage"
+                    placeholder="Напиши повідомлення..."
+                    maxlength="2000"
+                ></textarea>
 
                 <button
+                    id="sendSupportBtn"
                     class="primary-button"
-                    id="open-support"
-                    type="button">
-
-                    Написати в підтримку
-
+                    type="button"
+                >
+                    Надіслати
                 </button>
 
             </div>
 
         </section>
-
 
 
         <!-- =================================================
@@ -1233,196 +604,45 @@
         ================================================== -->
 
         <section
-            class="page"
-            id="page-admin">
+            id="screen-admin"
+            class="screen"
+            style="display:none;"
+        >
 
-
-            <div class="page-header">
-
-                <button
-                    class="back-button"
-                    data-page="profile"
-                    type="button">
-
-                    ‹
-
-                </button>
-
-
+            <div class="page-heading">
                 <div>
-
-                    <h2>
-                        Адмін-панель
-                    </h2>
-
-                    <p>
-                        Керування NightBorn
-                    </p>
-
+                    <span>NightBorn</span>
+                    <h1>Адмін-панель</h1>
                 </div>
-
             </div>
 
+            <div class="admin-grid">
 
-            <div class="admin-stats">
-
-                <div class="stat-card">
-
-                    <span>
-                        Користувачі
-                    </span>
-
-                    <strong id="admin-users">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <span>
-                        Баланс
-                    </span>
-
-                    <strong>
-
-                        <span id="admin-balance">
-                            0.00
-                        </span>
-
-                        ₴
-
-                    </strong>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <span>
-                        Завдання
-                    </span>
-
-                    <strong id="admin-tasks">
-                        0
-                    </strong>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <span>
-                        Спонсори
-                    </span>
-
-                    <strong id="admin-sponsors">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="admin-section">
-
-                <h3>
-                    Додати завдання
-                </h3>
-
-
-                <input
-                    class="input"
-                    id="admin-task-title"
-                    type="text"
-                    placeholder="Назва завдання"
-                >
-
-
-                <input
-                    class="input"
-                    id="admin-task-url"
-                    type="url"
-                    placeholder="Посилання"
-                >
-
-
-                <input
-                    class="input"
-                    id="admin-task-reward"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    placeholder="Винагорода ₴"
-                >
-
-
-                <button
-                    class="primary-button"
-                    id="admin-add-task"
-                    type="button">
-
-                    Додати завдання
-
+                <button class="admin-card" type="button">
+                    <strong>Користувачі</strong>
+                    <span>Керування користувачами</span>
                 </button>
 
-            </div>
-
-
-            <div class="admin-section">
-
-                <h3>
-                    Додати спонсора
-                </h3>
-
-
-                <input
-                    class="input"
-                    id="admin-sponsor-title"
-                    type="text"
-                    placeholder="Назва каналу"
-                >
-
-
-                <input
-                    class="input"
-                    id="admin-sponsor-username"
-                    type="text"
-                    placeholder="@username"
-                >
-
-
-                <input
-                    class="input"
-                    id="admin-sponsor-url"
-                    type="url"
-                    placeholder="Посилання на канал"
-                >
-
-
-                <button
-                    class="primary-button"
-                    id="admin-add-sponsor"
-                    type="button">
-
-                    Додати спонсора
-
+                <button class="admin-card" type="button">
+                    <strong>Завдання</strong>
+                    <span>Керування завданнями</span>
                 </button>
 
-            </div>
+                <button class="admin-card" type="button">
+                    <strong>Спонсори</strong>
+                    <span>Керування каналами</span>
+                </button>
 
+                <button class="admin-card" type="button">
+                    <strong>Промокоди</strong>
+                    <span>Керування промокодами</span>
+                </button>
 
-            <div
-                class="admin-section"
-                id="admin-items">
             </div>
 
         </section>
 
     </main>
-
 
 
     <!-- =====================================================
@@ -1432,87 +652,49 @@
     <nav class="bottom-nav">
 
         <button
-            class="nav-item active"
-            data-page="home"
-            type="button">
-
-            <span>
-                ⌂
-            </span>
-
-            <small>
-                Головна
-            </small>
-
+            class="nav-button active"
+            data-screen="home"
+            type="button"
+        >
+            <span>⌂</span>
+            <small>Головна</small>
         </button>
 
-
         <button
-            class="nav-item"
-            data-page="tasks"
-            type="button">
-
-            <span>
-                ▣
-            </span>
-
-            <small>
-                Завдання
-            </small>
-
+            class="nav-button"
+            data-screen="tasks"
+            type="button"
+        >
+            <span>▣</span>
+            <small>Завдання</small>
         </button>
 
-
         <button
-            class="nav-item"
-            data-page="bonus"
-            type="button">
-
-            <span>
-                🎁
-            </span>
-
-            <small>
-                Бонус
-            </small>
-
+            class="nav-button"
+            data-screen="referrals"
+            type="button"
+        >
+            <span>♧</span>
+            <small>Реферали</small>
         </button>
 
-
         <button
-            class="nav-item"
-            data-page="referrals"
-            type="button">
-
-            <span>
-                ♙
-            </span>
-
-            <small>
-                Реферали
-            </small>
-
-        </button>
-
-
-        <button
-            class="nav-item"
-            data-page="profile"
-            type="button">
-
-            <span>
-                ●
-            </span>
-
-            <small>
-                Профіль
-            </small>
-
+            class="nav-button"
+            data-screen="profile"
+            type="button"
+        >
+            <span>◉</span>
+            <small>Профіль</small>
         </button>
 
     </nav>
 
 </div>
+
+
+<!-- TOAST -->
+
+<div id="toast" class="toast"></div>
 
 
 <script src="js/app.js"></script>
