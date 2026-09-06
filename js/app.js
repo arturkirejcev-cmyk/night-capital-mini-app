@@ -1,1738 +1,975 @@
-(() => {
-    "use strict";
+"use strict";
 
-    /*
-     * =====================================================
-     * NIGHT CAPITAL
-     * Головний JavaScript Mini App
-     *
-     * ВАЖЛИВО:
-     * Тут НІКОЛИ не створюються фейкові спонсори.
-     * Якщо API не відповідає — показується помилка.
-     * Якщо API повертає 0 спонсорів — показується 0.
-     * =====================================================
-     */
+/*
+    NIGHTBORN 🌙
+    Mini App frontend
+*/
 
+const API_BASE = "https://YOUR-PUBLIC-API-DOMAIN";
 
-    /* =====================================================
-       НАЛАШТУВАННЯ API
-       ===================================================== */
+const tg = window.Telegram && window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
 
-    const API_BASE =
-        "https://YOUR-PUBLIC-API-DOMAIN";
+let player = null;
+let sponsors = [];
+let isAdmin = false;
 
 
-    /* =====================================================
-       TELEGRAM
-       ===================================================== */
+/* =========================================================
+   TELEGRAM
+========================================================= */
 
-    const telegram =
-        window.Telegram &&
-        window.Telegram.WebApp
-            ? window.Telegram.WebApp
-            : null;
+function initTelegram() {
 
-
-    if (telegram) {
-        telegram.ready();
-        telegram.expand();
+    if (!tg) {
+        return;
     }
 
+    tg.ready();
+    tg.expand();
 
-    /* =====================================================
-       DOM
-       ===================================================== */
+    if (tg.setHeaderColor) {
+        tg.setHeaderColor("#020817");
+    }
 
-    const elements = {
+    if (tg.setBackgroundColor) {
+        tg.setBackgroundColor("#020817");
+    }
+}
 
-        playerAvatar:
-            document.getElementById("playerAvatar"),
 
-        playerName:
-            document.getElementById("playerName"),
+/* =========================================================
+   API
+========================================================= */
 
-        playerUsername:
-            document.getElementById("playerUsername"),
+async function api(path, options = {}) {
 
-        playerBalance:
-            document.getElementById("playerBalance"),
-
-        profileAvatar:
-            document.getElementById("profileAvatar"),
-
-        profileName:
-            document.getElementById("profileName"),
-
-        profileUsername:
-            document.getElementById("profileUsername"),
-
-        profileId:
-            document.getElementById("profileId"),
-
-        profileBalance:
-            document.getElementById("profileBalance"),
-
-        referralCount:
-            document.getElementById("referralCount"),
-
-        sponsorCounter:
-            document.getElementById("sponsorCounter"),
-
-        sponsorLoading:
-            document.getElementById("sponsorLoading"),
-
-        sponsorError:
-            document.getElementById("sponsorError"),
-
-        sponsorErrorText:
-            document.getElementById("sponsorErrorText"),
-
-        sponsorList:
-            document.getElementById("sponsorList"),
-
-        noSponsors:
-            document.getElementById("noSponsors"),
-
-        retrySponsors:
-            document.getElementById("retrySponsors"),
-
-        closeApp:
-            document.getElementById("closeApp"),
-
-        balanceAction:
-            document.getElementById("balanceAction"),
-
-        profileAction:
-            document.getElementById("profileAction"),
-
-        adminPanel:
-            document.getElementById("adminPanel"),
-
-        closeAdmin:
-            document.getElementById("closeAdmin"),
-
-        adminContent:
-            document.getElementById("adminContent"),
-
-        toast:
-            document.getElementById("toast")
+    const headers = {
+        "Content-Type": "application/json"
     };
 
-
-    /* =====================================================
-       STATE
-       ===================================================== */
-
-    const state = {
-
-        user: null,
-
-        sponsors: [],
-
-        subscribed: new Set(),
-
-        currentPage: "home",
-
-        isAdmin: false
-    };
-
-
-    /* =====================================================
-       HELPERS
-       ===================================================== */
-
-    function showToast(message) {
-
-        elements.toast.textContent =
-            String(message);
-
-        elements.toast.classList.add("show");
-
-        clearTimeout(
-            showToast.timeout
-        );
-
-        showToast.timeout =
-            setTimeout(() => {
-
-                elements.toast.classList.remove(
-                    "show"
-                );
-
-            }, 2500);
+    if (tg && tg.initData) {
+        headers["X-Telegram-Init-Data"] = tg.initData;
     }
 
-
-    function formatMoney(value) {
-
-        const number =
-            Number(value);
-
-        if (!Number.isFinite(number)) {
-            return "0.00 ₴";
-        }
-
-        return (
-            number.toFixed(2) +
-            " ₴"
-        );
-    }
-
-
-    function getInitials(user) {
-
-        if (!user) {
-            return "?";
-        }
-
-        const first =
-            String(
-                user.first_name || ""
-            ).trim();
-
-        const last =
-            String(
-                user.last_name || ""
-            ).trim();
-
-        if (first && last) {
-            return (
-                first.charAt(0) +
-                last.charAt(0)
-            ).toUpperCase();
-        }
-
-        if (first) {
-            return first
-                .substring(0, 2)
-                .toUpperCase();
-        }
-
-        return "?";
-    }
-
-
-    function telegramInitData() {
-
-        if (!telegram) {
-            return "";
-        }
-
-        return telegram.initData || "";
-    }
-
-
-    /* =====================================================
-       API
-       ===================================================== */
-
-    async function apiRequest(
-        endpoint,
-        options = {}
-    ) {
-
-        const headers = {
-            "Accept":
-                "application/json",
-
+    const response = await fetch(API_BASE + path, {
+        ...options,
+        headers: {
+            ...headers,
             ...(options.headers || {})
-        };
-
-
-        const initData =
-            telegramInitData();
-
-
-        if (initData) {
-
-            headers[
-                "X-Telegram-Init-Data"
-            ] = initData;
         }
+    });
 
+    let data;
 
-        if (options.body) {
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error("Сервер повернув неправильну відповідь.");
+    }
 
-            headers[
-                "Content-Type"
-            ] = "application/json";
-        }
+    if (!response.ok || data.ok === false) {
 
-
-        const response =
-            await fetch(
-                API_BASE + endpoint,
-                {
-                    ...options,
-                    headers
-                }
-            );
-
-
-        let data;
-
-
-        try {
-
-            data =
-                await response.json();
-
-        } catch {
-
+        if (response.status === 401) {
             throw new Error(
-                "Сервер повернув некоректну відповідь."
+                "Помилка авторизації. Відкрий Mini App через Telegram."
             );
         }
 
-
-        if (!response.ok) {
-
-            throw new Error(
-                data &&
-                data.error
-                    ? data.error
-                    : `Помилка сервера: ${response.status}`
-            );
-        }
-
-
-        if (
-            data &&
-            data.ok === false
-        ) {
-
-            throw new Error(
-                data.error ||
-                "Сервер відхилив запит."
-            );
-        }
-
-
-        return data;
+        throw new Error(data.error || "Помилка сервера.");
     }
 
-
-    /* =====================================================
-       USER
-       ===================================================== */
-
-    async function loadUser() {
-
-        try {
-
-            const data =
-                await apiRequest(
-                    "/api/me"
-                );
+    return data;
+}
 
 
-            if (
-                !data ||
-                !data.user
-            ) {
+/* =========================================================
+   LOAD PLAYER
+========================================================= */
 
-                throw new Error(
-                    "Сервер не повернув дані користувача."
-                );
-            }
+async function loadPlayer() {
 
+    const data = await api("/api/me");
 
-            state.user =
-                data.user;
+    player = data.user;
+    isAdmin = !!data.is_admin;
 
+    renderPlayer();
 
-            state.isAdmin =
-                Boolean(
-                    data.user.is_admin
-                );
+    if (isAdmin) {
 
+        document
+            .getElementById("adminNav")
+            .classList.remove("hidden");
 
-            renderUser();
-
-        } catch (error) {
-
-            console.error(
-                "USER ERROR:",
-                error
-            );
+        await loadAdmin();
+    }
+}
 
 
-            elements.playerName.textContent =
-                "Не вдалося завантажити";
+/* =========================================================
+   PLAYER UI
+========================================================= */
 
-            elements.playerUsername.textContent =
-                "Помилка авторизації";
+function renderPlayer() {
 
-            elements.playerBalance.textContent =
-                "—";
-
-            showToast(
-                "Не вдалося завантажити профіль."
-            );
-        }
+    if (!player) {
+        return;
     }
 
+    const name =
+        player.first_name ||
+        player.username ||
+        "Користувач";
 
-    function renderUser() {
+    const username =
+        player.username
+            ? "@" + player.username
+            : "username відсутній";
 
-        const user =
-            state.user;
+    const balance =
+        Number(player.balance || 0).toFixed(2);
 
+    document.getElementById("playerName").textContent = name;
+    document.getElementById("playerUsername").textContent = username;
+    document.getElementById("playerId").textContent = player.user_id;
 
-        if (!user) {
-            return;
-        }
+    document.getElementById("balance").textContent = balance;
 
+    document.getElementById("profileName").textContent = name;
+    document.getElementById("profileUsername").textContent = username;
+    document.getElementById("profileId").textContent = player.user_id;
+    document.getElementById("profileBalance").textContent = balance;
 
-        const firstName =
-            user.first_name ||
-            "Користувач";
+    document.getElementById("referralCount").textContent =
+        player.referrals || 0;
 
+    document.getElementById("profileReferrals").textContent =
+        player.referrals || 0;
 
-        const username =
-            user.username
-                ? "@" + user.username
-                : "Username відсутній";
+    if (player.photo_url) {
 
+        const avatar = document.getElementById("avatar");
+        const profileAvatar =
+            document.getElementById("profileAvatar");
 
-        const balance =
-            user.balance || 0;
+        avatar.innerHTML = "";
+        profileAvatar.innerHTML = "";
 
+        avatar.style.backgroundImage =
+            `url("${player.photo_url}")`;
 
-        const initials =
-            getInitials(user);
+        avatar.style.backgroundSize = "cover";
+        avatar.style.backgroundPosition = "center";
 
+        profileAvatar.style.backgroundImage =
+            `url("${player.photo_url}")`;
 
-        elements.playerAvatar.textContent =
-            initials;
-
-
-        elements.profileAvatar.textContent =
-            initials;
-
-
-        elements.playerName.textContent =
-            firstName;
-
-
-        elements.playerUsername.textContent =
-            username;
-
-
-        elements.playerBalance.textContent =
-            formatMoney(balance);
-
-
-        elements.profileName.textContent =
-            (
-                user.first_name ||
-                ""
-            ) +
-            (
-                user.last_name
-                    ? " " +
-                      user.last_name
-                    : ""
-            ) ||
-            "—";
-
-
-        elements.profileUsername.textContent =
-            username;
-
-
-        elements.profileId.textContent =
-            user.id
-                ? String(user.id)
-                : "—";
-
-
-        elements.profileBalance.textContent =
-            formatMoney(balance);
-
-
-        if (
-            typeof user.referrals_count !==
-            "undefined"
-        ) {
-
-            elements.referralCount.textContent =
-                String(
-                    user.referrals_count
-                );
-        }
+        profileAvatar.style.backgroundSize = "cover";
+        profileAvatar.style.backgroundPosition = "center";
     }
+}
 
 
-    /* =====================================================
-       SPONSORS
-       ===================================================== */
+/* =========================================================
+   SPONSORS
+========================================================= */
 
-    async function loadSponsors() {
+async function loadSponsors() {
 
-        setSponsorLoading(
-            true
-        );
+    const box =
+        document.getElementById("sponsorsList");
 
+    box.innerHTML =
+        `<div class="loading-box">Завантаження спонсорів...</div>`;
 
-        try {
+    try {
 
-            const data =
-                await apiRequest(
-                    "/api/sponsors"
-                );
+        const data = await api("/api/sponsors");
 
+        sponsors = data.sponsors || [];
 
-            if (
-                !data ||
-                !Array.isArray(
-                    data.sponsors
-                )
-            ) {
-
-                throw new Error(
-                    "Сервер не повернув правильний список спонсорів."
-                );
-            }
-
-
-            /*
-             * ЖОДНИХ ФЕЙКОВИХ ДАНИХ.
-             * Беремо тільки те,
-             * що реально прийшло від API.
-             */
-
-            state.sponsors =
-                data.sponsors;
-
-
-            renderSponsors();
-
-
-        } catch (error) {
-
-            console.error(
-                "SPONSORS ERROR:",
-                error
-            );
-
-
-            state.sponsors = [];
-
-
-            showSponsorError(
-                error.message
-            );
-        }
-    }
-
-
-    function setSponsorLoading(
-        loading
-    ) {
-
-        if (loading) {
-
-            elements.sponsorLoading.classList.remove(
-                "hidden"
-            );
-
-            elements.sponsorError.classList.add(
-                "hidden"
-            );
-
-            elements.sponsorList.innerHTML = "";
-
-            elements.noSponsors.classList.add(
-                "hidden"
-            );
-
-            return;
-        }
-
-
-        elements.sponsorLoading.classList.add(
-            "hidden"
-        );
-    }
-
-
-    function showSponsorError(
-        message
-    ) {
-
-        elements.sponsorLoading.classList.add(
-            "hidden"
-        );
-
-        elements.sponsorList.innerHTML = "";
-
-        elements.noSponsors.classList.add(
-            "hidden"
-        );
-
-        elements.sponsorError.classList.remove(
-            "hidden"
-        );
-
-        elements.sponsorErrorText.textContent =
-            message ||
-            "Сервер недоступний.";
-
-        elements.sponsorCounter.textContent =
-            "0/0";
-    }
-
-
-    function renderSponsors() {
-
-        elements.sponsorLoading.classList.add(
-            "hidden"
-        );
-
-        elements.sponsorError.classList.add(
-            "hidden"
-        );
-
-        elements.sponsorList.innerHTML = "";
-
-
-        const sponsors =
-            state.sponsors;
-
-
-        elements.sponsorCounter.textContent =
-            `0/${sponsors.length}`;
-
+        document.getElementById("sponsorCounter")
+            .textContent = `0/${sponsors.length}`;
 
         if (!sponsors.length) {
 
-            elements.noSponsors.classList.remove(
-                "hidden"
-            );
+            box.innerHTML = `
+                <div class="empty-card">
+                    <div class="empty-icon">🌙</div>
+                    <h3>Спонсорів немає</h3>
+                    <p>
+                        Зараз немає активних каналів для підписки.
+                    </p>
+                </div>
+            `;
 
             return;
         }
 
+        renderSponsors();
 
-        elements.noSponsors.classList.add(
-            "hidden"
-        );
+    } catch (error) {
 
-
-        sponsors.forEach(
-            sponsor => {
-
-                elements.sponsorList.appendChild(
-                    createSponsorCard(
-                        sponsor
-                    )
-                );
-            }
-        );
+        box.innerHTML = `
+            <div class="error-box">
+                ❌ ${escapeHtml(error.message)}
+            </div>
+        `;
     }
+}
 
 
-    function createSponsorCard(
-        sponsor
-    ) {
+function renderSponsors() {
 
-        const card =
-            document.createElement(
-                "article"
-            );
+    const box =
+        document.getElementById("sponsorsList");
 
-        card.className =
-            "sponsor-card";
+    box.innerHTML = "";
 
+    let checked = 0;
+
+    sponsors.forEach(sponsor => {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "sponsor";
 
         const logo =
-            document.createElement(
-                "div"
+            sponsor.logo_url
+                ? `<img class="sponsor-logo"
+                        src="${escapeAttribute(sponsor.logo_url)}"
+                        onerror="this.style.display='none'">`
+                : `<div class="sponsor-logo"
+                        style="display:flex;align-items:center;justify-content:center;font-size:22px">
+                        📢
+                   </div>`;
+
+        item.innerHTML = `
+
+            ${logo}
+
+            <div class="sponsor-info">
+
+                <div class="sponsor-name">
+                    ${escapeHtml(sponsor.name)}
+                </div>
+
+                <div id="status-${sponsor.id}"
+                     class="sponsor-status">
+                    Потрібна підписка
+                </div>
+
+            </div>
+
+            <button
+                class="sponsor-btn"
+                data-id="${sponsor.id}"
+                data-url="${escapeAttribute(sponsor.url)}">
+                Перейти
+            </button>
+        `;
+
+        box.appendChild(item);
+    });
+
+    box.querySelectorAll(".sponsor-btn")
+        .forEach(button => {
+
+            button.addEventListener("click", async () => {
+
+                const id =
+                    Number(button.dataset.id);
+
+                const url =
+                    button.dataset.url;
+
+                if (url) {
+
+                    if (tg && tg.openTelegramLink) {
+                        tg.openTelegramLink(url);
+                    } else {
+                        window.open(url, "_blank");
+                    }
+                }
+
+                button.textContent = "Перевірити...";
+
+                try {
+
+                    const result =
+                        await api("/api/sponsor/check", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                sponsor_id: id
+                            })
+                        });
+
+                    if (result.subscribed) {
+
+                        button.textContent = "✓ Виконано";
+                        button.classList.add("checked");
+
+                        document.getElementById(
+                            `status-${id}`
+                        ).textContent = "Підписку підтверджено";
+
+                    } else {
+
+                        button.textContent = "Не підписаний";
+
+                        document.getElementById(
+                            `status-${id}`
+                        ).textContent =
+                            "Підписка не знайдена";
+                    }
+
+                    updateSponsorCounter();
+
+                } catch (error) {
+
+                    button.textContent = "Перевірити";
+
+                    showModal(
+                        "Помилка",
+                        error.message
+                    );
+                }
+            });
+        });
+}
+
+
+function updateSponsorCounter() {
+
+    const buttons =
+        document.querySelectorAll(".sponsor-btn.checked");
+
+    document.getElementById("sponsorCounter")
+        .textContent =
+        `${buttons.length}/${sponsors.length}`;
+}
+
+
+/* =========================================================
+   REFERRAL
+========================================================= */
+
+function getReferralLink() {
+
+    if (!player || !player.referral_link) {
+        return "";
+    }
+
+    return player.referral_link;
+}
+
+
+async function copyReferral() {
+
+    const link = getReferralLink();
+
+    if (!link) {
+
+        showModal(
+            "Реферальне посилання",
+            "Посилання ще не створено."
+        );
+
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(link);
+
+        showModal(
+            "Готово 🌙",
+            "Реферальне посилання скопійовано."
+        );
+
+    } catch {
+
+        showModal(
+            "Реферальне посилання",
+            `<div style="word-break:break-all">
+                ${escapeHtml(link)}
+             </div>`
+        );
+    }
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function initNavigation() {
+
+    document.querySelectorAll(".nav-item")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const page =
+                    button.dataset.page;
+
+                if (!page) {
+                    return;
+                }
+
+                document.querySelectorAll(".page")
+                    .forEach(p =>
+                        p.classList.remove("active")
+                    );
+
+                document
+                    .getElementById(page)
+                    .classList.add("active");
+
+                document.querySelectorAll(".nav-item")
+                    .forEach(b =>
+                        b.classList.remove("active")
+                    );
+
+                button.classList.add("active");
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+                if (page === "adminPage" && isAdmin) {
+                    loadAdmin();
+                }
+            });
+        });
+}
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+async function loadAdmin() {
+
+    if (!isAdmin) {
+        return;
+    }
+
+    try {
+
+        const data =
+            await api("/api/admin/statistics");
+
+        document.getElementById("adminUsers")
+            .textContent = data.users;
+
+        document.getElementById("adminSponsors")
+            .textContent = data.total_sponsors;
+
+        document.getElementById("adminActiveSponsors")
+            .textContent = data.active_sponsors;
+
+        document.getElementById("adminBalance")
+            .textContent =
+            Number(data.total_balance || 0).toFixed(2);
+
+    } catch (error) {
+
+        console.error(error);
+    }
+
+    await loadAdminSponsors();
+    await loadAdminUsers();
+}
+
+
+async function loadAdminSponsors() {
+
+    const box =
+        document.getElementById("adminSponsorsList");
+
+    try {
+
+        const data =
+            await api("/api/admin/sponsors");
+
+        box.innerHTML = "";
+
+        data.sponsors.forEach(sponsor => {
+
+            const item =
+                document.createElement("div");
+
+            item.className = "admin-sponsor";
+
+            item.innerHTML = `
+
+                <div class="admin-sponsor-info">
+
+                    <div class="admin-sponsor-name">
+                        ${escapeHtml(sponsor.name)}
+                    </div>
+
+                    <div class="admin-sponsor-status">
+                        ${sponsor.is_active
+                            ? "🟢 Активний"
+                            : "🔴 Вимкнений"}
+                    </div>
+
+                </div>
+
+                <div class="admin-actions">
+
+                    <button
+                        class="admin-action toggle-sponsor"
+                        data-id="${sponsor.id}"
+                        data-active="${sponsor.is_active}">
+                        ${sponsor.is_active ? "🔴" : "🟢"}
+                    </button>
+
+                    <button
+                        class="admin-action danger delete-sponsor"
+                        data-id="${sponsor.id}">
+                        🗑
+                    </button>
+
+                </div>
+            `;
+
+            box.appendChild(item);
+        });
+
+        box.querySelectorAll(".toggle-sponsor")
+            .forEach(btn => {
+
+                btn.addEventListener("click", async () => {
+
+                    await api(
+                        "/api/admin/sponsors/toggle",
+                        {
+                            method: "POST",
+                            body: JSON.stringify({
+                                sponsor_id:
+                                    Number(btn.dataset.id),
+
+                                active:
+                                    btn.dataset.active !== "1"
+                            })
+                        }
+                    );
+
+                    await loadAdmin();
+                    await loadSponsors();
+                });
+            });
+
+        box.querySelectorAll(".delete-sponsor")
+            .forEach(btn => {
+
+                btn.addEventListener("click", async () => {
+
+                    if (!confirm("Видалити цього спонсора?")) {
+                        return;
+                    }
+
+                    await api(
+                        "/api/admin/sponsors/delete",
+                        {
+                            method: "POST",
+                            body: JSON.stringify({
+                                sponsor_id:
+                                    Number(btn.dataset.id)
+                            })
+                        }
+                    );
+
+                    await loadAdmin();
+                    await loadSponsors();
+                });
+            });
+
+    } catch (error) {
+
+        box.innerHTML = `
+            <div class="error-box">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+    }
+}
+
+
+/* =========================================================
+   ADMIN USERS
+========================================================= */
+
+async function loadAdminUsers() {
+
+    const box =
+        document.getElementById("adminUsersList");
+
+    try {
+
+        const data =
+            await api("/api/admin/users");
+
+        box.innerHTML = "";
+
+        data.users.forEach(user => {
+
+            const item =
+                document.createElement("div");
+
+            item.className = "admin-user";
+
+            item.innerHTML = `
+
+                <div>
+                    <b>
+                        ${escapeHtml(
+                            user.first_name || "Користувач"
+                        )}
+                    </b>
+
+                    <br>
+
+                    <span>
+                        ID: ${escapeHtml(
+                            String(user.user_id)
+                        )}
+                    </span>
+                </div>
+
+                <div>
+                    <b>
+                        ${Number(
+                            user.balance || 0
+                        ).toFixed(2)}
+                    </b>
+
+                    <br>
+
+                    <span>GRAM</span>
+                </div>
+            `;
+
+            box.appendChild(item);
+        });
+
+    } catch (error) {
+
+        box.innerHTML = `
+            <div class="error-box">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+    }
+}
+
+
+/* =========================================================
+   ADD SPONSOR
+========================================================= */
+
+function initAdmin() {
+
+    document
+        .getElementById("adminAddSponsor")
+        .addEventListener("click", () => {
+
+            if (!isAdmin) {
+                return;
+            }
+
+            showModal(
+                "➕ Додати спонсора",
+                `
+                <p style="color:#7288a3;font-size:12px">
+                    Заповни дані нового Telegram-каналу.
+                </p>
+
+                <input
+                    id="sponsorName"
+                    class="admin-input"
+                    placeholder="Назва">
+
+                <input
+                    id="sponsorChannel"
+                    class="admin-input"
+                    placeholder="@username або ID">
+
+                <input
+                    id="sponsorUrl"
+                    class="admin-input"
+                    placeholder="Посилання https://t.me/...">
+
+                <input
+                    id="sponsorLogo"
+                    class="admin-input"
+                    placeholder="URL логотипу (необов'язково)">
+
+                <button
+                    id="saveSponsor"
+                    class="primary-btn">
+                    Додати
+                </button>
+                `
             );
 
-        logo.className =
-            "sponsor-logo";
+            document
+                .getElementById("saveSponsor")
+                .addEventListener("click", addSponsor);
+        });
+}
 
 
-        if (
-            sponsor.logo_url
-        ) {
+async function addSponsor() {
 
-            const image =
-                document.createElement(
-                    "img"
+    const name =
+        document.getElementById("sponsorName").value.trim();
+
+    const channel =
+        document.getElementById("sponsorChannel").value.trim();
+
+    const url =
+        document.getElementById("sponsorUrl").value.trim();
+
+    const logo =
+        document.getElementById("sponsorLogo").value.trim();
+
+    if (!name || !channel || !url) {
+
+        alert("Заповни всі обов'язкові поля.");
+
+        return;
+    }
+
+    try {
+
+        await api(
+            "/api/admin/sponsors/add",
+            {
+                method: "POST",
+
+                body: JSON.stringify({
+                    name,
+                    channel,
+                    join_url: url,
+                    logo_url: logo
+                })
+            }
+        );
+
+        closeModal();
+
+        await loadAdmin();
+        await loadSponsors();
+
+        showModal(
+            "Готово",
+            "Спонсора успішно додано."
+        );
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function showModal(title, content) {
+
+    const modal =
+        document.getElementById("modal");
+
+    const box =
+        document.getElementById("modalContent");
+
+    box.innerHTML = `
+        <h2 style="margin-top:0">
+            ${escapeHtml(title)}
+        </h2>
+
+        ${content}
+    `;
+
+    modal.classList.remove("hidden");
+}
+
+
+function closeModal() {
+
+    document
+        .getElementById("modal")
+        .classList.add("hidden");
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function escapeAttribute(value) {
+    return escapeHtml(value);
+}
+
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+async function startApp() {
+
+    initTelegram();
+
+    const status =
+        document.getElementById("loaderStatus");
+
+    try {
+
+        if (!tg || !tg.initData) {
+
+            status.textContent =
+                "Відкрий Mini App через Telegram";
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("loader")
+                    .classList.add("hidden");
+
+                document
+                    .getElementById("app")
+                    .classList.remove("hidden");
+
+                showModal(
+                    "🌙 NightBorn",
+                    "Цей додаток потрібно відкривати через Telegram."
                 );
 
-            image.src =
-                sponsor.logo_url;
+            }, 1300);
 
-            image.alt = "";
-
-            image.className =
-                "sponsor-logo";
-
-
-            image.onerror =
-                () => {
-
-                    image.remove();
-
-                    logo.textContent =
-                        "📢";
-                };
-
-
-            card.appendChild(
-                image
-            );
-
-        } else {
-
-            logo.textContent =
-                "📢";
-
-            card.appendChild(
-                logo
-            );
+            return;
         }
-
-
-        const information =
-            document.createElement(
-                "div"
-            );
-
-        information.className =
-            "sponsor-information";
-
-
-        const name =
-            document.createElement(
-                "div"
-            );
-
-        name.className =
-            "sponsor-name";
-
-        name.textContent =
-            sponsor.name ||
-            "Без назви";
-
-
-        const status =
-            document.createElement(
-                "div"
-            );
-
-        status.className =
-            "sponsor-status";
 
         status.textContent =
-            state.subscribed.has(
-                sponsor.id
-            )
-                ? "Підписку підтверджено"
-                : "Підписка не перевірена";
+            "Перевірка Telegram...";
 
+        await loadPlayer();
 
-        if (
-            state.subscribed.has(
-                sponsor.id
-            )
-        ) {
+        status.textContent =
+            "Завантаження профілю...";
 
-            status.classList.add(
-                "success"
-            );
-        }
+        await loadSponsors();
 
+        status.textContent =
+            "Готово ✨";
 
-        information.appendChild(
-            name
-        );
+        setTimeout(() => {
 
-        information.appendChild(
-            status
-        );
+            document
+                .getElementById("loader")
+                .classList.add("hidden");
 
+            document
+                .getElementById("app")
+                .classList.remove("hidden");
 
-        const buttons =
-            document.createElement(
-                "div"
-            );
+        }, 700);
 
-        buttons.className =
-            "sponsor-buttons";
+    } catch (error) {
 
+        console.error(error);
 
-        const openButton =
-            document.createElement(
-                "button"
-            );
+        status.textContent =
+            "Помилка завантаження";
 
-        openButton.type =
-            "button";
+        setTimeout(() => {
 
-        openButton.className =
-            "sponsor-button primary";
+            document
+                .getElementById("loader")
+                .classList.add("hidden");
 
-        openButton.textContent =
-            "Відкрити";
+            document
+                .getElementById("app")
+                .classList.remove("hidden");
 
-
-        openButton.addEventListener(
-            "click",
-            () => {
-
-                openSponsor(
-                    sponsor.url
-                );
-            }
-        );
-
-
-        const checkButton =
-            document.createElement(
-                "button"
+            showModal(
+                "❌ Не вдалося завантажити",
+                escapeHtml(error.message)
             );
 
-        checkButton.type =
-            "button";
-
-        checkButton.className =
-            "sponsor-button check";
-
-        checkButton.textContent =
-            state.subscribed.has(
-                sponsor.id
-            )
-                ? "✓"
-                : "Перевірити";
-
-
-        if (
-            state.subscribed.has(
-                sponsor.id
-            )
-        ) {
-
-            checkButton.disabled =
-                true;
-        }
-
-
-        checkButton.addEventListener(
-            "click",
-            async () => {
-
-                await checkSponsor(
-                    sponsor,
-                    status,
-                    checkButton
-                );
-            }
-        );
-
-
-        buttons.appendChild(
-            openButton
-        );
-
-        buttons.appendChild(
-            checkButton
-        );
-
-
-        card.appendChild(
-            information
-        );
-
-        card.appendChild(
-            buttons
-        );
-
-
-        return card;
+        }, 800);
     }
+}
 
 
-    function openSponsor(
-        url
-    ) {
+/* =========================================================
+   EVENTS
+========================================================= */
 
-        if (!url) {
+document.addEventListener("DOMContentLoaded", () => {
 
-            showToast(
-                "У цього спонсора немає посилання."
-            );
-
-            return;
-        }
-
-
-        if (
-            telegram &&
-            telegram.openTelegramLink &&
-            url.startsWith(
-                "https://t.me/"
-            )
-        ) {
-
-            telegram.openTelegramLink(
-                url
-            );
-
-            return;
-        }
-
-
-        window.open(
-            url,
-            "_blank"
-        );
-    }
-
-
-    async function checkSponsor(
-        sponsor,
-        statusElement,
-        button
-    ) {
-
-        button.disabled =
-            true;
-
-        const oldText =
-            button.textContent;
-
-        button.textContent =
-            "...";
-
-
-        try {
-
-            const result =
-                await apiRequest(
-                    "/api/sponsor/check",
-                    {
-                        method: "POST",
-
-                        body:
-                            JSON.stringify({
-                                sponsor_id:
-                                    sponsor.id
-                            })
-                    }
-                );
-
-
-            if (
-                result.subscribed
-            ) {
-
-                state.subscribed.add(
-                    sponsor.id
-                );
-
-
-                statusElement.textContent =
-                    "Підписку підтверджено";
-
-
-                statusElement.classList.add(
-                    "success"
-                );
-
-
-                button.textContent =
-                    "✓";
-
-
-                elements.sponsorCounter.textContent =
-                    `${
-                        state.subscribed.size
-                    }/${state.sponsors.length}`;
-
-
-                showToast(
-                    "Підписку підтверджено."
-                );
-
-
-            } else {
-
-                statusElement.textContent =
-                    "Підписку не знайдено";
-
-
-                button.textContent =
-                    oldText;
-
-
-                showToast(
-                    "Підписку ще не знайдено."
-                );
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                "CHECK SPONSOR ERROR:",
-                error
-            );
-
-
-            button.textContent =
-                oldText;
-
-
-            showToast(
-                error.message ||
-                "Помилка перевірки."
-            );
-
-
-        } finally {
-
-            if (
-                !state.subscribed.has(
-                    sponsor.id
-                )
-            ) {
-
-                button.disabled =
-                    false;
-            }
-        }
-    }
-
-
-    /* =====================================================
-       NAVIGATION
-       ===================================================== */
-
-    function switchPage(
-        page
-    ) {
-
-        const pages =
-            document.querySelectorAll(
-                ".page"
-            );
-
-
-        const buttons =
-            document.querySelectorAll(
-                ".navigation-button"
-            );
-
-
-        pages.forEach(
-            item => {
-
-                item.classList.toggle(
-                    "active",
-                    item.id ===
-                    `page-${page}`
-                );
-            }
-        );
-
-
-        buttons.forEach(
-            button => {
-
-                button.classList.toggle(
-                    "active",
-                    button.dataset.page ===
-                    page
-                );
-            }
-        );
-
-
-        state.currentPage =
-            page;
-    }
-
-
-    /* =====================================================
-       ADMIN
-       ===================================================== */
-
-    function openAdmin() {
-
-        if (
-            !state.isAdmin
-        ) {
-
-            showToast(
-                "У вас немає доступу до адмін-панелі."
-            );
-
-            return;
-        }
-
-
-        elements.adminPanel.classList.remove(
-            "hidden"
-        );
-    }
-
-
-    function closeAdmin() {
-
-        elements.adminPanel.classList.add(
-            "hidden"
-        );
-    }
-
-
-    async function loadAdminPage(
-        page
-    ) {
-
-        if (
-            !state.isAdmin
-        ) {
-
-            showToast(
-                "Доступ заборонено."
-            );
-
-            return;
-        }
-
-
-        elements.adminContent.innerHTML =
-            `
-                <div class="loading-card">
-                    Завантаження...
-                </div>
-            `;
-
-
-        try {
-
-            let endpoint =
-                "/api/admin/" +
-                page;
-
-
-            const data =
-                await apiRequest(
-                    endpoint
-                );
-
-
-            renderAdminPage(
-                page,
-                data
-            );
-
-
-        } catch (error) {
-
-            elements.adminContent.innerHTML =
-                `
-                    <div class="error-card">
-                        <div class="error-icon">
-                            ⚠️
-                        </div>
-
-                        <div>
-                            <strong>
-                                Не вдалося завантажити
-                            </strong>
-
-                            <p>
-                                ${escapeHtml(
-                                    error.message
-                                )}
-                            </p>
-                        </div>
-                    </div>
-                `;
-        }
-    }
-
-
-    function renderAdminPage(
-        page,
-        data
-    ) {
-
-        /*
-         * Дані адмін-панелі приходять
-         * тільки з API.
-         */
-
-        if (
-            page === "statistics"
-        ) {
-
-            elements.adminContent.innerHTML =
-                `
-                    <div class="profile-card">
-                        <div class="profile-row">
-                            <span>Користувачі</span>
-                            <strong>
-                                ${
-                                    data.users ??
-                                    0
-                                }
-                            </strong>
-                        </div>
-
-                        <div class="profile-row">
-                            <span>Спонсори</span>
-                            <strong>
-                                ${
-                                    data.sponsors ??
-                                    0
-                                }
-                            </strong>
-                        </div>
-
-                        <div class="profile-row">
-                            <span>Активні спонсори</span>
-                            <strong>
-                                ${
-                                    data.active_sponsors ??
-                                    0
-                                }
-                            </strong>
-                        </div>
-                    </div>
-                `;
-
-            return;
-        }
-
-
-        if (
-            page === "sponsors"
-        ) {
-
-            renderAdminSponsors(
-                data
-            );
-
-            return;
-        }
-
-
-        if (
-            page === "users"
-        ) {
-
-            renderAdminUsers(
-                data
-            );
-
-            return;
-        }
-
-
-        if (
-            page === "tasks"
-        ) {
-
-            elements.adminContent.innerHTML =
-                `
-                    <div class="empty-card">
-                        <div class="empty-icon">
-                            📋
-                        </div>
-
-                        <strong>
-                            Завдання
-                        </strong>
-
-                        <p>
-                            Список завдань буде
-                            отримано з API.
-                        </p>
-                    </div>
-                `;
-
-            return;
-        }
-
-
-        elements.adminContent.innerHTML =
-            `
-                <div class="empty-card">
-                    Дані відсутні.
-                </div>
-            `;
-    }
-
-
-    function renderAdminSponsors(
-        data
-    ) {
-
-        const list =
-            Array.isArray(
-                data.sponsors
-            )
-                ? data.sponsors
-                : [];
-
-
-        if (!list.length) {
-
-            elements.adminContent.innerHTML =
-                `
-                    <div class="empty-card">
-                        <div class="empty-icon">
-                            📢
-                        </div>
-
-                        <strong>
-                            Спонсорів немає
-                        </strong>
-
-                        <p>
-                            У базі немає жодного спонсора.
-                        </p>
-                    </div>
-                `;
-
-            return;
-        }
-
-
-        const wrapper =
-            document.createElement(
-                "div"
-            );
-
-
-        wrapper.className =
-            "sponsor-list";
-
-
-        list.forEach(
-            sponsor => {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
-
-                item.className =
-                    "sponsor-card";
-
-
-                const info =
-                    document.createElement(
-                        "div"
-                    );
-
-                info.className =
-                    "sponsor-information";
-
-
-                const name =
-                    document.createElement(
-                        "div"
-                    );
-
-                name.className =
-                    "sponsor-name";
-
-                name.textContent =
-                    sponsor.name ||
-                    "Без назви";
-
-
-                const status =
-                    document.createElement(
-                        "div"
-                    );
-
-                status.className =
-                    "sponsor-status";
-
-                status.textContent =
-                    sponsor.is_active
-                        ? "🟢 Активний"
-                        : "🔴 Вимкнений";
-
-
-                info.appendChild(
-                    name
-                );
-
-                info.appendChild(
-                    status
-                );
-
-
-                const button =
-                    document.createElement(
-                        "button"
-                    );
-
-                button.type =
-                    "button";
-
-                button.className =
-                    "sponsor-button primary";
-
-                button.textContent =
-                    sponsor.is_active
-                        ? "Вимкнути"
-                        : "Увімкнути";
-
-
-                button.addEventListener(
-                    "click",
-                    async () => {
-
-                        await toggleAdminSponsor(
-                            sponsor.id,
-                            !sponsor.is_active
-                        );
-                    }
-                );
-
-
-                item.appendChild(
-                    info
-                );
-
-                item.appendChild(
-                    button
-                );
-
-                wrapper.appendChild(
-                    item
-                );
-            }
-        );
-
-
-        elements.adminContent.innerHTML =
-            "";
-
-        elements.adminContent.appendChild(
-            wrapper
-        );
-    }
-
-
-    async function toggleAdminSponsor(
-        sponsorId,
-        active
-    ) {
-
-        try {
-
-            await apiRequest(
-                "/api/admin/sponsors/toggle",
-                {
-                    method: "POST",
-
-                    body:
-                        JSON.stringify({
-                            sponsor_id:
-                                sponsorId,
-
-                            active:
-                                active
-                        })
-                }
-            );
-
-
-            showToast(
-                active
-                    ? "Спонсора увімкнено."
-                    : "Спонсора вимкнено."
-            );
-
-
-            await loadAdminPage(
-                "sponsors"
-            );
-
-
-            await loadSponsors();
-
-
-        } catch (error) {
-
-            showToast(
-                error.message
-            );
-        }
-    }
-
-
-    function renderAdminUsers(
-        data
-    ) {
-
-        const users =
-            Array.isArray(
-                data.users
-            )
-                ? data.users
-                : [];
-
-
-        if (!users.length) {
-
-            elements.adminContent.innerHTML =
-                `
-                    <div class="empty-card">
-                        Користувачів немає.
-                    </div>
-                `;
-
-            return;
-        }
-
-
-        const wrapper =
-            document.createElement(
-                "div"
-            );
-
-
-        wrapper.className =
-            "profile-card";
-
-
-        users.forEach(
-            user => {
-
-                const row =
-                    document.createElement(
-                        "div"
-                    );
-
-                row.className =
-                    "profile-row";
-
-
-                const left =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                left.textContent =
-                    user.username
-                        ? "@" +
-                          user.username
-                        : (
-                            user.first_name ||
-                            "Користувач"
-                        );
-
-
-                const right =
-                    document.createElement(
-                        "strong"
-                    );
-
-
-                right.textContent =
-                    formatMoney(
-                        user.balance
-                    );
-
-
-                row.appendChild(
-                    left
-                );
-
-                row.appendChild(
-                    right
-                );
-
-
-                wrapper.appendChild(
-                    row
-                );
-            }
-        );
-
-
-        elements.adminContent.innerHTML =
-            "";
-
-        elements.adminContent.appendChild(
-            wrapper
-        );
-    }
-
-
-    /* =====================================================
-       SECURITY
-       ===================================================== */
-
-    function escapeHtml(
-        value
-    ) {
-
-        return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-    }
-
-
-    /* =====================================================
-       EVENTS
-       ===================================================== */
+    initNavigation();
+    initAdmin();
 
     document
-        .querySelectorAll(
-            ".navigation-button"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        switchPage(
-                            button.dataset.page
-                        );
-                    }
-                );
-            }
-        );
-
-
-    elements.closeApp
-        .addEventListener(
-            "click",
-            () => {
-
-                if (telegram) {
-                    telegram.close();
-                }
-            }
-        );
-
-
-    elements.retrySponsors
-        .addEventListener(
-            "click",
-            () => {
-
-                loadSponsors();
-            }
-        );
-
-
-    elements.balanceAction
-        .addEventListener(
-            "click",
-            () => {
-
-                switchPage(
-                    "profile"
-                );
-
-                showToast(
-                    "Твій баланс: " +
-                    formatMoney(
-                        state.user
-                            ? state.user.balance
-                            : 0
-                    )
-                );
-            }
-        );
-
-
-    elements.profileAction
-        .addEventListener(
-            "click",
-            () => {
-
-                switchPage(
-                    "profile"
-                );
-            }
-        );
-
-
-    elements.closeAdmin
-        .addEventListener(
-            "click",
-            closeAdmin
-        );
-
+        .getElementById("copyReferralBtn")
+        .addEventListener("click", copyReferral);
 
     document
-        .querySelectorAll(
-            ".admin-card"
-        )
-        .forEach(
-            button => {
+        .getElementById("copyReferralBig")
+        .addEventListener("click", copyReferral);
 
-                button.addEventListener(
-                    "click",
-                    () => {
+    document
+        .getElementById("refreshBtn")
+        .addEventListener("click", async () => {
 
-                        loadAdminPage(
-                            button.dataset.adminPage
-                        );
-                    }
+            try {
+
+                await loadPlayer();
+                await loadSponsors();
+
+            } catch (error) {
+
+                showModal(
+                    "Помилка",
+                    error.message
                 );
             }
-        );
+        });
 
+    document
+        .getElementById("closeModal")
+        .addEventListener("click", closeModal);
 
-    /* =====================================================
-       START
-       ===================================================== */
+    document
+        .getElementById("modal")
+        .addEventListener("click", event => {
 
-    async function start() {
+            if (event.target.id === "modal") {
+                closeModal();
+            }
+        });
 
-        if (!telegram) {
-
-            showToast(
-                "Відкрий Night Capital через Telegram."
-            );
-        }
-
-
-        await Promise.all([
-            loadUser(),
-            loadSponsors()
-        ]);
-    }
-
-
-    start();
-
-})();
+    startApp();
+});
