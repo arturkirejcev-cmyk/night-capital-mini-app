@@ -2,11 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <meta name="theme-color" content="#030711">
     <meta name="description" content="NightBorn">
@@ -20,440 +16,375 @@
 
 <body>
 
-<!-- =========================================================
+<!-- =====================================================
      LOADER
-========================================================= -->
+===================================================== -->
 
 <div id="loader" class="loader">
 
     <div class="loader-stars">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i>
     </div>
+
+    <div class="loader-glow"></div>
 
     <div class="loader-center">
 
-        <div class="loader-crown-wrap">
+        <!-- КРАСИВА КОРОНА -->
+        <div class="crown-wrap">
 
-            <div class="loader-crown">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <svg class="crown" viewBox="0 0 160 110" aria-hidden="true">
+                <defs>
+                    <linearGradient id="crownGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#dff7ff"/>
+                        <stop offset="35%" stop-color="#55c5ff"/>
+                        <stop offset="70%" stop-color="#168dff"/>
+                        <stop offset="100%" stop-color="#0755a7"/>
+                    </linearGradient>
 
-            <div class="crown-aura"></div>
-
-        </div>
-
-
-        <div class="loader-brand">
-
-            <div class="loader-brand-name">
-                NightBorn
-            </div>
-
-            <div class="loader-brand-line"></div>
-
-        </div>
-
-
-        <!-- СПРАВЖНІЙ ГРАФІЧНИЙ ПІВМІСЯЦЬ -->
-
-        <div class="loader-moon-wrap">
-
-            <svg
-                class="brand-crescent brand-crescent-large"
-                viewBox="0 0 64 64"
-                aria-hidden="true"
-            >
+                    <filter id="crownGlow">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
 
                 <path
-                    class="crescent-shape"
-                    d="M45.8 5.7C27.4 8.9 14 24.1 14 41.5C14 53.1 20.3 61.8 30.3 63C24.1 57.2 20.6 49.6 20.6 41C20.6 26.5 30.3 13.5 45.8 5.7Z"
+                    d="M12 22
+                       L35 45
+                       L55 13
+                       L80 45
+                       L105 13
+                       L125 45
+                       L148 22
+                       L132 91
+                       L28 91
+                       Z"
+                    fill="url(#crownGradient)"
+                    filter="url(#crownGlow)"
                 />
 
                 <path
-                    class="crescent-highlight"
-                    d="M38.9 9.8C27.4 15.1 20.8 27 20.8 40.2C20.8 48.2 23.8 55.3 29.2 60C23.3 54.1 20.2 47.1 20.2 39C20.2 26.9 27.1 15.4 38.9 9.8Z"
+                    d="M28 91 H132"
+                    fill="none"
+                    stroke="#bceeff"
+                    stroke-width="6"
+                    stroke-linecap="round"
                 />
 
+                <path
+                    d="M34 77 H126"
+                    fill="none"
+                    stroke="#0b6fd3"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    opacity=".8"
+                />
+
+                <circle cx="12" cy="22" r="6" fill="#dff7ff"/>
+                <circle cx="55" cy="13" r="6" fill="#dff7ff"/>
+                <circle cx="105" cy="13" r="6" fill="#dff7ff"/>
+                <circle cx="148" cy="22" r="6" fill="#dff7ff"/>
             </svg>
 
         </div>
 
+        <!-- БРЕНД -->
+        <div class="loader-brand">
+            <div class="loader-brand-name">NightBorn</div>
+            <div class="loader-brand-sub">NIGHT CAPITAL</div>
+        </div>
+
+        <!-- НОРМАЛЬНИЙ ПІВМІСЯЦЬ -->
+        <div class="loader-crescent">
+
+            <svg
+                class="crescent crescent-large"
+                viewBox="0 0 100 100"
+                aria-hidden="true"
+            >
+                <defs>
+                    <linearGradient id="crescentGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#dff8ff"/>
+                        <stop offset="30%" stop-color="#67ceff"/>
+                        <stop offset="65%" stop-color="#168eff"/>
+                        <stop offset="100%" stop-color="#0755a7"/>
+                    </linearGradient>
+
+                    <filter id="crescentGlow">
+                        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <path
+                    d="M68 9
+                       C43 14 25 35 25 59
+                       C25 77 36 91 51 95
+                       C42 86 38 74 38 60
+                       C38 38 49 19 68 9 Z"
+                    fill="url(#crescentGradient)"
+                    filter="url(#crescentGlow)"
+                />
+
+                <path
+                    d="M60 15
+                       C45 24 37 40 37 58
+                       C37 73 43 85 52 92"
+                    fill="none"
+                    stroke="#dff8ff"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    opacity=".75"
+                />
+            </svg>
+
+        </div>
 
         <!-- ЕНЕРГІЯ -->
+        <div class="energy-system">
 
-        <div class="night-energy">
-
-            <div class="energy-orbit orbit-one">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-
-            <div class="energy-orbit orbit-two">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <div class="energy-ring ring-1"></div>
+            <div class="energy-ring ring-2"></div>
+            <div class="energy-ring ring-3"></div>
 
             <div class="energy-core">
-                <div class="energy-core-inner"></div>
+                <span></span>
             </div>
 
             <div class="energy-particles">
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
+                <i></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i><i></i><i></i>
             </div>
 
         </div>
 
-
-        <div class="loader-status">
-            <span id="loaderStatus">
-                Пробудження NightBorn
-            </span>
+        <div class="loader-status" id="loaderStatus">
+            Пробудження NightBorn
         </div>
 
         <div class="loader-progress">
-            <div id="loaderProgressBar"></div>
+            <span id="loaderProgress"></span>
         </div>
 
     </div>
-
 </div>
 
 
-<!-- =========================================================
-     APPLICATION
-========================================================= -->
+<!-- =====================================================
+     APP
+===================================================== -->
 
 <div id="app" class="app hidden">
 
-    <!-- TOP BAR -->
-
+    <!-- TOPBAR -->
     <header class="topbar">
 
-        <button
-            class="brand"
-            data-screen="home"
-            type="button"
-            aria-label="Головна"
-        >
+        <button class="brand-button" data-screen="home" type="button">
 
             <svg
-                class="brand-crescent brand-crescent-small"
-                viewBox="0 0 64 64"
+                class="crescent crescent-small"
+                viewBox="0 0 100 100"
                 aria-hidden="true"
             >
-
                 <path
-                    class="crescent-shape"
-                    d="M45.8 5.7C27.4 8.9 14 24.1 14 41.5C14 53.1 20.3 61.8 30.3 63C24.1 57.2 20.6 49.6 20.6 41C20.6 26.5 30.3 13.5 45.8 5.7Z"
+                    d="M68 9
+                       C43 14 25 35 25 59
+                       C25 77 36 91 51 95
+                       C42 86 38 74 38 60
+                       C38 38 49 19 68 9 Z"
+                    fill="url(#topCrescentGradient)"
                 />
 
-                <path
-                    class="crescent-highlight"
-                    d="M38.9 9.8C27.4 15.1 20.8 27 20.8 40.2C20.8 48.2 23.8 55.3 29.2 60C23.3 54.1 20.2 47.1 20.2 39C20.2 26.9 27.1 15.4 38.9 9.8Z"
-                />
-
+                <defs>
+                    <linearGradient id="topCrescentGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#dff8ff"/>
+                        <stop offset="35%" stop-color="#58c9ff"/>
+                        <stop offset="70%" stop-color="#158eff"/>
+                        <stop offset="100%" stop-color="#0755a7"/>
+                    </linearGradient>
+                </defs>
             </svg>
 
-
             <span class="brand-text">
-
                 <strong>NightBorn</strong>
-
-                <span>Night Capital</span>
-
+                <small>NIGHT CAPITAL</small>
             </span>
 
         </button>
 
-
-        <button
-            id="settingsTopBtn"
-            class="icon-button"
-            type="button"
-            aria-label="Налаштування"
-        >
+        <button id="settingsTopBtn" class="top-icon-button" type="button">
             ⚙
         </button>
 
     </header>
 
 
-    <!-- =====================================================
-         CONTENT
-    ====================================================== -->
-
+    <!-- CONTENT -->
     <main class="content">
 
+        <!-- HOME -->
+        <section id="screen-home" class="screen active">
 
-        <!-- ================= HOME ================= -->
+            <div class="home-cover">
 
-        <section
-            id="screen-home"
-            class="screen active"
-        >
+                <div class="cover-overlay"></div>
 
-            <div class="hero-card">
+                <div class="cover-content">
 
-                <div class="hero-glow"></div>
-
-                <div class="hero-lines"></div>
-
-                <div class="hero-content">
-
-                    <div class="hero-label">
-                        NIGHTBORN
+                    <div class="cover-crown">
+                        <svg viewBox="0 0 160 110">
+                            <path
+                                d="M12 22 L35 45 L55 13 L80 45 L105 13 L125 45 L148 22 L132 91 L28 91 Z"
+                                fill="url(#homeCrownGradient)"
+                            />
+                            <path
+                                d="M28 91 H132"
+                                stroke="#dff8ff"
+                                stroke-width="6"
+                                stroke-linecap="round"
+                            />
+                            <defs>
+                                <linearGradient id="homeCrownGradient">
+                                    <stop offset="0%" stop-color="#dff8ff"/>
+                                    <stop offset="45%" stop-color="#36b6ff"/>
+                                    <stop offset="100%" stop-color="#0755a7"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
                     </div>
 
-                    <div class="hero-title">
-                        NIGHT CAPITAL
-                    </div>
+                    <div class="home-brand">NIGHTBORN</div>
 
-                    <div class="hero-subtitle">
-                        Твоя ніч. Твій капітал.
-                    </div>
+                    <h1>NIGHT CAPITAL</h1>
 
-                    <div class="balance-label">
-                        Поточний баланс
-                    </div>
+                    <p>Твоя ніч. Твій капітал.</p>
 
-                    <div class="balance-value">
-
-                        <span id="balance">
-                            0.00
-                        </span>
-
-                        <span class="currency">
-                            ₴
-                        </span>
-
+                    <div class="home-crescent">
+                        <svg class="crescent" viewBox="0 0 100 100">
+                            <path
+                                d="M68 9
+                                   C43 14 25 35 25 59
+                                   C25 77 36 91 51 95
+                                   C42 86 38 74 38 60
+                                   C38 38 49 19 68 9 Z"
+                                fill="url(#homeMoonGradient)"
+                            />
+                            <defs>
+                                <linearGradient id="homeMoonGradient">
+                                    <stop offset="0%" stop-color="#dff8ff"/>
+                                    <stop offset="45%" stop-color="#48bfff"/>
+                                    <stop offset="100%" stop-color="#0966c7"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
                     </div>
 
                 </div>
+            </div>
+
+
+            <!-- БАЛАНС -->
+            <div class="balance-card">
+
+                <div class="balance-top">
+                    <span>Поточний баланс</span>
+                    <span class="balance-dot"></span>
+                </div>
+
+                <div class="balance-number">
+                    <span id="balance">0.00</span>
+                    <small>₴</small>
+                </div>
+
+                <div class="balance-line"></div>
+
+                <div class="balance-bottom">
+                    <span>Доступно</span>
+                    <strong id="availableBalance">0.00 ₴</strong>
+                </div>
+
+            </div>
+
+
+            <!-- ШВИДКІ ДІЇ -->
+            <div class="section-heading">
+                <span>Основне</span>
+                <small>Швидкий доступ</small>
+            </div>
+
+            <div class="action-grid">
+
+                <button class="action-card" data-screen="tasks" type="button">
+                    <span class="action-icon">▣</span>
+                    <strong>Завдання</strong>
+                    <small>Отримуй винагороду</small>
+                </button>
+
+                <button class="action-card" data-screen="referrals" type="button">
+                    <span class="action-icon">♧</span>
+                    <strong>Реферали</strong>
+                    <small>Запрошуй друзів</small>
+                </button>
+
+                <button class="action-card" data-screen="bonus" type="button">
+                    <span class="action-icon">✦</span>
+                    <strong>Бонус</strong>
+                    <small>Щоденна нагорода</small>
+                </button>
+
+                <button class="action-card" data-screen="history" type="button">
+                    <span class="action-icon">◴</span>
+                    <strong>Історія</strong>
+                    <small>Твої операції</small>
+                </button>
 
             </div>
 
 
             <!-- ПРОФІЛЬ -->
-
-            <div class="section-title">
-                Профіль
+            <div class="section-heading">
+                <span>Профіль</span>
+                <small>Telegram</small>
             </div>
 
-            <div class="profile-grid">
+            <div class="profile-mini-card">
 
-                <div class="info-card">
+                <div class="avatar" id="homeAvatar">N</div>
 
-                    <div class="info-icon">
-                        ◈
-                    </div>
-
-                    <div class="info-content">
-
-                        <span>
-                            Ім'я
-                        </span>
-
-                        <strong id="userName">
-                            —
-                        </strong>
-
-                    </div>
-
+                <div class="profile-mini-info">
+                    <strong id="userName">Користувач</strong>
+                    <span id="userUsername">@username</span>
                 </div>
 
-
-                <div class="info-card">
-
-                    <div class="info-icon">
-                        @
-                    </div>
-
-                    <div class="info-content">
-
-                        <span>
-                            Username
-                        </span>
-
-                        <strong id="userUsername">
-                            —
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="info-card info-card-wide">
-
-                    <div class="info-icon">
-                        ID
-                    </div>
-
-                    <div class="info-content">
-
-                        <span>
-                            Telegram ID
-                        </span>
-
-                        <strong id="userId">
-                            —
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ШВИДКИЙ ДОСТУП -->
-
-            <div class="section-title">
-                Швидкий доступ
-            </div>
-
-            <div class="quick-grid">
-
-                <button
-                    class="quick-card"
-                    data-screen="tasks"
-                    type="button"
-                >
-
-                    <span class="quick-icon">
-                        ▣
-                    </span>
-
-                    <span>
-                        Завдання
-                    </span>
-
-                </button>
-
-
-                <button
-                    class="quick-card"
-                    data-screen="referrals"
-                    type="button"
-                >
-
-                    <span class="quick-icon">
-                        ♧
-                    </span>
-
-                    <span>
-                        Реферали
-                    </span>
-
-                </button>
-
-
-                <button
-                    class="quick-card"
-                    data-screen="bonus"
-                    type="button"
-                >
-
-                    <span class="quick-icon">
-                        ✦
-                    </span>
-
-                    <span>
-                        Бонус
-                    </span>
-
-                </button>
-
-
-                <button
-                    class="quick-card"
-                    data-screen="history"
-                    type="button"
-                >
-
-                    <span class="quick-icon">
-                        ◴
-                    </span>
-
-                    <span>
-                        Історія
-                    </span>
-
+                <button data-screen="profile" type="button">
+                    ›
                 </button>
 
             </div>
 
 
             <!-- СПОНСОРИ -->
+            <div id="sponsorsHomeBlock" class="sponsor-section hidden">
 
-            <div
-                id="sponsorsHomeBlock"
-                class="section-block"
-                style="display:none;"
-            >
-
-                <div class="section-title">
-                    Підтримка проєкту
+                <div class="section-heading">
+                    <span>Доступ до NightBorn</span>
+                    <small id="sponsorCounter">0/0</small>
                 </div>
 
                 <div class="sponsor-card">
 
-                    <div class="sponsor-header">
-
-                        <div>
-
-                            <strong>
-                                Підпишись на канали
-                            </strong>
-
-                            <span>
-                                Виконай умови, щоб продовжити
-                            </span>
-
-                        </div>
-
-                        <div id="sponsorCounter">
-                            0/0
-                        </div>
-
-                    </div>
-
-
                     <div id="sponsorsList"></div>
 
-
-                    <button
-                        id="checkSponsorsBtn"
-                        class="primary-button"
-                        type="button"
-                    >
+                    <button id="checkSponsorsBtn" class="primary-button" type="button">
                         Перевірити підписку
                     </button>
 
@@ -464,155 +395,92 @@
         </section>
 
 
-        <!-- ================= TASKS ================= -->
+        <!-- TASKS -->
+        <section id="screen-tasks" class="screen">
 
-        <section
-            id="screen-tasks"
-            class="screen"
-        >
-
-            <div class="page-heading">
-
-                <span>
-                    NIGHTBORN
-                </span>
-
-                <h1>
-                    Завдання
-                </h1>
-
-                <p>
-                    Виконуй завдання та отримуй винагороду.
-                </p>
-
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Завдання</h1>
+                <p>Виконуй завдання та отримуй винагороду.</p>
             </div>
 
-
-            <div
-                id="tasksList"
-                class="items-list"
-            >
-
-                <div class="empty-state">
-                    Завдання завантажуються…
-                </div>
-
+            <div id="tasksList" class="list-container">
+                <div class="loading-card">Завантаження завдань…</div>
             </div>
 
         </section>
 
 
-        <!-- ================= REFERRALS ================= -->
+        <!-- REFERRALS -->
+        <section id="screen-referrals" class="screen">
 
-        <section
-            id="screen-referrals"
-            class="screen"
-        >
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Реферали</h1>
+                <p>Запрошуй друзів та отримуй винагороду.</p>
+            </div>
 
-            <div class="page-heading">
+            <div class="referral-stat">
 
-                <span>
-                    NIGHTBORN
-                </span>
+                <div>
+                    <span>Запрошено</span>
+                    <strong id="referralCount">0</strong>
+                </div>
 
-                <h1>
-                    Реферали
-                </h1>
-
-                <p>
-                    Запрошуй друзів та отримуй винагороду.
-                </p>
+                <div>
+                    <span>Винагорода</span>
+                    <strong id="referralEarned">0.00 ₴</strong>
+                </div>
 
             </div>
 
-
-            <div class="stat-card">
-
-                <span>
-                    Запрошено користувачів
-                </span>
-
-                <strong id="referralCount">
-                    0
-                </strong>
-
+            <div class="section-heading">
+                <span>Твоє посилання</span>
             </div>
-
-
-            <div class="section-title">
-                Твоє реферальне посилання
-            </div>
-
 
             <div class="referral-box">
 
-                <input
-                    id="referralLink"
-                    type="text"
-                    readonly
-                    value=""
-                >
+                <input id="referralLink" type="text" readonly>
 
-                <button
-                    id="copyReferralBtn"
-                    type="button"
-                >
+                <button id="copyReferralBtn" type="button">
                     Копіювати
                 </button>
 
             </div>
 
-
-            <div class="referral-info">
-                Запрошуй друзів та розвивай NightBorn разом.
+            <div class="info-message">
+                Поділись посиланням з друзями та запрошуй їх у NightBorn.
             </div>
 
         </section>
 
 
-        <!-- ================= BONUS ================= -->
+        <!-- BONUS -->
+        <section id="screen-bonus" class="screen">
 
-        <section
-            id="screen-bonus"
-            class="screen"
-        >
-
-            <div class="page-heading">
-
-                <span>
-                    NIGHTBORN
-                </span>
-
-                <h1>
-                    Щоденний бонус
-                </h1>
-
-                <p>
-                    Заходь щодня та отримуй свою винагороду.
-                </p>
-
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Щоденний бонус</h1>
+                <p>Отримуй винагороду один раз на добу.</p>
             </div>
-
 
             <div class="bonus-card">
 
-                <div class="bonus-symbol">
-                    ✦
+                <div class="bonus-orb">
+                    <span>✦</span>
                 </div>
 
-                <h2>
-                    Щоденна винагорода
-                </h2>
+                <h2 id="bonusTitle">Щоденна винагорода</h2>
 
                 <p id="bonusDescription">
-                    Твій щоденний бонус уже чекає.
+                    Натисни кнопку нижче, щоб перевірити доступність бонусу.
                 </p>
 
-                <button
-                    id="claimBonusBtn"
-                    class="primary-button"
-                    type="button"
-                >
+                <div class="bonus-value" id="bonusValue">
+                    +0.00 ₴
+                </div>
+
+                <button id="claimBonusBtn" class="primary-button" type="button">
                     Отримати бонус
                 </button>
 
@@ -621,134 +489,56 @@
         </section>
 
 
-        <!-- ================= HISTORY ================= -->
+        <!-- HISTORY -->
+        <section id="screen-history" class="screen">
 
-        <section
-            id="screen-history"
-            class="screen"
-        >
-
-            <div class="page-heading">
-
-                <span>
-                    NIGHTBORN
-                </span>
-
-                <h1>
-                    Історія
-                </h1>
-
-                <p>
-                    Останні операції твого акаунта.
-                </p>
-
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Історія</h1>
+                <p>Твої останні операції.</p>
             </div>
 
-
-            <div
-                id="historyList"
-                class="items-list"
-            >
-
-                <div class="empty-state">
-                    Історія завантажується…
-                </div>
-
+            <div id="historyList" class="list-container">
+                <div class="loading-card">Завантаження історії…</div>
             </div>
 
         </section>
 
 
-        <!-- ================= PROFILE ================= -->
+        <!-- PROFILE -->
+        <section id="screen-profile" class="screen">
 
-        <section
-            id="screen-profile"
-            class="screen"
-        >
-
-            <div class="page-heading">
-
-                <span>
-                    NIGHTBORN
-                </span>
-
-                <h1>
-                    Мій профіль
-                </h1>
-
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Мій профіль</h1>
             </div>
-
 
             <div class="profile-large-card">
 
-                <div
-                    class="profile-avatar"
-                    id="profileAvatar"
-                >
+                <div class="avatar avatar-large" id="profileAvatar">
                     N
                 </div>
 
-                <div
-                    class="profile-large-name"
-                    id="profileName"
-                >
-                    —
-                </div>
-
-                <div
-                    class="profile-large-username"
-                    id="profileUsername"
-                >
-                    —
-                </div>
+                <h2 id="profileName">Користувач</h2>
+                <p id="profileUsername">@username</p>
 
             </div>
 
-
-            <div class="profile-details">
+            <div class="details-card">
 
                 <div class="detail-row">
-
-                    <span>
-                        Telegram ID
-                    </span>
-
-                    <strong id="profileId">
-                        —
-                    </strong>
-
+                    <span>Telegram ID</span>
+                    <strong id="userId">—</strong>
                 </div>
 
-
                 <div class="detail-row">
-
-                    <span>
-                        Баланс
-                    </span>
-
-                    <strong>
-
-                        <span id="profileBalance">
-                            0.00
-                        </span>
-
-                        ₴
-
-                    </strong>
-
+                    <span>Баланс</span>
+                    <strong id="profileBalance">0.00 ₴</strong>
                 </div>
 
-
                 <div class="detail-row">
-
-                    <span>
-                        Рефералів
-                    </span>
-
-                    <strong id="profileReferrals">
-                        0
-                    </strong>
-
+                    <span>Рефералів</span>
+                    <strong id="profileReferrals">0</strong>
                 </div>
 
             </div>
@@ -756,84 +546,29 @@
         </section>
 
 
-        <!-- ================= SETTINGS ================= -->
+        <!-- SETTINGS -->
+        <section id="screen-settings" class="screen">
 
-        <section
-            id="screen-settings"
-            class="screen"
-        >
-
-            <div class="page-heading">
-
-                <span>
-                    NIGHTBORN
-                </span>
-
-                <h1>
-                    Налаштування
-                </h1>
-
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Налаштування</h1>
+                <p>Керування додатком.</p>
             </div>
-
 
             <div class="settings-card">
 
-                <div class="setting-row">
-
+                <div class="settings-row">
                     <div>
-
-                        <strong>
-                            Мова
-                        </strong>
-
-                        <span>
-                            Мова інтерфейсу
-                        </span>
-
+                        <strong>Мова</strong>
+                        <small>Українська</small>
                     </div>
 
-
-                    <select id="languageSelect">
-
-                        <option value="uk">
-                            Українська
-                        </option>
-
-                        <option value="ru">
-                            Русский
-                        </option>
-
-                    </select>
-
+                    <span class="settings-value">UA</span>
                 </div>
 
-            </div>
-
-
-            <div class="settings-card">
-
-                <button
-                    class="setting-button"
-                    data-screen="support"
-                    type="button"
-                >
-
-                    <span class="setting-button-icon">
-                        ?
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Підтримка
-                        </strong>
-
-                        <small>
-                            Поставити запитання
-                        </small>
-
-                    </div>
-
+                <button id="supportSettingsBtn" class="settings-action" type="button">
+                    <span>Підтримка</span>
+                    <b>›</b>
                 </button>
 
             </div>
@@ -841,59 +576,35 @@
         </section>
 
 
-        <!-- ================= SUPPORT ================= -->
+        <!-- SUPPORT -->
+        <section id="screen-support" class="screen">
 
-        <section
-            id="screen-support"
-            class="screen"
-        >
-
-            <div class="page-heading">
-
-                <span>
-                    NIGHTBORN
-                </span>
-
-                <h1>
-                    Підтримка
-                </h1>
-
-                <p>
-                    Ми допоможемо вирішити твоє питання.
-                </p>
-
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Підтримка</h1>
+                <p>Опиши питання — повідомлення буде передано адміністратору.</p>
             </div>
-
 
             <div class="support-card">
 
-                <div class="support-symbol">
-                    ?
-                </div>
-
-                <h2>
-                    Є питання?
-                </h2>
-
-                <p>
-                    Опиши проблему або запитання.
-                    Повідомлення буде передано адміністратору.
-                </p>
-
+                <label for="supportMessage">
+                    Твоє повідомлення
+                </label>
 
                 <textarea
                     id="supportMessage"
+                    rows="7"
                     maxlength="2000"
-                    placeholder="Напиши повідомлення..."
+                    placeholder="Напиши питання або проблему..."
                 ></textarea>
 
+                <div class="support-counter">
+                    <span>Повідомлення</span>
+                    <span id="supportCounter">0/2000</span>
+                </div>
 
-                <button
-                    id="sendSupportBtn"
-                    class="primary-button"
-                    type="button"
-                >
-                    Надіслати
+                <button id="sendSupportBtn" class="primary-button" type="button">
+                    Надіслати питання
                 </button>
 
             </div>
@@ -901,199 +612,80 @@
         </section>
 
 
-        <!-- ================= ADMIN ================= -->
+        <!-- ADMIN -->
+        <section id="screen-admin" class="screen">
 
-        <section
-            id="screen-admin"
-            class="screen"
-            style="display:none;"
-        >
-
-            <div class="page-heading">
-
-                <span>
-                    NIGHTBORN
-                </span>
-
-                <h1>
-                    Адмін-панель
-                </h1>
-
-                <p>
-                    Керування системою.
-                </p>
-
+            <div class="page-title">
+                <span>NIGHTBORN</span>
+                <h1>Адмін-панель</h1>
+                <p>Керування проєктом.</p>
             </div>
-
 
             <div class="admin-grid">
 
-                <button
-                    class="admin-card"
-                    data-admin-action="users"
-                    type="button"
-                >
-
-                    <strong>
-                        Користувачі
-                    </strong>
-
-                    <span>
-                        Керування користувачами
-                    </span>
-
+                <button data-admin-action="users" type="button">
+                    <strong>Користувачі</strong>
+                    <span>Перегляд</span>
                 </button>
 
-
-                <button
-                    class="admin-card"
-                    data-admin-action="tasks"
-                    type="button"
-                >
-
-                    <strong>
-                        Завдання
-                    </strong>
-
-                    <span>
-                        Керування завданнями
-                    </span>
-
+                <button data-admin-action="tasks" type="button">
+                    <strong>Завдання</strong>
+                    <span>Керування</span>
                 </button>
 
-
-                <button
-                    class="admin-card"
-                    data-admin-action="sponsors"
-                    type="button"
-                >
-
-                    <strong>
-                        Спонсори
-                    </strong>
-
-                    <span>
-                        Керування каналами
-                    </span>
-
+                <button data-admin-action="sponsors" type="button">
+                    <strong>Спонсори</strong>
+                    <span>Канали</span>
                 </button>
 
-
-                <button
-                    class="admin-card"
-                    data-admin-action="promocodes"
-                    type="button"
-                >
-
-                    <strong>
-                        Промокоди
-                    </strong>
-
-                    <span>
-                        Керування промокодами
-                    </span>
-
+                <button data-admin-action="promocodes" type="button">
+                    <strong>Промокоди</strong>
+                    <span>Керування</span>
                 </button>
 
             </div>
 
-
-            <div
-                id="adminResult"
-                class="admin-result"
-            ></div>
+            <div id="adminOutput" class="admin-output"></div>
 
         </section>
 
     </main>
 
 
-    <!-- =====================================================
-         BOTTOM NAVIGATION
-    ====================================================== -->
-
+    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
 
-        <button
-            class="nav-item active"
-            data-screen="home"
-            type="button"
-        >
-
-            <span>
-                ◆
-            </span>
-
-            <small>
-                Головна
-            </small>
-
+        <button data-screen="home" class="nav-button active" type="button">
+            <span>⌂</span>
+            <small>Головна</small>
         </button>
 
-
-        <button
-            class="nav-item"
-            data-screen="tasks"
-            type="button"
-        >
-
-            <span>
-                ▣
-            </span>
-
-            <small>
-                Завдання
-            </small>
-
+        <button data-screen="tasks" class="nav-button" type="button">
+            <span>▣</span>
+            <small>Завдання</small>
         </button>
 
-
-        <button
-            class="nav-item"
-            data-screen="referrals"
-            type="button"
-        >
-
-            <span>
-                ♧
-            </span>
-
-            <small>
-                Реферали
-            </small>
-
+        <button data-screen="referrals" class="nav-button" type="button">
+            <span>♧</span>
+            <small>Реферали</small>
         </button>
 
+        <button data-screen="bonus" class="nav-button" type="button">
+            <span>✦</span>
+            <small>Бонус</small>
+        </button>
 
-        <button
-            class="nav-item"
-            data-screen="profile"
-            type="button"
-        >
-
-            <span>
-                ◉
-            </span>
-
-            <small>
-                Профіль
-            </small>
-
+        <button data-screen="profile" class="nav-button" type="button">
+            <span>◉</span>
+            <small>Профіль</small>
         </button>
 
     </nav>
 
-
-    <!-- TOAST -->
-
-    <div
-        id="toast"
-        class="toast"
-        aria-live="polite"
-    ></div>
-
 </div>
 
+
+<div id="toast" class="toast"></div>
 
 <script src="js/app.js"></script>
 
