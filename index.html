@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#020607">
+  <meta name="theme-color" content="#020405">
   <meta name="format-detection" content="telephone=no">
 
   <title>NightBorn 💸🌙</title>
@@ -20,78 +20,409 @@
 
 <body>
 
-<div class="app-shell">
+<div id="app">
 
-  <!-- =====================================================
-       SPLASH / LOADING
-       ===================================================== -->
+  <!-- ==================================================
+       SPLASH
+       ================================================== -->
 
-  <section id="introScreen" class="intro-screen">
+  <section id="splash" class="splash">
 
-    <div class="intro-background"></div>
+    <div class="splash-bg"></div>
 
-    <div class="intro-noise"></div>
-
-    <div class="intro-rays">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+    <div class="stars">
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
     </div>
 
-    <div class="particles" aria-hidden="true">
-      <i></i><i></i><i></i><i></i><i></i>
-      <i></i><i></i><i></i><i></i><i></i>
-      <i></i><i></i><i></i><i></i><i></i>
-      <i></i><i></i><i></i><i></i><i></i>
-    </div>
+    <div class="splash-content">
 
-    <div class="intro-center">
+      <!-- Корона -->
 
-      <div class="crown-aura"></div>
+      <div class="crown-area">
 
-      <div class="crown-container">
+        <div class="crown-glow"></div>
 
-        <div class="crown-3d">
-          <div class="crown-face">
-            <div class="crown-top">♛</div>
-          </div>
+        <svg
+          class="crown"
+          viewBox="0 0 260 190"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
 
-          <div class="crown-side"></div>
-          <div class="crown-highlight"></div>
+          <defs>
+
+            <linearGradient
+              id="crownMetal"
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="1"
+            >
+              <stop offset="0%" stop-color="#dffeff"/>
+              <stop offset="18%" stop-color="#6edee5"/>
+              <stop offset="45%" stop-color="#159da8"/>
+              <stop offset="70%" stop-color="#55e4e9"/>
+              <stop offset="100%" stop-color="#0b6870"/>
+            </linearGradient>
+
+            <linearGradient
+              id="crownLight"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="35%" stop-color="#8ffcff"/>
+              <stop offset="100%" stop-color="#18aab3"/>
+            </linearGradient>
+
+            <filter id="crownShadow">
+              <feDropShadow
+                dx="0"
+                dy="8"
+                stdDeviation="7"
+                flood-color="#20d9e1"
+                flood-opacity=".28"
+              />
+            </filter>
+
+          </defs>
+
+          <!-- задня частина -->
+
+          <path
+            d="M30 55
+               L72 94
+               L96 31
+               L130 91
+               L164 31
+               L188 94
+               L230 55
+               L207 145
+               Q130 175 53 145 Z"
+            fill="#06363b"
+            opacity=".8"
+          />
+
+          <!-- основа корони -->
+
+          <path
+            d="M30 55
+               L72 101
+               L96 37
+               L130 99
+               L164 37
+               L188 101
+               L230 55
+               L207 143
+               Q130 168 53 143 Z"
+            fill="url(#crownMetal)"
+            stroke="#8afcff"
+            stroke-width="2"
+            filter="url(#crownShadow)"
+          />
+
+          <!-- передня панель -->
+
+          <path
+            d="M49 111
+               Q130 137 211 111
+               L202 145
+               Q130 168 58 145 Z"
+            fill="#0b6269"
+            opacity=".8"
+          />
+
+          <!-- дорогоцінні вставки -->
+
+          <circle
+            cx="72"
+            cy="114"
+            r="5"
+            fill="#d9ffff"
+          />
+
+          <circle
+            cx="96"
+            cy="121"
+            r="5"
+            fill="#eaffff"
+          />
+
+          <circle
+            cx="130"
+            cy="126"
+            r="6"
+            fill="#ffffff"
+          />
+
+          <circle
+            cx="164"
+            cy="121"
+            r="5"
+            fill="#eaffff"
+          />
+
+          <circle
+            cx="188"
+            cy="114"
+            r="5"
+            fill="#d9ffff"
+          />
+
+          <!-- блиск -->
+
+          <path
+            class="crown-shine"
+            d="M72 103 L97 45"
+            stroke="white"
+            stroke-width="5"
+            stroke-linecap="round"
+            opacity=".65"
+          />
+
+        </svg>
+
+      </div>
+
+
+      <!-- Назва -->
+
+      <div class="brand">
+
+        <div class="brand-name">
+          NightBorn
+        </div>
+
+
+        <div class="brand-symbols">
+
+          <!-- Купюра -->
+
+          <svg
+            class="money"
+            viewBox="0 0 90 48"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-label="Гроші"
+          >
+
+            <defs>
+
+              <linearGradient
+                id="moneyGradient"
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="1"
+              >
+                <stop offset="0%" stop-color="#55dfe3"/>
+                <stop offset="50%" stop-color="#218f97"/>
+                <stop offset="100%" stop-color="#0d555b"/>
+              </linearGradient>
+
+            </defs>
+
+            <g transform="rotate(-7 45 24)">
+
+              <rect
+                x="3"
+                y="5"
+                width="84"
+                height="38"
+                rx="6"
+                fill="url(#moneyGradient)"
+                stroke="#72edf0"
+                stroke-width="1.5"
+              />
+
+              <rect
+                x="8"
+                y="9"
+                width="74"
+                height="30"
+                rx="4"
+                fill="none"
+                stroke="#a2fbfd"
+                stroke-opacity=".42"
+              />
+
+              <circle
+                cx="45"
+                cy="24"
+                r="10"
+                fill="none"
+                stroke="#c8ffff"
+                stroke-opacity=".55"
+                stroke-width="1"
+              />
+
+              <text
+                x="45"
+                y="29"
+                text-anchor="middle"
+                font-size="16"
+                font-weight="900"
+                fill="#e5ffff"
+              >
+                ₴
+              </text>
+
+              <text
+                x="14"
+                y="18"
+                font-size="5"
+                fill="#c8ffff"
+              >
+                NB
+              </text>
+
+              <text
+                x="68"
+                y="35"
+                font-size="5"
+                fill="#c8ffff"
+              >
+                NB
+              </text>
+
+            </g>
+
+          </svg>
+
+
+          <!-- Місяць -->
+
+          <svg
+            class="moon"
+            viewBox="0 0 50 50"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-label="Місяць"
+          >
+
+            <defs>
+
+              <radialGradient
+                id="moonGradient"
+                cx="30%"
+                cy="25%"
+              >
+                <stop
+                  offset="0%"
+                  stop-color="#eaffff"
+                />
+
+                <stop
+                  offset="55%"
+                  stop-color="#55dce2"
+                />
+
+                <stop
+                  offset="100%"
+                  stop-color="#11747c"
+                />
+
+              </radialGradient>
+
+              <mask id="moonMask">
+
+                <rect
+                  width="50"
+                  height="50"
+                  fill="black"
+                />
+
+                <circle
+                  cx="23"
+                  cy="25"
+                  r="17"
+                  fill="white"
+                />
+
+                <circle
+                  cx="31"
+                  cy="20"
+                  r="17"
+                  fill="black"
+                />
+
+              </mask>
+
+            </defs>
+
+            <circle
+              cx="25"
+              cy="25"
+              r="20"
+              fill="url(#moonGradient)"
+              mask="url(#moonMask)"
+            />
+
+            <circle
+              cx="17"
+              cy="18"
+              r="2"
+              fill="#dfffff"
+              opacity=".45"
+            />
+
+            <circle
+              cx="13"
+              cy="27"
+              r="1.5"
+              fill="#dfffff"
+              opacity=".3"
+            />
+
+          </svg>
+
         </div>
 
       </div>
 
-      <div class="intro-brand">
 
-        <div class="intro-title">
-          NightBorn <span>💸🌙</span>
-        </div>
+      <div class="separator"></div>
 
-        <div class="intro-line"></div>
-
-        <div class="intro-subtitle">
-          YOUR NIGHT. YOUR CAPITAL.
-        </div>
-
+      <div class="slogan">
+        YOUR NIGHT. YOUR CAPITAL.
       </div>
 
-      <div class="loading-area">
 
-        <div class="loading-status" id="loadingStatus">
-          Ініціалізація NightBorn
+      <!-- Завантаження -->
+
+      <div class="loader">
+
+        <div
+          id="loadingText"
+          class="loading-text"
+        >
+          Ініціалізація…
         </div>
 
-        <div class="loading-bar">
-          <div class="loading-progress" id="loadingProgress"></div>
+        <div class="loading-track">
+
+          <div
+            id="loadingBar"
+            class="loading-bar"
+          ></div>
+
         </div>
 
-        <div class="loading-percent" id="loadingPercent">
+        <div
+          id="loadingPercent"
+          class="loading-percent"
+        >
           0%
         </div>
 
@@ -99,40 +430,36 @@
 
     </div>
 
-    <div class="intro-bottom">
-      <span>SECURE CONNECTION</span>
-      <b>•</b>
-      <span>TELEGRAM MINI APP</span>
-    </div>
-
   </section>
 
 
-  <!-- =====================================================
-       MAIN APPLICATION
-       ===================================================== -->
+  <!-- ==================================================
+       APPLICATION
+       ================================================== -->
 
-  <div id="application" class="application hidden">
+  <section
+    id="application"
+    class="application hidden"
+  >
 
-    <div class="background" aria-hidden="true"></div>
+    <div class="app-bg"></div>
 
     <main class="content">
 
       <header class="topbar">
 
-        <div class="brand">
+        <div class="mini-logo">
+          NB
+        </div>
 
-          <div class="brand-logo">
-            <span>N</span>
-            <span>B</span>
+        <div>
+
+          <div class="app-title">
+            NightBorn
           </div>
 
-          <div class="brand-name">
-            NightBorn <span>💸🌙</span>
-          </div>
-
-          <div class="brand-subtitle">
-            Твій простір у Mini App
+          <div class="app-subtitle">
+            💸 Your night. Your capital. 🌙
           </div>
 
         </div>
@@ -144,22 +471,24 @@
 
       <section
         id="errorScreen"
-        class="screen-card error-card hidden"
-        aria-live="polite"
+        class="card hidden"
       >
 
-        <div class="status-icon">!</div>
+        <div class="error-icon">
+          !
+        </div>
 
-        <h1>Не вдалося завантажити</h1>
+        <h2>
+          Не вдалося підключитися
+        </h2>
 
         <p id="errorText">
-          Перевір підключення та налаштування API.
+          Перевір підключення до сервера.
         </p>
 
         <button
           id="retryButton"
-          class="primary-button"
-          type="button"
+          class="main-button"
         >
           Спробувати ще раз
         </button>
@@ -171,205 +500,159 @@
 
       <section
         id="sponsorScreen"
-        class="screen-card hidden"
+        class="card hidden"
       >
 
-        <div class="sponsor-header">
+        <h2>
+          Підтримай канали
+        </h2>
 
-          <div class="small-neon-icon">
-            🌙
-          </div>
+        <p class="description">
+          Підпишись на канали нижче,
+          щоб продовжити.
+        </p>
 
-          <h1 class="section-title">
-            Підтримай канали
-          </h1>
-
-          <p class="section-description">
-            Підпишись на всі канали нижче,
-            щоб відкрити доступ до NightBorn.
-          </p>
-
+        <div class="counter">
+          <span id="counterCurrent">0</span>
+          /
+          <span id="counterTotal">0</span>
         </div>
-
-
-        <div class="counter-wrap">
-
-          <div class="counter">
-
-            <span id="counterCurrent">0</span>
-
-            <b>/</b>
-
-            <span id="counterTotal">0</span>
-
-          </div>
-
-        </div>
-
 
         <div
           id="channelsList"
-          class="channels-list"
+          class="channels"
         ></div>
-
 
         <button
           id="checkButton"
-          class="primary-button"
-          type="button"
+          class="main-button"
         >
           Перевірити підписки
         </button>
 
-
         <div
           id="message"
           class="message"
-          role="status"
         ></div>
 
       </section>
 
 
-      <!-- MAIN MENU -->
+      <!-- MAIN -->
 
       <section
         id="mainMenu"
         class="hidden"
       >
 
-        <div class="welcome-card">
+        <div class="profile-card">
 
-          <div class="welcome-glow"></div>
-
-          <div class="welcome-icon">
+          <div class="profile-icon">
             🌙
           </div>
 
-          <div class="welcome-label">
-            NIGHTBORN
+          <div class="profile-info">
+
+            <div
+              id="profileName"
+              class="profile-name"
+            >
+              NightBorn
+            </div>
+
+            <div
+              id="profileUsername"
+              class="profile-username"
+            >
+              @username
+            </div>
+
+            <div
+              id="profileId"
+              class="profile-id"
+            >
+              ID: —
+            </div>
+
           </div>
 
-          <h1>
-            Ласкаво просимо
-          </h1>
+        </div>
 
-          <p id="welcomeText">
-            Ти успішно відкрив NightBorn.
-          </p>
+
+        <div class="balance-card">
+
+          <div>
+
+            <div class="balance-label">
+              БАЛАНС
+            </div>
+
+            <div
+              id="balanceValue"
+              class="balance-value"
+            >
+              0.00 ₴
+            </div>
+
+          </div>
+
+          <div class="balance-icon">
+            ₴
+          </div>
 
         </div>
 
 
         <div class="menu-grid">
 
-          <button
-            class="menu-button"
-            data-action="balance"
-            type="button"
-          >
+          <button class="menu-button">
             <span>💰</span>
-            <strong>Баланс</strong>
-            <small>Твій баланс</small>
+            <b>Баланс</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="referrals"
-            type="button"
-          >
+          <button class="menu-button">
             <span>👥</span>
-            <strong>Реферали</strong>
-            <small>Запрошення</small>
+            <b>Реферали</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="flyer"
-            type="button"
-          >
+          <button class="menu-button">
             <span>🎁</span>
-            <strong>Flyer</strong>
-            <small>Отримати бонус</small>
+            <b>Flyer</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="tasks"
-            type="button"
-          >
+          <button class="menu-button">
             <span>📋</span>
-            <strong>Завдання</strong>
-            <small>Заробіток</small>
+            <b>Завдання</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="promocodes"
-            type="button"
-          >
+          <button class="menu-button">
             <span>🎟</span>
-            <strong>Промокоди</strong>
-            <small>Активувати код</small>
+            <b>Промокоди</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="top"
-            type="button"
-          >
+          <button class="menu-button">
             <span>🏆</span>
-            <strong>Топ</strong>
-            <small>Рейтинг</small>
+            <b>Топ</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="mining"
-            type="button"
-          >
+          <button class="menu-button">
             <span>⛏</span>
-            <strong>Mining</strong>
-            <small>Майнінг</small>
+            <b>Mining</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="animals"
-            type="button"
-          >
+          <button class="menu-button">
             <span>🐾</span>
-            <strong>Тварини</strong>
-            <small>Колекція</small>
+            <b>Тварини</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="settings"
-            type="button"
-          >
+          <button class="menu-button">
             <span>⚙️</span>
-            <strong>Налаштування</strong>
-            <small>Параметри</small>
+            <b>Налаштування</b>
           </button>
 
-
-          <button
-            class="menu-button"
-            data-action="support"
-            type="button"
-          >
+          <button class="menu-button">
             <span>📢</span>
-            <strong>Підтримка</strong>
-            <small>Інфо та допомога</small>
+            <b>Підтримка</b>
           </button>
 
         </div>
@@ -378,7 +661,7 @@
 
     </main>
 
-  </div>
+  </section>
 
 </div>
 
@@ -388,30 +671,24 @@
 window.NIGHTBORN_CONFIG = {
 
   /*
-   * Публічна HTTPS-адреса API.
-   *
-   * Наприклад:
-   * https://example.com
-   *
-   * БЕЗ /api в кінці.
+   * Тут має бути твоя реальна HTTPS адреса API.
+   * Без /api в кінці.
    */
 
   API_BASE_URL:
     "https://YOUR-PUBLIC-API-DOMAIN",
 
   /*
-   * Тривалість заставки.
-   *
-   * 10 хвилин = 600000 мс.
+   * Нормальна коротка заставка.
+   * 3200 = 3,2 секунди.
    */
 
   INTRO_DURATION:
-    600000
+    3200
 
 };
 
 </script>
-
 
 <script src="js/app.js" defer></script>
 
