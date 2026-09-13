@@ -3,45 +3,39 @@
   "use strict";
 
 
-  /* =====================================================
-     TELEGRAM
-     ===================================================== */
-
-  const tg =
-    window.Telegram?.WebApp || null;
-
-
-  /* =====================================================
+  /* ==================================================
      CONFIG
-     ===================================================== */
+     ================================================== */
 
   const config =
     window.NIGHTBORN_CONFIG || {};
-
 
   const API_BASE_URL =
     String(
       config.API_BASE_URL || ""
     ).replace(/\/+$/, "");
 
-
-  /*
-   * Заставка.
-   *
-   * За замовчуванням 10 хвилин.
-   */
-
   const INTRO_DURATION =
     Number(config.INTRO_DURATION) > 0
       ? Number(config.INTRO_DURATION)
-      : 600000;
+      : 3200;
 
 
-  /* =====================================================
+  /* ==================================================
+     TELEGRAM
+     ================================================== */
+
+  const tg =
+    window.Telegram?.WebApp || null;
+
+
+  /* ==================================================
      STATE
-     ===================================================== */
+     ================================================== */
 
   const state = {
+
+    user: null,
 
     sponsors: [],
 
@@ -49,84 +43,75 @@
 
     pageSize: 4,
 
-    user: null,
+    apiReady: false,
 
-    checking: false,
+    apiError: null,
 
-    applicationReady: false,
-
-    apiError: null
+    checking: false
 
   };
 
 
-  /* =====================================================
+  /* ==================================================
      DOM
-     ===================================================== */
+     ================================================== */
 
-  const $ = (id) =>
-    document.getElementById(id);
-
-
-  const introScreen =
-    $("introScreen");
+  const splash =
+    document.getElementById("splash");
 
   const application =
-    $("application");
+    document.getElementById("application");
 
-  const errorScreen =
-    $("errorScreen");
-
-  const sponsorScreen =
-    $("sponsorScreen");
-
-  const mainMenu =
-    $("mainMenu");
-
-  const channelsList =
-    $("channelsList");
-
-  const checkButton =
-    $("checkButton");
-
-  const retryButton =
-    $("retryButton");
-
-  const message =
-    $("message");
-
-  const errorText =
-    $("errorText");
-
-  const counterCurrent =
-    $("counterCurrent");
-
-  const counterTotal =
-    $("counterTotal");
-
-  const welcomeText =
-    $("welcomeText");
-
-  const loadingProgress =
-    $("loadingProgress");
+  const loadingBar =
+    document.getElementById("loadingBar");
 
   const loadingPercent =
-    $("loadingPercent");
+    document.getElementById("loadingPercent");
 
-  const loadingStatus =
-    $("loadingStatus");
+  const loadingText =
+    document.getElementById("loadingText");
+
+  const errorScreen =
+    document.getElementById("errorScreen");
+
+  const sponsorScreen =
+    document.getElementById("sponsorScreen");
+
+  const mainMenu =
+    document.getElementById("mainMenu");
+
+  const errorText =
+    document.getElementById("errorText");
+
+  const retryButton =
+    document.getElementById("retryButton");
+
+  const checkButton =
+    document.getElementById("checkButton");
+
+  const channelsList =
+    document.getElementById("channelsList");
+
+  const counterCurrent =
+    document.getElementById("counterCurrent");
+
+  const counterTotal =
+    document.getElementById("counterTotal");
+
+  const message =
+    document.getElementById("message");
 
 
-  /* =====================================================
-     TELEGRAM INITIALIZATION
-     ===================================================== */
+  /* ==================================================
+     TELEGRAM INIT
+     ================================================== */
 
   function initTelegram() {
 
     if (!tg) {
 
       console.warn(
-        "Telegram WebApp API недоступний."
+        "Telegram WebApp API unavailable"
       );
 
       return;
@@ -144,7 +129,7 @@
       if (tg.setHeaderColor) {
 
         tg.setHeaderColor(
-          "#020607"
+          "#020405"
         );
 
       }
@@ -153,26 +138,15 @@
       if (tg.setBackgroundColor) {
 
         tg.setBackgroundColor(
-          "#020607"
+          "#020405"
         );
-
-      }
-
-
-      if (tg.disableVerticalSwipes) {
-
-        try {
-
-          tg.disableVerticalSwipes();
-
-        } catch (_) {}
 
       }
 
     } catch (error) {
 
       console.warn(
-        "Telegram initialization:",
+        "Telegram init error:",
         error
       );
 
@@ -180,35 +154,87 @@
 
 
     state.user =
-      tg.initDataUnsafe?.user || null;
+      tg.initDataUnsafe?.user ||
+      null;
 
 
-    if (
-      state.user &&
-      state.user.first_name
-    ) {
-
-      welcomeText.textContent =
-        `${state.user.first_name}, ти успішно відкрив NightBorn.`;
-
-    }
+    renderUser();
 
   }
 
 
-  /* =====================================================
+  /* ==================================================
+     USER
+     ================================================== */
+
+  function renderUser() {
+
+    const name =
+      document.getElementById(
+        "profileName"
+      );
+
+    const username =
+      document.getElementById(
+        "profileUsername"
+      );
+
+    const id =
+      document.getElementById(
+        "profileId"
+      );
+
+
+    if (!state.user) {
+
+      name.textContent =
+        "NightBorn";
+
+      username.textContent =
+        "@username";
+
+      id.textContent =
+        "ID: —";
+
+      return;
+
+    }
+
+
+    name.textContent =
+      [
+        state.user.first_name,
+        state.user.last_name
+      ]
+        .filter(Boolean)
+        .join(" ") ||
+      "Користувач";
+
+
+    username.textContent =
+      state.user.username
+        ? `@${state.user.username}`
+        : "Username не вказаний";
+
+
+    id.textContent =
+      `ID: ${state.user.id}`;
+
+  }
+
+
+  /* ==================================================
      API
-     ===================================================== */
+     ================================================== */
 
-  function apiConfigured() {
+  function apiIsConfigured() {
 
-    return Boolean(
-      API_BASE_URL &&
-      !API_BASE_URL.includes(
-        "YOUR-PUBLIC-API-DOMAIN"
-      ) &&
+    return (
       /^https:\/\//i.test(
         API_BASE_URL
+      ) &&
+      !API_BASE_URL.includes(
+        "YOUR-PUBLIC-API-DOMAIN"
       )
     );
 
@@ -220,10 +246,19 @@
     options = {}
   ) {
 
-    if (!apiConfigured()) {
+    if (!apiIsConfigured()) {
 
       throw new Error(
-        "Не вказана публічна HTTPS-адреса API в NIGHTBORN_CONFIG."
+        "API_BASE_URL не налаштований."
+      );
+
+    }
+
+
+    if (!tg?.initData) {
+
+      throw new Error(
+        "Telegram initData відсутній."
       );
 
     }
@@ -241,6 +276,12 @@
     );
 
 
+    headers.set(
+      "X-Telegram-Init-Data",
+      tg.initData
+    );
+
+
     if (options.body) {
 
       headers.set(
@@ -249,25 +290,6 @@
       );
 
     }
-
-
-    const initData =
-      tg?.initData || "";
-
-
-    if (!initData) {
-
-      throw new Error(
-        "Mini App відкрито не через Telegram або initData відсутній."
-      );
-
-    }
-
-
-    headers.set(
-      "X-Telegram-Init-Data",
-      initData
-    );
 
 
     const response =
@@ -281,7 +303,7 @@
       );
 
 
-    let data = null;
+    let data;
 
 
     try {
@@ -289,7 +311,11 @@
       data =
         await response.json();
 
-    } catch (_) {}
+    } catch (_) {
+
+      data = null;
+
+    }
 
 
     if (
@@ -297,13 +323,9 @@
       !data?.ok
     ) {
 
-      const code =
-        data?.error ||
-        `HTTP ${response.status}`;
-
-
       throw new Error(
-        `API: ${code}`
+        data?.error ||
+        `HTTP ${response.status}`
       );
 
     }
@@ -314,27 +336,259 @@
   }
 
 
-  /* =====================================================
-     SCREEN MANAGEMENT
-     ===================================================== */
+  /* ==================================================
+     LOAD API
+     ================================================== */
 
-  function showOnly(screen) {
+  async function loadApplicationData() {
+
+    try {
+
+      const data =
+        await apiRequest(
+          "/api/sponsors"
+        );
+
+
+      state.sponsors =
+        Array.isArray(
+          data.sponsors
+        )
+          ? data.sponsors
+          : [];
+
+
+      state.apiReady =
+        true;
+
+
+      state.apiError =
+        null;
+
+
+    } catch (error) {
+
+      console.error(
+        "NightBorn API:",
+        error
+      );
+
+
+      state.apiReady =
+        false;
+
+      state.apiError =
+        error;
+
+    }
+
+  }
+
+
+  /* ==================================================
+     SPLASH PROGRESS
+     ================================================== */
+
+  function setProgress(
+    percent,
+    text
+  ) {
+
+    const value =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          percent
+        )
+      );
+
+
+    loadingBar.style.width =
+      `${value}%`;
+
+
+    loadingPercent.textContent =
+      `${Math.round(value)}%`;
+
+
+    if (text) {
+
+      loadingText.textContent =
+        text;
+
+    }
+
+  }
+
+
+  /* ==================================================
+     RUN SPLASH
+     ================================================== */
+
+  async function runSplash() {
+
+    /*
+     * API запускаємо одразу.
+     * Заставка НЕ чекає API.
+     */
+
+    const apiPromise =
+      loadApplicationData();
+
+
+    const started =
+      performance.now();
+
+
+    /*
+     * Всього приблизно 3,2 секунди.
+     */
+
+    await new Promise(
+      resolve => {
+
+        const timer =
+          setInterval(() => {
+
+            const elapsed =
+              performance.now() -
+              started;
+
+
+            const percent =
+              Math.min(
+                100,
+                elapsed /
+                INTRO_DURATION *
+                100
+              );
+
+
+            let text =
+              "Ініціалізація…";
+
+
+            if (
+              percent >= 25 &&
+              percent < 50
+            ) {
+
+              text =
+                "Підключення…";
+
+            } else if (
+              percent >= 50 &&
+              percent < 75
+            ) {
+
+              text =
+                "Синхронізація…";
+
+            } else if (
+              percent >= 75 &&
+              percent < 95
+            ) {
+
+              text =
+                "Підготовка…";
+
+            } else if (
+              percent >= 95
+            ) {
+
+              text =
+                "Готово";
+
+            }
+
+
+            setProgress(
+              percent,
+              text
+            );
+
+
+            if (
+              elapsed >=
+              INTRO_DURATION
+            ) {
+
+              clearInterval(
+                timer
+              );
+
+
+              setProgress(
+                100,
+                "Готово"
+              );
+
+
+              resolve();
+
+            }
+
+          }, 50);
+
+      }
+    );
+
+
+    /*
+     * Якщо API встигло завантажитися —
+     * одразу відкриваємо.
+     *
+     * Якщо сервер трохи повільний,
+     * даємо йому ще максимум 1.2 сек,
+     * а не тримаємо заставку хвилинами.
+     */
+
+    if (!state.apiReady) {
+
+      await Promise.race([
+
+        apiPromise,
+
+        new Promise(
+          resolve =>
+            setTimeout(
+              resolve,
+              1200
+            )
+        )
+
+      ]);
+
+    }
+
+
+    openApplication();
+
+  }
+
+
+  /* ==================================================
+     SCREENS
+     ================================================== */
+
+  function showScreen(
+    screen
+  ) {
 
     [
       errorScreen,
       sponsorScreen,
       mainMenu
-    ].forEach((element) => {
-
-      if (element) {
+    ].forEach(
+      element => {
 
         element.classList.add(
           "hidden"
         );
 
       }
-
-    });
+    );
 
 
     if (screen) {
@@ -348,53 +602,72 @@
   }
 
 
-  /* =====================================================
-     MESSAGE
-     ===================================================== */
+  /* ==================================================
+     OPEN APPLICATION
+     ================================================== */
 
-  function showMessage(
-    text,
-    type = ""
-  ) {
+  function openApplication() {
 
-    if (!message) return;
-
-
-    message.textContent =
-      text;
+    splash.classList.add(
+      "hidden"
+    );
 
 
-    message.className =
-      "message show" +
-      (
-        type
-          ? ` ${type}`
-          : ""
+    application.classList.remove(
+      "hidden"
+    );
+
+
+    if (!state.apiReady) {
+
+      errorText.textContent =
+        state.apiError?.message ||
+        "Сервер не відповідає.";
+
+
+      showScreen(
+        errorScreen
       );
 
+
+      return;
+
+    }
+
+
+    /*
+     * Якщо спонсорів 0 —
+     * перевірку взагалі не показуємо.
+     */
+
+    if (
+      state.sponsors.length === 0
+    ) {
+
+      showScreen(
+        mainMenu
+      );
+
+      return;
+
+    }
+
+
+    renderSponsors();
+
+
+    showScreen(
+      sponsorScreen
+    );
+
   }
 
 
-  function clearMessage() {
-
-    if (!message) return;
-
-
-    message.textContent =
-      "";
-
-
-    message.className =
-      "message";
-
-  }
-
-
-  /* =====================================================
+  /* ==================================================
      SPONSORS
-     ===================================================== */
+     ================================================== */
 
-  function currentPageSponsors() {
+  function getCurrentSponsors() {
 
     const start =
       state.page *
@@ -411,23 +684,11 @@
 
   function renderSponsors() {
 
-    if (!channelsList) {
-      return;
-    }
+    channelsList.replaceChildren();
 
 
-    const pageSponsors =
-      currentPageSponsors();
-
-
-    const totalPages =
-      Math.max(
-        1,
-        Math.ceil(
-          state.sponsors.length /
-          state.pageSize
-        )
-      );
+    const items =
+      getCurrentSponsors();
 
 
     const start =
@@ -444,22 +705,18 @@
     counterCurrent.textContent =
       String(
         Math.min(
-          start +
-          pageSponsors.length,
+          start + items.length,
           state.sponsors.length
         )
       );
 
 
-    channelsList.replaceChildren();
-
-
-    pageSponsors.forEach(
+    items.forEach(
       (sponsor, index) => {
 
         const row =
           document.createElement(
-            "article"
+            "div"
           );
 
 
@@ -495,7 +752,7 @@
 
         const name =
           document.createElement(
-            "p"
+            "div"
           );
 
 
@@ -510,7 +767,7 @@
 
         const status =
           document.createElement(
-            "p"
+            "div"
           );
 
 
@@ -519,7 +776,7 @@
 
 
         status.textContent =
-          "Натисни → та підпишись";
+          "Натисни → щоб відкрити";
 
 
         info.append(
@@ -534,33 +791,63 @@
           );
 
 
-        button.className =
-          "channel-button";
-
-
         button.type =
           "button";
 
+        button.className =
+          "channel-button";
 
         button.textContent =
           "→";
 
 
-        button.setAttribute(
-          "aria-label",
-          `Відкрити ${
-            sponsor.name ||
-            "канал"
-          }`
-        );
-
-
         button.addEventListener(
           "click",
-          () =>
-            openSponsor(
-              sponsor
-            )
+          () => {
+
+            if (
+              !sponsor.url
+            ) {
+
+              showMessage(
+                "Посилання на канал відсутнє.",
+                "error"
+              );
+
+              return;
+
+            }
+
+
+            if (
+              tg?.openTelegramLink &&
+              /^https:\/\/t\.me\//i.test(
+                sponsor.url
+              )
+            ) {
+
+              tg.openTelegramLink(
+                sponsor.url
+              );
+
+            } else if (
+              tg?.openLink
+            ) {
+
+              tg.openLink(
+                sponsor.url
+              );
+
+            } else {
+
+              window.open(
+                sponsor.url,
+                "_blank"
+              );
+
+            }
+
+          }
         );
 
 
@@ -578,454 +865,29 @@
       }
     );
 
-
-    checkButton.textContent =
-      state.page <
-      totalPages - 1
-        ? "Перевірити підписки"
-        : "Перевірити та відкрити";
-
-
-    checkButton.disabled =
-      pageSponsors.length === 0 ||
-      state.checking;
-
   }
 
 
-  function openSponsor(
-    sponsor
-  ) {
+  /* ==================================================
+     CHECK SPONSORS
+     ================================================== */
 
-    const url =
-      sponsor?.url;
+  async function checkSponsors() {
 
-
-    if (!url) {
-
-      showMessage(
-        "Для цього спонсора немає посилання.",
-        "error"
-      );
+    if (state.checking) {
 
       return;
 
     }
 
 
-    if (
-      tg?.openTelegramLink &&
-      /^https:\/\/t\.me\//i.test(
-        url
-      )
-    ) {
+    const items =
+      getCurrentSponsors();
 
-      tg.openTelegramLink(
-        url
-      );
 
-    } else if (
-      tg?.openLink
-    ) {
+    if (!items.length) {
 
-      tg.openLink(
-        url
-      );
-
-    } else {
-
-      window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
-      );
-
-    }
-
-  }
-
-
-  /* =====================================================
-     LOAD SPONSORS
-     ===================================================== */
-
-  async function loadSponsors() {
-
-    clearMessage();
-
-
-    try {
-
-      initTelegram();
-
-
-      const data =
-        await apiRequest(
-          "/api/sponsors"
-        );
-
-
-      state.sponsors =
-        Array.isArray(
-          data.sponsors
-        )
-          ? data.sponsors
-          : [];
-
-
-      state.page = 0;
-
-      state.applicationReady =
-        true;
-
-
-    } catch (error) {
-
-      console.error(
-        "NightBorn API:",
-        error
-      );
-
-
-      state.apiError =
-        error;
-
-
-      state.applicationReady =
-        false;
-
-    }
-
-  }
-
-
-  /* =====================================================
-     SHOW APPLICATION
-     ===================================================== */
-
-  function showApplication() {
-
-    introScreen.classList.add(
-      "hidden"
-    );
-
-
-    application.classList.remove(
-      "hidden"
-    );
-
-
-    if (state.applicationReady) {
-
-      if (
-        state.sponsors.length === 0
-      ) {
-
-        showOnly(
-          mainMenu
-        );
-
-      } else {
-
-        renderSponsors();
-
-        showOnly(
-          sponsorScreen
-        );
-
-      }
-
-      return;
-
-    }
-
-
-    errorText.textContent =
-      state.apiError?.message ||
-      "Не вдалося підключитися до API.";
-
-
-    showOnly(
-      errorScreen
-    );
-
-  }
-
-
-  /* =====================================================
-     LOADING ANIMATION
-     ===================================================== */
-
-  function updateLoading(
-    percent
-  ) {
-
-    const safePercent =
-      Math.max(
-        0,
-        Math.min(
-          100,
-          percent
-        )
-      );
-
-
-    if (loadingProgress) {
-
-      loadingProgress.style.width =
-        `${safePercent}%`;
-
-    }
-
-
-    if (loadingPercent) {
-
-      loadingPercent.textContent =
-        `${Math.round(
-          safePercent
-        )}%`;
-
-    }
-
-
-    if (!loadingStatus) {
-      return;
-    }
-
-
-    if (safePercent < 12) {
-
-      loadingStatus.textContent =
-        "Ініціалізація NightBorn";
-
-    } else if (
-      safePercent < 25
-    ) {
-
-      loadingStatus.textContent =
-        "Створення захищеного з'єднання";
-
-    } else if (
-      safePercent < 40
-    ) {
-
-      loadingStatus.textContent =
-        "Підключення Telegram";
-
-    } else if (
-      safePercent < 55
-    ) {
-
-      loadingStatus.textContent =
-        "Синхронізація профілю";
-
-    } else if (
-      safePercent < 70
-    ) {
-
-      loadingStatus.textContent =
-        "Перевірка серверів";
-
-    } else if (
-      safePercent < 85
-    ) {
-
-      loadingStatus.textContent =
-        "Завантаження NightBorn";
-
-    } else if (
-      safePercent < 98
-    ) {
-
-      loadingStatus.textContent =
-        "Підготовка простору";
-
-    } else {
-
-      loadingStatus.textContent =
-        "NightBorn готовий";
-
-    }
-
-  }
-
-
-  /* =====================================================
-     10 MINUTE INTRO
-     ===================================================== */
-
-  async function runIntro() {
-
-    /*
-     * API запускаємо одразу,
-     * не чекаємо завершення заставки.
-     */
-
-    const apiPromise =
-      loadSponsors();
-
-
-    const startedAt =
-      Date.now();
-
-
-    /*
-     * Анімація прогресу.
-     *
-     * Вона спеціально не доходить до 100%
-     * занадто рано.
-     */
-
-    let lastPercent = 0;
-
-
-    const animation =
-      new Promise((resolve) => {
-
-        const timer =
-          setInterval(() => {
-
-            const elapsed =
-              Date.now() -
-              startedAt;
-
-
-            let percent =
-              (
-                elapsed /
-                INTRO_DURATION
-              ) * 100;
-
-
-            /*
-             * Ніколи не показуємо 100%
-             * до завершення заставки.
-             */
-
-            if (percent >= 99) {
-
-              percent = 99;
-
-            }
-
-
-            /*
-             * Робимо рух природнішим.
-             */
-
-            if (
-              percent <
-              lastPercent
-            ) {
-
-              percent =
-                lastPercent;
-
-            }
-
-
-            lastPercent =
-              percent;
-
-
-            updateLoading(
-              percent
-            );
-
-
-            if (
-              elapsed >=
-              INTRO_DURATION
-            ) {
-
-              clearInterval(
-                timer
-              );
-
-              updateLoading(
-                100
-              );
-
-              resolve();
-
-            }
-
-          }, 300);
-
-      });
-
-
-    /*
-     * Чекаємо завершення заставки.
-     */
-
-    await animation;
-
-
-    /*
-     * API вже могло завершитися.
-     * Якщо ні — дочекаємося його.
-     */
-
-    try {
-
-      await apiPromise;
-
-    } catch (error) {
-
-      state.apiError =
-        error;
-
-    }
-
-
-    updateLoading(
-      100
-    );
-
-
-    /*
-     * Маленька пауза після 100%.
-     */
-
-    await new Promise(
-      resolve =>
-        setTimeout(
-          resolve,
-          700
-        )
-    );
-
-
-    showApplication();
-
-  }
-
-
-  /* =====================================================
-     CHECK CURRENT PAGE
-     ===================================================== */
-
-  async function checkCurrentPage() {
-
-    if (
-      state.checking
-    ) {
-
-      return;
-
-    }
-
-
-    const pageSponsors =
-      currentPageSponsors();
-
-
-    if (
-      !pageSponsors.length
-    ) {
-
-      showOnly(
+      showScreen(
         mainMenu
       );
 
@@ -1053,11 +915,8 @@
 
       const results =
         await Promise.all(
-
-          pageSponsors.map(
-            async (
-              sponsor
-            ) => {
+          items.map(
+            async sponsor => {
 
               try {
 
@@ -1079,51 +938,31 @@
                   );
 
 
-                return {
+                return Boolean(
+                  result.subscribed
+                );
 
-                  sponsor,
+              } catch (_) {
 
-                  subscribed:
-                    Boolean(
-                      result.subscribed
-                    )
-
-                };
-
-              } catch (error) {
-
-                return {
-
-                  sponsor,
-
-                  subscribed:
-                    false,
-
-                  error
-
-                };
+                return false;
 
               }
 
             }
           )
-
         );
 
 
-      const failed =
-        results.filter(
-          result =>
-            !result.subscribed
+      const allSubscribed =
+        results.every(
+          Boolean
         );
 
 
-      if (
-        failed.length
-      ) {
+      if (!allSubscribed) {
 
         showMessage(
-          `Потрібно підписатися на всі канали цієї сторінки. Не пройдено: ${failed.length}.`,
+          "Ти ще не підписався на всі канали цієї сторінки.",
           "error"
         );
 
@@ -1151,14 +990,14 @@
 
 
         showMessage(
-          "Готово! Переходимо до наступних каналів.",
+          "Готово. Наступна сторінка.",
           "success"
         );
 
       } else {
 
         showMessage(
-          "Усі підписки підтверджено. Доступ відкрито!",
+          "Підписки підтверджено!",
           "success"
         );
 
@@ -1166,12 +1005,12 @@
         setTimeout(
           () => {
 
-            showOnly(
+            showScreen(
               mainMenu
             );
 
           },
-          500
+          450
         );
 
       }
@@ -1182,213 +1021,95 @@
         false;
 
 
-      if (
-        mainMenu.classList.contains(
-          "hidden"
-        )
-      ) {
+      checkButton.disabled =
+        false;
 
-        renderSponsors();
 
-      }
+      checkButton.textContent =
+        "Перевірити підписки";
 
     }
 
   }
 
 
-  /* =====================================================
-     MENU
-     ===================================================== */
+  /* ==================================================
+     MESSAGE
+     ================================================== */
 
-  function handleMenuAction(
-    action
+  function showMessage(
+    text,
+    type
   ) {
 
-    const labels = {
+    message.textContent =
+      text;
 
-      balance:
-        "Баланс",
-
-      referrals:
-        "Реферали",
-
-      flyer:
-        "Flyer",
-
-      tasks:
-        "Завдання",
-
-      promocodes:
-        "Промокоди",
-
-      top:
-        "Топ",
-
-      mining:
-        "Mining",
-
-      animals:
-        "Тварини",
-
-      settings:
-        "Налаштування",
-
-      support:
-        "Інфо та підтримка"
-
-    };
-
-
-    const label =
-      labels[action] ||
-      "Розділ";
-
-
-    /*
-     * Поки API цих розділів
-     * не реалізований у backend,
-     * не робимо вигляд, що він працює.
-     */
-
-    showMessage(
-      `Розділ «${label}» очікує підключення відповідного API.`,
-      ""
-    );
+    message.className =
+      `message show ${type || ""}`;
 
   }
 
 
-  /* =====================================================
+  function clearMessage() {
+
+    message.textContent =
+      "";
+
+    message.className =
+      "message";
+
+  }
+
+
+  /* ==================================================
+     RETRY
+     ================================================== */
+
+  retryButton.addEventListener(
+    "click",
+    async () => {
+
+      retryButton.disabled =
+        true;
+
+      retryButton.textContent =
+        "Підключення…";
+
+
+      await loadApplicationData();
+
+
+      retryButton.disabled =
+        false;
+
+      retryButton.textContent =
+        "Спробувати ще раз";
+
+
+      openApplication();
+
+    }
+  );
+
+
+  /* ==================================================
      EVENTS
-     ===================================================== */
+     ================================================== */
 
-  document
-    .querySelectorAll(
-      ".menu-button"
-    )
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () =>
-            handleMenuAction(
-              button.dataset.action
-            )
-        );
-
-      }
-    );
-
-
-  if (checkButton) {
-
-    checkButton.addEventListener(
-      "click",
-      checkCurrentPage
-    );
-
-  }
-
-
-  if (retryButton) {
-
-    retryButton.addEventListener(
-      "click",
-      async () => {
-
-        showOnly(
-          null
-        );
-
-
-        state.apiError =
-          null;
-
-
-        await loadSponsors();
-
-
-        if (
-          state.applicationReady
-        ) {
-
-          if (
-            state.sponsors.length === 0
-          ) {
-
-            showOnly(
-              mainMenu
-            );
-
-          } else {
-
-            renderSponsors();
-
-            showOnly(
-              sponsorScreen
-            );
-
-          }
-
-        } else {
-
-          errorText.textContent =
-            state.apiError?.message ||
-            "Не вдалося підключитися до API.";
-
-
-          showOnly(
-            errorScreen
-          );
-
-        }
-
-      }
-    );
-
-  }
-
-
-  /* =====================================================
-     GLOBAL ERRORS
-     ===================================================== */
-
-  window.addEventListener(
-    "error",
-    event => {
-
-      console.error(
-        "NightBorn runtime error:",
-        event.error ||
-        event.message
-      );
-
-    }
+  checkButton.addEventListener(
+    "click",
+    checkSponsors
   );
 
 
-  window.addEventListener(
-    "unhandledrejection",
-    event => {
-
-      console.error(
-        "NightBorn promise error:",
-        event.reason
-      );
-
-    }
-  );
-
-
-  /* =====================================================
+  /* ==================================================
      START
-     ===================================================== */
+     ================================================== */
 
   initTelegram();
 
-  runIntro();
+  runSplash();
 
 
 })();
